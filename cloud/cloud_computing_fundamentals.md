@@ -72,3 +72,79 @@
 ###### ==> Metadata is information about information
 ###### ==> Computer networks use the metadata in each packet od data to reassemble the packets into the original file in the right order.
 ![Image](https://github.com/user-attachments/assets/bf3305bb-ca27-4dc6-b751-9898c44209dc)
+
+### MODULE 1: How do Computers Communicate? - The evolution of the cloud
+
+###### - The first documented use of the term cloud computing was in an internal document at Compaq Computer, which later merged with the Hewlett-Packard Company. Engineering drawings used a cloud as a symbol for a network.
+
+##### The beginnings of cloud computing
+###### - When the internet was just beginning, companies would use high-powered computers to host web pages and store files. 
+###### - These computers were the first servers. Each computer might have run several websites, and the computer’s storage would have all the files needed for the site saved on it. 
+###### - In the early days, it was common for small businesses to have their company’s websites running on a server under some employee’s desk. Imagine how fragile this was. 
+###### - As internet technology evolved, server farms developed where hundreds and then thousands of servers networked together to share the tasks or workloads involved in delivering hundreds of websites and services.
+###### The cloud is an evolution of these server farms. Computer scientists designed early internet servers to deliver websites with all the services a website needed, like storage, networking, and security, all on one server. 
+###### - Cloud computing improved on that model by separating the features of one server into distinct functions on specially designed and dedicated servers. This makes it easier for engineers to use only the resources they need when they need them. 
+
+### MODULE 2: How Does Cloud Computing Work? - The importance of the cloud
+###### - Cloud computing makes many powerful technical tools and innovations easy to access in everyday life.
+
+##### Dynamic mapping technology, such as Google Maps
+###### - With support services that respond dynamically to changing location in real time and the ability to store and deliver large amounts of data quickly, the cloud enables companies to develop maps that dyncamically adjust to changing conditions and help people get to where they need to go.
+
+##### Global identity and access management (IAM)
+###### - the global presence and strong security of the cloud enable companies to manage which individuals or systems can access their resources. 
+###### - the cloud also enables single sign-on so users can sign on to one service and then acccess a variety of cloud-based resources
+
+##### Personal digital assistants like Siri and Alexa
+###### - services like natural language processing (NLP), voice recognition, and large sets of data need lots of computing power
+###### - cloud-connected mobile devices can access powerful computers in the cloud to enable users to get answers to questions, set appointements and reminders, and even send emails 
+
+##### Files and photos everywhere and anywhere
+###### - massive amounts of storage and a global network of computers make it possible for users and businesses to access their files like documents, photos, spreadsheets, and even media from anywhere and on any device using the cloud
+
+##### Voice and music streaming
+###### - streaming music and video require a lot of bandwidth and intelligent network technology to compress data and get the media to where it needs to go
+###### - cloud networking, data compression, and global data replication make streaming movies and songs possible
+
+##### Natural Language Processing (NLP) and Artificial Intelligence (AI)
+###### - processing natural language and artificial intelligence takes a lot fo memory and processing power
+###### - since the cloud uses thousands of computers working togther, cloud systems can process enormous amounts of data quickly and run complex algorithms using powerful computers, all of which makes nautral language and AI possible
+
+##### For many people, it’s hard to imagine a world without some of these innovations. But the cloud is relatively new and many of these innovations appeared within the last decade. None of them would exist without the cloud.
+
+###### - the cloud us also important for businesses, example: creating a suport ticket with a cloud-based support service.
+
+##### Step 1: Customer encounters problem
+###### - a customer attempts to use their microwave, but the appliance doesn't turn on
+
+##### Step 2: Customer attempts to troubleshoot
+###### - the customer browses to the company's website and finds the manual for the appliance
+###### - they work through the troubleshooting steps, but can't fix the problem
+
+##### Step 3: Customer uses a chatbot to troubleshoot
+###### - on the customer support page, the customer notices the option to use a chatbot
+###### - the chatbot uses cloud-based artificial intelligence and natural language processing to interact with the customer
+###### - after a few minutes, the chatbot decides it cannot help the customer with the problem and asks if they want to open a support ticket
+
+##### Step 4: Customer creates a support ticket
+###### - the chatbot sends the customer to an online form
+###### - the form asks if they want to sign in with their social media account to make filling out the form easier
+###### - the service uses a cloud-based identity and access management system (IAM) to securely bring customer information from their social media account into the form
+
+##### Step 5: Customer identifies the product
+###### - the form asks the customer to take a picture of the front of their microwave with their phone and send the photo to a cloud service that uses image recognition to identity the exact model
+###### - it then automatically fills in the relevant data on the support ticket
+
+##### Step 6: Customer describes the problem and submits the ticket
+###### - on the form, the customer selects a microphone button and describes the problem using their voice
+###### - as they describe the problem, the service uses a cloud service to accurately transcribe what the customer is describing in real time
+###### - the customer has the chance to edit the transcription and then submits the support ticket
+
+##### Step 7: Cloud services move the ticket along
+###### - the service uses a cloud application to create an entry in the support database and automatically send a notification to a support professional with the information so they can begin to work on it
+###### - the service also automatically sends an email to the customer summarizing the support ticket
+
+##### Step 8: Customer sets up an appointment
+###### - the customer uses a link in the email to set up an appointment for a technician to come and fix the appliance
+###### - the customer receives real-time updates about the technician's arrival time on their mobile device
+
