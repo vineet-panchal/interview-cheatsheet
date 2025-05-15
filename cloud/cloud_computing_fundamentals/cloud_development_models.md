@@ -236,4 +236,146 @@
 ##### Retain
 ###### ==> Identify and retain applications that cannot be migrated for some reason
 
+### Deploying the infrastructure and applications to the cloud
 
+###### - To deploy to the cloud means to migrate or create and configure a set of computing resources, applications, services, and databases in a cloud environment
+###### - The cloud environment could be IBM Cloud, Amazon Web Services (AWS), Microsoft Azure, or Google Cloud Platform (GCP)
+###### - Deployment involves the creation of virtual machines (VMs), storage, network configurations, security settings, and other resources required to run applications, services, or databases in the cloud
+
+##### Step 1: Design the architecture
+###### ==> Design the cloud infrastructure, including the virtual network, security groups, storage accounts, and compute resources
+###### ==> This step involves determining the size and configuration of the infrastructure based on the business requirements
+
+##### Step 2: Configure security 
+###### ==> Configure security settings, such as firewalls and access control lists (ACLs), to ensure the infrastructure is secure and protected from unauthorized access.
+
+##### Step 3: Create virtual machines and containers
+###### ==> Create a virtualized environment using virtual machines (VMs) and containers. These host applications, services, or databases
+###### ==> This involves selecting the appropriate operating system and application software as well as configuring network settings
+
+##### Step 4: Set up storage
+###### ==> Configure storage options, such as object storage or block storage, to provide storage for data and applications
+
+##### Step 5: Configure network settings
+###### ==> Configure network settings, such as subnets, virtual private networks (VPNs), and load balancers, to ensure that the infrastructure is accessible and highly available.
+
+##### Step 6: Deploy Applications
+###### ==> Deploy applications, services, or databases to the cloud infrastructure. This might involve migrating data from on-premises infrastructure to the cloud.
+
+##### Step 7: Test and validate infrastructure
+###### ==> Test and validate the infrastructure and applications to ensure they are working as expected and meeting the business requirements
+
+##### Step 8: Monitor and manage the infrastructure
+###### ==> Monitor the infrastructure and applications for performance and security issues and manage the infrastructure to ensure that it is optimized for performance, cost, and scalability
+
+## MODULE 3: Cloud deployment models
+
+### Deployment models
+###### - Cloud deployment models are the ways that cloud computing services are delivered and hosted
+###### - The four main types of cloud deployment models are: public, private, hybrid, and community
+
+##### Public Cloud
+###### ==> A cloud deployment model where resources are available to anyone over the internet.  
+###### ==> The service provider owns and manages the infrastructure, software, and security of the cloud
+###### ==> Public clouds are typically cheaper and more scalable than other models, but they might have less control and customization options for users
+###### ==> Public clouds are well suited for businesses and individuals that want to use open source software without modifying it
+
+##### Private Cloud
+###### ==> A cloud deployment model where resources are available to anyone over the internet.  
+###### ==> The service provider owns and manages the infrastructure, software, and security of the cloud
+###### ==> Public clouds are typically cheaper and more scalable than other models, but they might have less control and customization options for users. 
+###### ==> Public clouds are well suited for businesses and individuals that want to use open source software without modifying it
+
+##### Hybrid Cloud
+###### ==> A cloud deployment model that combines public and private clouds
+###### ==> The service provider or the organization can choose which resources and applications to run on each cloud based on their needs and preferences 
+###### ==> Hybrid clouds are typically more flexible and efficient than other models, but they can have more complexity and security challenges
+
+##### Community Cloud
+###### ==> A cloud deployment model where resources are shared by a group of organizations or users with common goals or interests. 
+###### ==> The service provider or one of the organizations owns and manages the infrastructure, services, and security of the cloud. 
+###### ==> Community clouds are typically more cost-effective and collaborative than other models, but they might have less scalability and availability
+
+### Private and public clouds
+###### - A public cloud offers lower costs, scalability, and flexibility. But the company must share resources and infrastructure with other customers, which might pose some risks or limitations.
+###### - A private cloud offers more customization, privacy, and compliance. But it also requires more investment, maintenance, and expertise.
+
+### The hybrid cloud
+###### - A hybrid cloud deployment is a way of using different types of cloud services together to achieve the best results for a business. For example, a company might use: 
+###### - A private cloud for sensitive data and applications. 
+###### - A public cloud for scalable and cost-effective resources. 
+###### - A third-party cloud for specialized services.
+
+###### - A hybrid cloud deployment requires careful planning and management to ensure compatibility, security, and performance across different environments. 
+###### - And a hybrid cloud deployment can offer great advantages to businesses, such as: 
+###### - More flexibility and control over their data and applications 
+###### - Access to a wider range of features and benefits from different cloud providers 
+
+## MODULE 4: Choosing an appropriate deployment model
+
+### Which model is the best match
+###### - Having different cloud deployment model options is an advantage to businesses because they can pick the deployment option that best suits their needs. For example, a business might choose: 
+###### - A private deployment that isolates their cloud infrastructure from others. 
+###### - A public deployment that shares infrastructure resources, like physical hardware and networking (but not data) with other users. 
+###### - A community deployment where businesses pool resources and share them among a specific set of companies. 
+###### - A hybrid model that is a combination of public and private deployments
+
+
+### Choosing a public cloud deployment
+###### - A public cloud deployment is a type of cloud computing service where a provider offers resources over the internet to multiple customers
+###### - These resources might include servers, storage, networking, software, and applications
+
+##### Time considerations
+###### ==> The business needs to launch a new product or service quickly and does not have the time or resources to set up its own infrastructure
+###### ==> The public cloud allows the business to deploy an infrastructure relatively quickly with fewer IT resources from within the company
+
+##### Application considerations
+###### ==> The business doesn’t have legacy or proprietary applications that require a specialized infrastructure to run
+###### ==> While the public cloud can be configured for a variety of application scenarios, it’s best suited for applications that don’t have many dependencies on very specialized hardware and network configurations
+
+##### Cost considerations
+###### ==> The business wants to leverage the expertise and innovation of the cloud provider without having to hire IT personnel to manage every detail of their infrastructure.
+
+##### Data considerations
+###### ==> The business does not have sensitive or regulated data that requires a high level of control or compliance
+###### ==> The public cloud is ideal for data that needs to be kept secure but doesn’t require full visibility and control of the infrastructure that manages it
+
+### Choosing a private cloud deployment
+###### - A private cloud deployment is a type of cloud computing where the cloud infrastructure and services are dedicated to a single organization or customer
+###### - Unlike a public cloud, where multiple customers share the same resources and services, a private cloud offers more control, security, and customization for the organization
+
+##### High security and compliance needs
+###### ==> A private cloud can offer the business more protection for sensitive or confidential data and applications
+###### ==> It also helps the business to meet specific regulatory or industry standards
+
+##### High performance and availability needs
+###### ==> A private cloud can offer the business more reliability and scalability for mission-critical or demanding workloads
+###### ==> It also helps the business to reduce latency and network congestion.
+
+##### High customization and integration needs
+###### ==> A private cloud can offer the business more flexibility and control over the configuration and management of the cloud infrastructure and services
+###### ==> It also helps the business to integrate with existing systems and applications
+
+### Choosing a hybrid cloud deployment
+###### - A hybrid cloud deployment is a mixed computing environment where applications are run using a combination of computing, storage, and services in different environments—public clouds and private clouds
+###### - This includes on-premises data centers or edge locations. Edge computing is a way of processing data closer to where it is generated or used, instead of sending it to a central server or cloud
+
+##### Reduce costs
+###### ==> A hybrid cloud deployment can help a business optimize its spending by using: 
+###### ==> Public cloud services for less sensitive or less critical workloads. 
+###### ==> Private cloud services for more sensitive or more critical workloads.
+###### ==> The business can avoid paying for unnecessary resources or security measures that they don’t need for every workload
+
+##### Minimize risk
+###### ==> A hybrid cloud deployment can help a business mitigate the risks of data breaches, compliance violations, or service outages
+###### ==> It does this by keeping some data and applications in a private cloud or on-premises environment that is under its own control and governance.  
+###### ==> This means the business can ensure that its data and applications are protected by its own security policies and standards
+###### ==> And that it can access them even if the public cloud provider faces any issues
+
+##### Extend capabilities
+###### ==> A hybrid cloud deployment can help a business leverage the benefits of both public cloud and private cloud services
+###### ==> Benefits such as scalability, agility, innovation, and performance, for example, a hybrid cloud deployment can enable a business to: 
+###### ==> scale up or down its resources on demand
+###### ==> access new features and services from public cloud providers
+###### ==> modernize its on-premises infrastructure with private cloud solutions
+###### ==> extend its compute and AI capabilities
