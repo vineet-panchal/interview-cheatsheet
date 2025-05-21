@@ -294,3 +294,423 @@
 ###### ==> Because users can create and destroy containers in seconds, containers also facilitate faster deployment and easier updates.
 
 ###### ==> Developers can group them together into clusters. Clusters are collections of containers that work together to provide a service or function. For example, a cluster of containers can run a web server, a database, and a load balancer. Developers can use tools such as Kubernetes to manage their clusters.
+
+## MODULE 3: Microservices
+
+### Software goes modular
+
+###### ==> Functions that perform a specific task are also called services and a typical software application consists of several services bundled together
+
+#### Breaking software into peices
+###### ==> As building software developed, engineers began packaging services that many applications could use into libraries
+###### ==> A library is a collection of software functions that do certain things. For example, all the applications in an office suite might share services like file management, spell and grammar checker, font management, and some layout features
+###### ==> Engineers package services like these in a library that all the applications would share.
+
+###### ==> Each application makes a call to the library to run the code for the service they need and get back a result or some data.
+
+###### ==> Bundling standard chunks of code, or services, into a library enables many applications to share the same code
+###### ==> This reduces the amount of code that applications need to contain and that computers need to store
+###### ==> It also helps users become familiar with standard functionality
+
+#### Modular software and the cloud
+###### ==> The idea of dividing software up into independent services is applied to cloud software in the form of microservices
+
+###### ==> Microservices are a way of designing cloud-based applications to consist of many small, independent, and loosely coupled services
+###### ==> Loosely coupled means that the services are connected to each other and each service performs a specific function by communicating with other services. Microservices communicate using application programming interfaces (APIs)
+###### ==> An API defines how a microservice can communicate with other microservices or applications. It specifies:
+
+###### ==> The functionality that the microservice offers
+
+###### ==> The information the microservice needs to perform each piece of functionality and the format that the information should be supplied in
+
+###### ==> The format that the microservice will use to pass any information to the other microservice
+
+###### - Microservices offer benefits to developers.
+###### ==> They enable faster development, easier deployment, and more flexible scaling of cloud applications
+
+###### ==> They allow developers to use different technologies and languages for different services, depending on their needs and preferences.
+
+###### ==> They help deliver agile and resilient software for the cloud
+
+
+### Using containers to deploy microservices
+
+###### - One of the challenges of developing and maintaining microservices is ensuring that they can run reliably and consistently across different environments
+###### - Developers can use containers to deploy microservices in a consistent and reliable way.
+
+###### - By using containers to deploy microservices, developers can avoid the problems of incompatible software versions, conflicting dependencies, and varying operating systems that can cause errors and inconsistencies
+
+##### Step 1: Write the code
+###### ==> First, the developer writes the code for the microservice using the programming language and framework of their choice
+
+##### Step 2: Create the container image
+###### ==> The developer uses a tool like Docker to create a container image for a microservice
+###### ==> A container image is like a recipe that tells the computer how to build and run the container
+###### ==> The developer includes information such as the base image, the code files, and the commands to execute when the container starts. This makes it easy to create and run containers consistently
+
+##### Step 3: Test the container image
+###### ==> The developer tests the container image locally using a tool such as Docker Compose
+###### ==> This tool allows the developer to run multiple containers together and simulate how they interact with each other and with external services
+###### ==> The developer checks whether the microservice works as expected and meets the functional and non-functional requirements
+
+##### Step 4: Publish the container
+###### ==> The developer pushes the container image to a registry, such as Docker Hub or Azure Container Registry
+###### ==> A registry is a centralized repository that stores and distributes container images
+###### ==> The developer can tag the image with a version number or a descriptive name to identify it easily
+
+##### Step 5: Deploy the container
+###### ==> The developer sends the container image to a target environment like a cloud platform or an on-premises server using a tool like Kubernetes or Docker Swarm
+###### ==> These tools help manage containers across multiple machines. They also provide features like load balancing, health monitoring, and scaling
+###### ==> The developer can set up the deployment using files that specify how many copies of the container to run and what resources to allocate
+
+### How microservices communicate
+###### - An application programming interface (API) is a set of definitions and protocols that enable two software components to communicate with each other
+###### - For example, here’s an illustration that shows how a weather app on someone’s phone can use an API to request weather data from a server that hosts a weather database. The server responds with the data in a defined format, such as JSON or XML.
+![Image](https://github.com/user-attachments/assets/ff855ddc-eb31-4e61-a8aa-74576af45c07)
+
+###### - APIs are like contracts that define how microservices can exchange information and request services from each other
+###### - They specify what sort of data can be sent and received, how to format the data, and what rules and protocols to follow
+###### - APIs enable microservices to work together as a cohesive system, while maintaining their autonomy and scalability
+
+###### ==> Modularity: Developers can develop, test, deploy, and update each microservice independently, without affecting other microservices.
+
+###### ==> Reusability: Different applications and systems can reuse each microservice.
+
+###### ==> Scalability: Developers can scale each microservice up or down according to the demand and load, without impacting other microservices.
+
+###### ==> Reliability: Each microservice can handle errors and failures gracefully, without causing the whole system to crash.
+
+###### ==> Flexibility: Each microservice can use different technologies and frameworks that suit its needs, without being constrained by the choices of other microservice developers
+
+## MODULE 4: APIs
+
+### Data in, data out
+
+###### - Application programming interfaces (APIs) have been a part of computer programming since the earliest days of computer science
+###### - In their simplest form, an API is a means by which computer programs and services can send data and receive data from each other
+###### - More precisely, an API is a set of rules and instructions that allow different software applications to communicate and exchange data with each other.
+###### - You can think of an API as a translator or a messenger that helps two parties understand each other and get what they want.
+
+#### Call me
+###### - When one application requests data from an API, the application is making a call to the API
+###### - When the other application responds with data, the API is sending a response.
+###### - Applications can make different types of calls to APIs.
+
+###### ==> The API for the software on the server defines how the client should interact with the server application and in what format the server can send or receive data
+###### ==> The client can verify the structure of the API before it sends a request by using special documents
+###### ==> The client application structures the call to the server API so it can send or receive data properly and securely.
+###### ==> When the server application gets the request from the client, it looks at the call and constructs a response according to the structure of the call.
+###### ==> The server sends the response back to the client with a status message and any requested data
+
+
+### APIs in cloud computing
+###### - APIs play a vital role in cloud computing.
+###### - They enable the development, integration, and management of cloud-based applications and services
+###### - APIs allow developers to access and use the functionality and resources provided by cloud service providers, such as Amazon Web Services (AWS), Microsoft Azure, and Google Cloud Platform.
+###### - APIs also allow users to connect multiple cloud services or platforms, or to connect cloud and on-premises applications
+###### - There are three key types of APIs that developers can use in cloud computing, each providing different levels and types of functionality and resources
+
+##### Service APIs
+###### ==> Service APIs provide access to specific cloud services, such as storage, messaging, and analytics.
+###### ==> For example, the AWS S3 API allows users to store and retrieve objects in the AWS S3 cloud storage service.
+
+##### Application APIs
+###### ==> Application APIs provide access to specific cloud applications, such as email, calendar, and social media.
+###### ==> For example, the Gmail API allows users to send and receive emails using the Gmail cloud application
+
+##### Infrastructure APIs
+###### ==> Infrastructure APIs provide access to low-level cloud infrastructure components, such as virtual machines, containers, and networks.
+###### ==> For example, the AWS EC2 API allows users to launch and manage virtual servers in the AWS EC2 cloud computing service
+
+***APIs are essential for cloud computing. They enable communication and data transfer between different software applications and services in the cloud or between the cloud and on-premises servers. APIs also facilitate the development, integration, and management of cloud-based solutions.***
+
+### Automating cloud tasks using APIs
+###### - By using APIs, a developer can write scripts or programs to interact with cloud services and perform tasks automatically, without requiring any human intervention
+###### - APIs enable developers to automate cloud tasks in a faster, easier, and more efficient way
+###### - This is because they can use existing code libraries and frameworks that support various API standards and formats
+
+
+## MODULE 5: Use cases and best practices
+
+### Using containers, microservices, and APIs to migrate legacy apps to the cloud
+###### - Many companies have old computer programs that are difficult to update and keep running
+###### - These programs often use outdated technology and are built in ways that make them hard to change
+###### - To make these programs work better and take advantage of new technology like cloud computing, companies can use tools like containers, microservices, and APIs.
+
+###### - Containers help separate the program from the computer it runs on and include all the resources and configuration settings that software needs to run independently.
+###### - Microservices divide programs into small parts that can work together.
+###### - And APIs help these parts talk to each other and to other programs.
+
+###### - By using these tools, companies can migrate, or move, their old programs to the cloud to make them easier to manage and improve how they work
+
+#### Containers, microservices, and APIs in practice
+###### - The thought of moving from existing apps to the cloud can be daunting. Disrupting a running business, even for a short time, can have a negative impact
+###### - However, using containers, microservices, and APIs to modernize a business’s applications can far outweigh the short-term impact the disruption might cause
+
+###### - By migrating its traditional applications to the cloud with containers, microservices, and APIs, ABC Inc. achieves several benefits.
+
+###### ==> They reduce the complexity and cost of maintaining and updating their applications by breaking them down into smaller and simpler units that they can independently develop, deploy, and manage
+
+###### ==> They increase the efficiency and scalability of their applications by leveraging the elasticity and automation of the cloud platform and the lightweight nature of the containers.
+
+###### ==> They improve the security and reliability of their applications by applying best practices to their code and infrastructure
+
+
+### Using containers, microservices, and APIs to build scalable applications
+###### - Combining containers, microservices, and APIs provides fulfillment, modularity, and availability
+
+##### Fufillment
+###### ==> Containers provide a lightweight and portable way to package and deploy applications, making it easy to scale applications up or down based on demand
+###### ==> This allows companies to quickly respond to changing business needs and user demands, while also ensuring efficient use of resources
+
+##### Modularity
+###### ==> Microservices divide an application into smaller, independent components that developers can create, deploy, and scale independently
+###### ==> This allows companies to scale specific parts of their application as needed, rather than having to scale the entire application
+###### ==> This can result in more efficient resource usage and faster response times
+
+##### Availability
+###### ==> Using a container orchestration platform like Kubernetes can enhance scalability
+###### ==> Kubernetes provides powerful tools for managing and scaling containerized applications, allowing developers to easily scale their applications up or down based on demand
+###### ==> It also provides features like automatic failover and rolling updates, which help ensure that applications are always available and up-to-date
+
+***By using containers, microservices, and APIs, developers can create scalable applications that can handle high demand and complexity with greater efficiency, agility, and reliability.***
+
+
+### Best practices when using containers and 
+
+##### Design each microservice to be loosely coupled and highly cohesive
+###### ==> This means that each microservice should have a clear and single responsibility, and should minimize its dependencies on other services
+###### ==> This way, businesses can develop, test, deploy, and update each microservice independently, without affecting the rest of the system.
+
+##### Use a consistent and standarized approach to communicate between microservices
+###### ==> Businesses can do this by using common protocols, formats, and patterns for inter-service communication, such as RESTful APIs, JSON, and message queues
+###### ==> This can help to ensure interoperability, reliability, and security of the communication.
+
+##### Implement proper logging, monitoring, and tracing mechanisms for each microservice and the whole system
+###### ==> This can help to detect and troubleshoot errors, performance issues, and anomalies in the system
+###### ==> It can also provide useful insights into the behavior and health of the system.
+
+##### Use a container orchestration tool to automate and manage the deployment, scaling, networking, and configuration of the containers
+###### ==> This can help to simplify the complexity of managing many containers across different environments
+###### ==> Some of the popular container orchestration tools are Kubernetes, Docker Swarm, and Amazon ECS
+
+##### Apply security best practices at every level of the system
+###### ==> This includes securing the communication between microservices using encryption and authentication
+###### ==> It also includes securing the containers using techniques such as scanning for vulnerabilities, limiting privileges, and enforcing policies
+
+
+## MODULE 6: You're a cloud engineer!
+
+### Your new cloud engineer role
+#### The Assignment
+###### - Your first task is to assist a senior cloud deployment engineer to create a Docker container and install an existing web app to the container.
+
+##### Your role
+###### ==> Your entry-level role is to provide general support for other cloud engineers to build your global copany resources on the cloud
+
+##### Your customers
+###### ==> Your department focuses on creating and delivering internal company software and services using the cloud
+
+##### Your area
+###### ==> You work alongside deployment and database experts to assist them in their work
+
+#### The skills to apply
+
+##### Technical skills
+###### ==> Read and write code at a fundamental level to create basic Docker instructions.
+###### ==> Run instructions from a command-line interface (CLI).
+
+##### Testing skills
+###### ==> Ensure the container is built properly by viewing the container in a desktop tool.
+###### ==> Run the container to ensure it loads properly.
+###### ==> View the application in the browser that is running in the container.
+
+
+### Your first project
+
+#### Purpose of the project
+###### - The software development team in your company developed a small web application to help employees manage their tasks
+###### - Your team will deploy this application to locations all over the world to improve how well people organize and manage their work time
+
+#### Your scope of work
+###### - The development of the web application is complete. Your team is ready to create a container for it
+###### - The senior cloud engineer decides to install the app into a Docker container to make deployment and maintenance easier
+###### - They’ve asked you to help on the project by assisting them to create the container and install the app image into it
+
+
+###### - During the build process, the container includes all the files it needs to run a Node.js web server
+###### - The container also includes three application files: script.js, style.css, and index.html.
+###### - Once you create the image and place it in the container, you’ll start the container and Docker will launch the Node.js web server which will serve the web application
+
+
+### Simulation: Create a Docker container and install an app
+###### - Clara, the senior engineer, already has installed Docker, VS Code, and Node.js on her laptop
+###### - She has created a folder and copied the three app files into it. In this simulation, you will follow the steps to create a Docker container, install an app into that container, and test the running app.
+
+##### Step 1
+###### ==> first you have to create a file called package.json
+###### ==> this file holds the information that Docker uses to create and run the web server
+
+```json
+// package.json
+{
+  "name": "todo-app",
+  "version": "1.0.0",
+  "description": "A workplace to do app",
+  "author": "Firs Last <first.last@example.com>",
+  "main": "server.is",
+}
+```
+
+##### Step 2
+###### ==> add the rest of the code for the package.json
+
+```json
+  "name": "todo-app",
+  "version": "1.0.0",
+  "description": "A workplace to do app",
+  "author": "Firs Last <first.last@example.com>",
+  "main": "server.is",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.1"
+  }
+```
+
+##### Step 3
+###### ==> create a server.js file
+###### ==> this is a script that Node.js uses to provide instructions for how the web server will operate
+###### ==> complete the file by writing code to open communication between the browser and the web server using the settings, starting from line 18
+
+```js
+// server.js
+"use strict";
+
+const express = require('express');
+const path = require('path');
+const publicDirPath = path.join(__dirname, '../app');
+
+// constants
+const PORT = 8080;
+const HOST = '0.0.0.0';
+
+// app
+const app = express();
+app.use(express.static(publicDirPath));
+app.get('/', (req, res) => {
+  res.sendFile("index.html");
+})
+
+app.listen(PORT, HOST, () => {
+  console.log(`Running on http://${HOST}:${PORT}`);
+});
+```
+
+##### Step 4
+###### ==> the final file you'll need to create is the Dockerfile and write the instructions
+###### ==> this is the specific file used by Docker that tells it which software and dependencies to use in the container
+###### ==> Notice the commands include the RUN command to install npm into the image and the COPY command to copy all the files
+###### ==> finally, the CMD command runs the node.js file you previously wrote which tells Docker to start the web server
+
+```dockerfile
+# Dockerfile
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY ..
+EXPOSE 8080
+CMD ["node", "server.js"]
+```
+
+##### Step 5
+###### ==> create a file to tell Docker to ignore all the existing Node.js files in the laptop's folder because the instructions you wrote tell Dcoker to install them
+###### ==> without this file, the Docker image might include unnecessary files in the image increasing its size
+
+```dockerfile
+# .dockerignore
+node_modules
+npm-debug.log
+```
+
+##### Step 6
+###### ==> now you're ready to build the container, through the command line
+###### ==> use Docker's "build" command to install the todo app and build the container
+
+```bash
+> docker build . -t todo-app
+[+] Building 1.3s (10/10) FINISHED
+> 
+```
+
+##### Step 7
+###### ==> now you have to launch the container and laod the image which contains the web app
+
+```bash
+> docker run -p 8080 -d todo-app
+```
+
+##### Step 8
+###### ==> to verify the app is running, open the Docker app and it shows the running container with the to-do app image loaded
+###### ==> nwo you can browse to the website that is running inside the container using Node.js to deliver the web pages
+###### ==> since its a web app you can test the application using a browser
+###### ==> the Docker app provides a link you can use to browse to the site
+###### ==> when you select the link, the to-do app opens in the browser, select the highlighted active port number for the running container that has the web app running inside it
+
+##### Step 9
+###### ==> notice that the Node.js application launches when you run the image through the Docker engine
+###### ==> this means you correctly packaged the Docker image and the container is ready to be deployed to the cloud so employees all over the world can use it
+
+
+## Key Points
+##### 1
+###### - Virtualization is the process of creating a virtual representation of a physical resource.
+
+##### 2
+###### - A virtual machine (VM) is a software-based emulation of a physical computer that can run different operating systems and applications. They can:
+###### - Reduce hardware costs, power consumption, and space requirements.
+###### - Improve server utilization and performance.
+###### - Provide high availability and fault tolerance.
+###### - Enhance system security.
+
+##### 3
+###### - Virtual storage is the pooling of physical storage from multiple networked devices into what appears to the user as a single storage device. It can:
+###### - Reduce the storage needed on internet-connected devices.
+###### - Enable data access from anywhere.
+###### - Allow users to scale their storage up or down depending on their needs.
+
+##### 4
+###### - A virtual network is a network built from virtual components instead of physical hardware. It can:
+###### - Enable users to created isolated environments for development and testing.
+###### - Connect different physical locations or cloud services together.
+###### - Enhance the performance or availability of network services.
+
+##### 5
+###### - Containers are a lightweight form of virtualization that enables applications to run in isolated environments that share the same operating system and hardware as the host server.
+
+##### 6
+###### - Containers are easy to deploy, replicate, and update across multiple host computers.
+
+##### 7
+###### - Using a container orchestration tool to automate and manage the deployment, scaling, networking, and configuration of the containers can simplify the complexity of managing containers across different environments.
+
+##### 8
+###### - Microservices are a way of designing cloud-based applications to consist of many small, independent, and loosely coupled services
+###### - They enable faster development, easier deployment, and more flexible scaling of cloud applications
+###### - They are more scalable and resilient than traditional applications.
+
+##### 9
+###### - Microservices can use any programming language or technology and they communicate by using APIs.
+
+##### 10
+###### - Developers use containers to simplify the deployment and maintenance of microservices.
+
+##### 11
+###### - An API is a set of rules and instructions that allow different software applications to communicate and exchange data with each other. They allow developers to:
+###### - Access and use the functionality and resources provided by cloud service providers.
+###### - Automate cloud tasks in a faster, easier, and more efficient way.
+
+##### 12
+###### - Containers, microservices, and APIs work well together to migrate legacy apps to the cloud and to build scalable applications.
