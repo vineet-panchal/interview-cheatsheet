@@ -183,4 +183,211 @@
 ###### ==> Specific steps: When deploying a new service, you might want to create very specific steps so you are sure the service does exactly what you want it to do
 
 ### The declarative orchestration method
+###### - Another way to achieve cloud orchestration is by using a declarative method
+###### - For this, developers specify the desired outcome or goal of their cloud service, such as the configuration, performance, availability, security, and cost
+###### - But, developers don’t need to write detailed instructions or procedures on how to achieve that outcome
+###### - Instead, they rely on a cloud orchestration tool or framework like Kubernetes or Jenkins to interpret their specifications and execute the necessary operations and procedures for them
 
+###### - A developer can deploy a web application to the cloud by:
+###### ==> Defining the components of their application, such as the web server, database, load balancer, and firewall
+###### ==> Specifying the properties and policies of each component, such as the number of server instances, scaling rules, access controls, and backup schedules
+
+### Cloud orchestration automation software
+###### - Developers use cloud automation to perform individual operations on components of a cloud environment, such as servers, databases, or switches
+
+#### Automating cloud orchestration with Kubernetes
+###### - Kubernetes(opens in a new tab) is a software platform that helps developers to automate the deployment, scaling, and management of their apps
+###### - Kubernetes lets them define their app as a set of containers, which are isolated units of code that can run on any machine
+###### - Developers can also specify how many replicas of each container they want, where the containers should run, and how they should communicate with each other
+
+## MODULE 3: You're a cloud deployment engineer
+
+### Your new cloud deployment engineer role
+
+##### Your role
+###### ==> your entry-level role is to provide general support for other cloud engineers to build your global company resources on the cloud
+
+##### Your customers
+###### ==> your department focuses on creating and delivering internal company software and services using the cloud
+
+##### Your area
+###### ==> you work alongside deployment and database experts to assist them in their work
+
+#### Assignment
+###### - Your first task is to assist a senior cloud deployment engineer to deploy a Docker image to the cloud using Kubernetes
+
+#### Skills to apply
+##### Technical skills
+###### ==> read and write code at a fundamental level to create basic Docker and Kubernetes instructions
+###### ==> run instructions from a command-line interface (CLI)
+
+##### Testing skills
+###### ==> ensure the container is properly deployed by reviewing the output in the CLI
+###### ==> view the deployed application in the browser
+
+### Your first project
+
+#### Purpose of the project 
+###### - The software development team in your company developed a small web application to help employees manage their tasks
+###### - your team will deploy this application to locations all over the world to improve how well people organize and manage their time
+
+#### Your scope of work
+###### - The senior cloud engineer decides to use Kubernetes on IBM Cloud to deliver the app to employees
+###### - They’ve asked you to help on the project by assisting them to configure the cluster and deploy the app image into it. The deployment works as follows.
+###### ==> The Docker image you’ll deploy includes all the application files it needs to run a Node.js web server
+###### ==> The container also includes three application files: script.js, style.css, and index.html.
+###### ==> After you create the image and place it in the container, you’ll create a deployment file and push the image to the Kubernetes cluster using the command line.
+
+#### Working together
+###### - In this simulation, you’ll be pair programming with the senior engineer on their laptop
+###### - Pair programming is a software development technique in which two programmers work together on one computer
+###### - One of them, called the “driver,” writes code.
+###### - The other one, called the “observer” or “navigator,” reviews each line of code, and gives feedback
+###### - The two programmers frequently switch roles to share their skills and perspectives.
+###### - During the simulation, you will take the role of the observer when reviewing the work of the senior engineer and the role of driver when writing code
+
+
+### Simulation: Deploy a Docker container
+
+##### Step 1
+###### ==> the first step is to create a container registry on IBM Cloud
+###### ==> this registry stores the Docker image you'll be creating
+###### ==> by using the registry, Kubernetes has a secure place from which to find and deploy the Docker image
+###### ==> after the command 'ibmcloud cr namespace-add utilities-cloud-registry', the new registry should display in the namespace list
+
+```bash
+> ibmcloud cr namespace-add utilties-cloud-registry
+Successfully added namespace 'utilities-cloud-registry'
+OK
+> ibmcloud cr namespace-list -v
+Listing namespaces for account ... in registry 'us.icr.io'...
+
+Namespace                    Resource Group     Created
+utilities-cloud-registry     Default            2 minutes ago
+
+OK
+> 
+```
+
+##### Step 2
+###### ==> the next step is to build a Docker image that is ready for IBM Cloud
+###### ==> the Docker image must include the operating system files that match the operating system used on IBM Cloud
+###### ==> build an image for Linux
+
+```bash
+> docker buildx build --platform linux/amd64 -t todo-app
+=> => writing image
+=> => naming to docker.io/library/todo-app
+> 
+```
+
+##### Step 3
+###### ==> it's time to create a copy of the image you just created that can be used in Kubernetes on the cloud
+###### ==> you'll use the Docker tag command that will create a version of the image that Kubernetes can reference from the registry you created earlier
+
+```bash
+> docker tag todo-app:latest us.icr.io/utilities-cloud-registry/todo-app
+app
+> 
+```
+
+##### Step 4
+###### ==> you can now push the iamge to the registry
+###### ==> the Docker image is currently on the hard disk on the laptop
+###### ==> for Kubernetes to be able to use it, you must push it to the registry you created earlier
+###### ==> before you can push to the registry, you must give Docker permissions to communicate with IBM Cloud
+
+```bash
+> ibmcloud cr login --client docker
+```
+
+##### Step 5
+###### ==> now you're ready to push the image using the Docker push command
+
+```bash
+> docker push us.icr.io/utilities-cloud-registry/todo-app
+Using default tag: latest
+The push refers to repository [us.icr.io/utilities-cloud-registry/todo-app]
+d5a88a33ebb5: Pushed
+1932e15b6e3d: Pushed
+```
+###### ==> the image is now in the container registry on IBM Cloud and is ready for your Kubernetes cluster to use
+
+##### Step 6
+###### ==> to deploy the app to Kubernetes, you need a special file that tells Kubernetes how to deploy the image
+###### ==> create a file called app-deploy.yaml, in which you'll write the deployment 
+###### ==> the file also needs to create a service on Kubernetes through which the todo app will communicate with the outside world
+
+```yaml
+apiVersion: v1
+  kind: Service
+  metadata
+    name: todo-app
+  spec: 
+    type: NodePort
+    ports: 
+    - port: 3000
+      targetPort: 3000
+    selector: 
+      app: todo-app
+```
+
+##### Step 7
+###### ==> next, its time to deploy the image to Kubernetes
+###### ==> you'll use a command that will send the instructions in the deployment file to Kubernetes
+###### ==> Kubernetes will use those instructions to make the app live on the internet
+
+```bash
+> kubectl apply -f app-deploy.yaml
+deloyment.apps/todo-app created
+service/todo-app unchanged
+> 
+```
+
+###### ==> the app is now available on the internet and Kubernetes is delivering the app using a Docker container
+
+##### Step 8
+###### ==> before you can call the deployment a success, you must perform a test to determine if the app actually is running and available for employees to access
+###### ==> to do this, you need to retreive the public IP address and a port number which you can use in a browser to test the application
+
+```bash
+> ibmcloud ks worker ls --cluster mycluster-free
+OK
+ID                                                       Public IP        Private IP       Flavor   State
+   Status    Zone    Version
+kube-chd9p6sf05334n42dbi0-myclusterfr-default-00000046   169.51.206.112   10.144.222.252   free  norma
+1  Ready     mil01   1.25.9_1543
+```
+
+###### ==> copy and paste the public ip in a browser window
+
+##### Step 9
+###### ==> then, you need to get the port number for the service you created
+
+```bash
+> kubectl describe service todo-app
+Name: ...
+Namespace: ...
+Labels: ...
+Annotations: ...
+Selector: ...
+Type: ...
+IP Family Policy: ...
+IP Families: ...
+IP: ...
+IPs: ...
+Port: ...
+TargetPort: ...
+NodePort: <unset> 30848/TCP
+Endpoints: ...
+Session Affinity: ...
+External Traffic Policy: ...
+Events: ...
+```
+
+###### ==> copy the value for the NodePort and past that after the public IP address you pasted in the browser window with two values separated by a colon
+###### 169.51.206.112:30848
+###### ==> your browser will load the Node.js web application
+###### ==> the application loads and you have successfully deployed it using a Docker container and Kubernetes
+###### ==> notice that the app running in the container through Kubernetes appears exactly as it would if it were running on a native web server
+###### ==> this is because the web server is running in a container making it easier to deploy to multiple regions or to scale as needed
