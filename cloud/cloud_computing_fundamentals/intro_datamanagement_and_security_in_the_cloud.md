@@ -161,3 +161,232 @@
 ###### ==> Authorization (AuthZ) provides access to resources within a system.  
 ###### ==> While authentication allows or prevents a user (or another system) from accessing a device or a system, authorization gives or denies them permission to use certain resources after the device or system authenticates them
 
+
+### Zero Trust, Fully Secure
+###### - The zero trust model is a way of securing modern organizations by removing the assumption of trust and enforcing strict verification and authorization
+###### - In this model, every user, device, and component is considered untrusted at all times, regardless of whether they are inside or outside of an organization’s network
+###### - The zero trust model is designed to adapt to the complexities of the cloud environment, where data and applications can be accessed from anywhere and by anyone
+###### - The zero trust model is based on three main principles
+
+##### Verify explicitly
+###### ==> the services must authenticate and authorize every access request based on multiple factors, such as identify, location, device health, and data sensitivity
+
+##### Use least privilege access
+###### ==> users and devices should only have the minimum level of access they need to perform their tasks, and that they should only gain access for a limited time and under certain conditions
+
+##### Assume breach
+###### ==> design security measures to minimize the impact of a potential attack
+###### ==> do this by encrypting data, segmenting networks, and monitoring for anomalies
+
+#### The purpose of the zero trust model
+###### - The zero trust model can help organizations to: Improve their security, Enable digital transformation, Empower productivity, Comply with regulations, Reduce costs and complexity
+###### - However, implementing the zero trust model requires a strategic approach that covers six key elements: identities, devices, applications, data, networks, and infrastructure.
+
+##### Identities
+###### ==> This element focuses on verifying the identity of every user before granting access to resources
+###### ==> Administrators can do this by using multifactor authentication and identity management solutions.
+
+##### Devices
+###### ==> This element focuses on ensuring that only secure and compliant devices can access resources
+###### ==> Administrators can use device management and endpoint security solutions to implement this
+
+##### Applications
+###### ==> This element focuses on securing the applications that users access
+###### ==> Administrators can use application security and access control solutions for this
+
+##### Data
+###### ==> This element focuses on protecting the data that users access and share
+###### ==> Administrators use data encryption and data loss prevention solutions to protect data
+
+##### Networks
+###### ==> This element focuses on securing the networks that connect users to resources
+###### ==> Administrators can secure networks by using network segmentation and network security solutions
+
+##### Infrastructure
+###### ==> This element focuses on securing the underlying infrastructure that supports the organization’s operations
+###### ==> Administrators use infrastructure security and compliance solutions to secure this
+
+
+## MODULE 4: Databases and DBaaS
+
+### Delivering databse services on the cloud
+###### - Databases exist to keep all that information organized and to efficiently and securely deliver it to the destinations that need it
+
+###### - Database as a service (DBaaS) is a way of storing and managing data online without having to worry about the technical details
+###### - Instead of buying, installing, and maintaining database software and hardware, businesses use a DBaaS provider that offers these services for a fee
+###### - A DBaaS provider is like a landlord who rents out apartments to tenants
+###### - Tenants can choose the size, location, and features of their apartment, but they don’t have to deal with the maintenance, security, or utilities
+###### - the landlord takes care of all that for them
+
+#### Benefits of using DBaaS
+##### Cost savings
+###### ==> busineeses only pay for what they use and don't have to invest in expensive hardware and software
+
+##### Flexibility
+###### ==> businesses can scale their databse resources up or down as their demand changes
+
+##### Availability
+###### ==> users can access the databse anytime and anywhere with an internet connection
+
+##### Security
+###### ==> data is encrypted and protected by the provider's security measures
+
+##### Reliability
+###### ==> data is abcked up and replicated by the provider to ensure high availability and disaster recovery
+
+### Managing databases with DBaaS
+###### - Database management is the process of creating, maintaining, and securing databases
+###### - Databases are collections of organized data that are stored in a way that makes them easy to access and manipulate
+###### - Database management can be challenging and time-consuming, especially for large and complex databases that require specialized skills and software
+
+### Securing databases with DBaaS
+###### - Cloud services that provide DBaaS have made database security a top priority
+###### - When a business chooses to move its data from servers housed on premises, they must ensure their cloud provider will prioritize the security of their data as much as they do themselves
+
+###### - One key difference between on-premises and DBaaS security is that with on-premises, a company has more control over their security protocols and can customize them to their specific needs.
+
+###### - With DBaaS, the provider handles most of the security details, which can be both a convenience and a potential concern
+###### - However, DBaaS providers typically have advanced security measures in place, including encryption, backup and recovery, and access control, which might be harder for a business to implement themselves due to cost and complexity
+
+###### - Another difference is that with on-premises, the company is responsible for maintaining and updating their own security measures
+###### - With DBaaS, the provider takes care of most of the maintenance and updates, which can free up resources for other tasks
+###### - However, companies also must trust that the provider is keeping up with the latest security measures and responding to new threats in a timely manner
+
+#### Security features of DBaaS
+###### - Cloud databases have many of the same security features that on-premises databases provide
+###### - However, DBaaS has an advantage over on-premises databases in that most of the security features are built in and managed for the user
+###### - Further, cloud providers manage continual improvements and updates so the risk of security gaps lessens over timE
+
+##### Encryption
+###### ==> One of the main security features of DBaaS is encryption
+###### ==> Encryption is a process of transforming data into a secret code that only authorized parties can read
+###### ==> DBaaS providers use encryption to protect data when storing it on their servers and when transferring it over the internet
+###### ==> This means that even if someone manages to access the data, they will not be able to understand it without the proper key
+
+##### Backup and Recovery
+###### ==> Backup and recovery are methods of saving copies of data and restoring them in case of a disaster
+###### ==> DBaaS providers offer backup and recovery services that automatically create and store backups of data on multiple locations and devices
+###### ==> This means that businesses don’t have to worry about losing their data due to hardware failure, human error, natural disaster, or cyberattack
+
+##### Access Control
+###### ==> Access control is a way of limiting who can access the data and what they can do with it
+###### ==> DBaaS providers offer access control tools that allow you to set permissions and roles for different users and groups
+###### ==> This means that businesses can control who can view, edit, delete, or share their data, and track their activities
+
+
+## MODULE 5: Data governance and data compliance
+
+### Managing data in the cloud
+| Data governance is the collection of processes, policies, roles, metrics, and standards that ensures an effective and efficient use of information in the cloud. It helps to ensure that data is clean, accurate, secure, and available for authorized users. Data governance also helps to establish data management practices that align with the organization’s goals and comply with external regulations. | Data compliance is the adherence to the rules and regulations that apply to the data in the cloud. These may include industry standards, government laws, contractual obligations, or ethical principles. It helps to protect the data from unauthorized access, misuse, or loss. Compliance also helps to avoid legal risks and reputational damage that may result from data breaches or violations. |
+| -- | -- |
+
+***Data governance and data compliance are critical for cloud computing because they enable companies to take advantage of the benefits of the cloud while minimizing the risks. By implementing a data governance and compliance framework, companies can ensure that their data is well-managed and protected in the cloud.***
+
+
+### Cloud support for data governance and compliance
+###### - Cloud service providers offer different levels of support for data governance and data compliance depending on the type of service they offer and the contract they have with the customer
+###### - Here are some of the common ways that cloud service providers support data governance and data compliance
+###### - Certifying their compliance 
+###### - Providing tools and documentation for customers 
+###### - Collaborating with customers and regulators
+
+##### Certifying compliance
+###### ==> Cloud service providers often provide certificates that demonstrate their compliance with various standards and frameworks
+###### ==> One type in the US is the Federal Risk and Authorization Management Program (FedRAMP), which provides guidance for how federal agencies should use cloud services
+
+##### Providing tools
+###### ==> Cloud service providers offer tools and features that help customers to manage their data
+###### ==> These might include tools for encryption, backup, recovery, access control, logging, and auditing
+
+##### Providing documentation
+###### ==> Cloud service providers usually share documentation and guidance that helps customers understand their roles and responsibilities in data governance and compliance
+###### ==> Documentation might include service level agreements (SLAs), terms of service (TOS), and privacy policies
+
+##### Collaborating
+###### ==> Cloud service providers collaborate with customers and regulators to address issues or requests related to data governance and data compliance
+###### ==> These might include data subject requests (DSRs), data breach notifications, and audits
+
+#### Cloud security tools that support governance and compliance
+
+###### - Cloud security tools are software or services that help businesses protect their data and applications in the cloud
+###### - Cloud security tools can also help businesses to manage data governance and data compliance
+
+##### Encryption
+###### ==> Encryption is the process of transforming data into a secret code that only authorized parties can read
+###### ==> Encryption can protect data at rest (stored in the cloud) or in transit (moving between the cloud and the user)
+###### ==> Most cloud providers offer encryption for both data at rest and data in transit, using industry-standard algorithms and protocols
+
+##### Key management
+###### ==> Key management is the process of creating, storing, and managing the keys or passwords used to encrypt and decrypt data
+###### ==> Key management is essential for ensuring that only authorized parties can access the encrypted data
+###### ==> Key management services can allow businesses to create and manage their own encryption keys, or use the cloud provider’s managed keys
+
+##### Identity and access management (IAM)
+###### ==> IAM is the process of defining and enforcing who can access what resources in the cloud, and under what conditions
+###### ==> IAM can help businesses control and monitor the access of their employees, customers, partners, and vendors to their cloud data and applications
+###### ==> Cloud providers offer IAM services that allow businesses to create and manage user accounts, roles, permissions, policies, and multifactor authentication
+
+##### Data loss prevention (DLP)
+###### ==> DLP is the process of detecting and preventing the unauthorized exposure or leakage of sensitive data from the cloud
+###### ==> DLP can help businesses comply with data privacy and security regulations, such as GDPR and HIPAA
+###### ==> DLP services allow businesses to scan, classify, and monitor their cloud data for potential risks and violations
+
+##### Security information and event management (SIEM)
+###### ==> SIEM is the process of collecting, analyzing, and correlating security-related data from various sources in the cloud, such as logs, alerts, events, and incidents
+###### ==> SIEM can help businesses detect and respond to cyberattacks, breaches, or anomalies in their cloud environment
+
+
+## MODULE 6: You're a cloud security analyst
+
+### Your new cloud security analyst role
+
+##### Your role
+###### ==> your entry-level role is to provide general support for other cloud security analysts to protect your global company resources on the cloud
+
+##### Your customers
+###### ==> your department focuses on creating and delivering internal company software and services using the cloud
+
+##### Your area
+###### ==> you work alongside security and databse experts to assist them in their work
+
+#### Assignment
+###### - Your first task is to assist a senior cloud security analyst to create an IBM Cloudant data resource on IBM Cloud
+###### - Cloudant databases are ideal for web, mobile, and serverless cloud applications and the development team requested this type of database from your team
+###### - You’ll then use the IBM Security and Compliance tool to create a security profile for the IBM Cloudant resource and test it to ensure it meets the security requirements of your organization
+
+#### The toolkit
+###### - As a cloud security analyst, you will use a variety of tools depending on the task
+###### - For this project scenario, you’ll use the interface from your company’s cloud provider, IBM Cloud, to interact with the cloud services
+
+#### the skills to apply
+
+##### Technical skills
+###### ==> deploy an IBM Cloudant databse
+###### ==> create a security profile on the IBM Security and Compliance tool
+###### ==> run the IBM Security and Compliance tool
+
+##### Testing skills
+###### ==> review the security settings for the database
+###### ==> evaluate the results of the tests performed by the IBM Security and Compliance tool
+
+### Your first project
+
+#### Purpose of the project
+###### - The software development team in your company needs a secure database in which to store sensitive customer data and they’ve asked your team to deploy it
+###### - In addition to creating the database for the team, you’ve been tasked with ensuring that the database is set up in the most secure way possible before handing it off to the development team
+
+#### Your scope of work
+###### - The senior security analyst decides to use an IBM Cloudant cloud database for this purpose
+###### - He’s asked you to help deploy the database and then create a security profile on the IBM Security and Compliance tool against which you’ll test your newly-created database
+###### - You’ll then review the results of the test which the senior cloud analyst will use to make further decisions. The process works as follows
+###### - You’ll create an IBM Cloudant data resource on IBM Cloud
+###### - You’ll set up a cloud object storage instance to hold the results of the security test you’ll run 
+###### - You’ll create a profile in the IBM Security and Compliance tool which will run a set of security tests on the IBM Cloudant database
+###### - You’ll review the result of the test so you can call out any issues to the senior cloud security analyst
+
+
+### Simulation: Secure an IBM Cloudant database
+
+##### Step 1
+###### ==> the first step is to create an IBM Cloudant database on IBM Cloud
+###### ==> Cloudant databses are ideal for web, mobile, and serverless cloud applications and the development team requested this type of databse from your team
