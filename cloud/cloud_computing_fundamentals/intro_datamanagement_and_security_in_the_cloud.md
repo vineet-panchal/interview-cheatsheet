@@ -390,3 +390,128 @@
 ##### Step 1
 ###### ==> the first step is to create an IBM Cloudant database on IBM Cloud
 ###### ==> Cloudant databses are ideal for web, mobile, and serverless cloud applications and the development team requested this type of databse from your team
+###### ==> change the name in the Instance name field to "usr-cldnt-database" and leave all other values as their defaults
+###### ==> select the create button to create the database
+![Image](https://github.com/user-attachments/assets/ec93a7a3-8800-4f90-817f-99deca8802eb)
+
+##### Step 2
+###### ==> the next step is to prepare for the security check
+###### ==> since the databse will be storing user information, your team needs to ensure that its using excryption and a secure authentication method
+###### ==> first, you will perform a visual check of the database settings
+![Image](https://github.com/user-attachments/assets/9e34f805-8a38-4d7c-9509-9fc79b9cde1b)
+
+###### ==> under the Name column, select the usr-cldnt-database from the list of databases
+![Image](https://github.com/user-attachments/assets/07ab4f43-f8ee-40e1-914d-5535c1dd8e54)
+
+###### ==> verify the two settings to ensure the database is secure
+###### ==> notice that the Authentication methods is using IBM Cloud IAM
+###### ==> this ensures that only authorized users can access the database
+###### ==> also notice that Disk encryption is set to Yes, which ensures that the data in the database is securely stored and transported
+
+##### Step 3
+###### ==> the next task is to create a cloud object storage instance
+###### ==> to store the results from the compliance and security tests you'll be runningm you need to set up this object storage service
+###### ==> this type of storage is best for files and other unstructured data
+###### ==> you find the Cloud Object Storage service in the IBM catalog
+###### ==> notice that you're creating this storage on IBM Cloud, but its possible to use object storage from an on-premises source or even from another cloud provider
+![Image](https://github.com/user-attachments/assets/319b14e6-6e7e-4b4e-a9ba-d0d520ed3591)
+
+###### ==> you've created the cloud object
+
+##### Step 4
+###### ==> now you need to create a bucket to store any files that will be put in object storage
+###### ==> for this project, the result of your security test will be stored here
+###### ==> select the Create Bucket button
+![Image](https://github.com/user-attachments/assets/815800fa-2639-405c-aa1d-f896441415b8)
+
+##### Step 5
+###### ==> you can use a predefined bucket for this project
+###### ==> using this option will optimize the bucket type for you, so you don't have to configure a lot of options
+###### ==> under the Predefined beckets section, select the arrow in the Quickly get started block
+![Image](https://github.com/user-attachments/assets/35d5c55e-44c7-41ac-b20d-6dfe8e703637)
+
+###### ==> you can leave the default bucket name as it is, select the Next button
+![Image](https://github.com/user-attachments/assets/8bdb0402-ae48-4926-8631-23b4a1415c5b)
+
+###### ==> since you're not uploading files at this point, you can just create your bucket, select the View bucket configuration button
+![Image](https://github.com/user-attachments/assets/4a2e2f3a-f184-4b7d-82bc-ac7d4ff6eaf2)
+
+##### Step 6
+###### ==> you have created the cloud object storage and tells you that you're now ready to create the Cloudant tests and store them in the cloud object storage you just created
+![Image](https://github.com/user-attachments/assets/e1bab264-def8-4ae7-9481-0a86c168cdc0)
+
+###### ==> you're ready to create some tests that you can run against the IBM Cloudant database to make sure its ready for the development team
+###### ==> the Security and Compliance page that the service enables you to create a control that will run specific tests against services on IBM Cloud
+###### ==> start by creating a control library that will store the controls
+###### ==> a control is similar to a policy in that it defines the security measures your organization requires
+###### ==> under Controls select Control libraries
+![Image](https://github.com/user-attachments/assets/4dff1bd9-eff5-4592-a809-b7938e22b43d)
+
+##### Step 7
+###### ==> create a new control library that will store the IBM Cloudant controls
+###### ==> open the Control libraries menu item so you can create a new control library, select the Create button
+![Image](https://github.com/user-attachments/assets/f4e016d0-a678-4fd7-a3f3-a0297c0cd16f)
+
+##### Step 8
+###### ==> name the control library, by writing "Cloudant Database Controls" in the name field
+![Image](https://github.com/user-attachments/assets/66f1602c-68bc-4942-98bc-5e951188fcaa)
+
+###### ==> you created the control libary
+###### ==> the control library needs assessments, the actual tests the tool will perform against the database
+###### ==> create a new control called Cloudant developer control
+![Image](https://github.com/user-attachments/assets/370f23fb-b1b2-41e6-adda-9ad782088c4f)
+
+##### Step 9
+###### ==> examine each of the Cloudant control assessments
+###### ==> notice that two of them are related to secure communication
+###### ==> the last one in the list is related to a specific type of encryption that corporations use when they want to tightly control particular areas of their security
+![Image](https://github.com/user-attachments/assets/cf976f89-f61d-475c-b8c9-93c7d15058f9)
+
+###### ==> you'll run the IBM Cloudant tests that will check that the database is enabled with encryption and is accessible only through HTTPS, which is a secure way to send data over the internet
+###### ==> select the checkboxes for Check whether Cloudant is enabled with encryption and Check whether Cloudant is accessible only through TLS 1.2 or higher and select Create
+
+##### Step 10
+###### ==> now that you've added the assessments, you can create the control
+###### ==> on the Create a control page, select Create
+![Image](https://github.com/user-attachments/assets/bee8dc29-5b64-4e80-a15a-7a026dccb6d0)
+
+##### Step 11
+###### ==> in order to run the tests, the Security and Compliance service needs a profile under which to run
+![Image](https://github.com/user-attachments/assets/535f5ccf-7e0a-4ace-b019-3348c559c6db)
+
+##### Step 12
+###### ==> the profile is set up, now its time to create an assessment
+###### ==> an assessment is joining a profile to a set of assessments
+###### ==> once you join a profile with assessments, the IBM Cloudant tests will run and you can view the results, select Create
+![Image](https://github.com/user-attachments/assets/c038c1c3-cac3-4514-9d71-3878dcfa9c28)
+
+##### Step 13
+###### ==> on the Profile and scope page, you need to select a scope that includes the IBM Cloudant database you created earlier
+###### ==> you'll use the default scope for this project
+###### ==> under Scope, select Default from the drop down menu, and then select the Next button
+![Image](https://github.com/user-attachments/assets/4d88141a-922a-4718-9429-815f055ada69)
+
+###### ==> this is the parameters page, there aren't any parameters that you need to set or edit for this assessment
+![Image](https://github.com/user-attachments/assets/c4832649-38cc-4c8d-bfad-db25e41ae51d)
+
+###### ==> here is the Scan Settings page, you can leave the scan settings to their defaults
+###### ==> the scan setting defaults will run a scan on your IBM Cloudant database once every day and show you a report
+###### ==> this will help you know if something critical has changed on your database that might compromise the data in it
+###### ==> you'll be able to see the results in the Security and Compliance dashboard
+![Image](https://github.com/user-attachments/assets/31bd95e1-1d2e-4c99-8d18-13cb2830d7ae)
+
+##### Step 14
+###### ==> this is the Review page
+###### ==> create the attachment that will start the scan
+###### ==> after the scan runs, the tool will create a file that stores the result of the tests and place it in the object storage bucket you created in a previous step
+![Image](https://github.com/user-attachments/assets/f76927b4-4253-4e23-a0f1-aa8b745ec1bd)
+
+###### ==> your scan is successful, review the results
+###### ==> notice the green check marks next to each of the assessments, this means your IBM Cloudant database passed the tests
+![Image](https://github.com/user-attachments/assets/5f3d8a48-565a-447c-b6e8-e0c07c78ed8b)
+
+###### ==> you have successfully created a secure IBM Cloudant database
+###### ==> you reviewed the settings on the database that showed that the database is secure
+###### ==> you then created controls that test the database to assess that the database uses the HTTPS protocol and that is encrypted
+###### ==> you attached a profile to these controls that regularly tests the database to ensure nothing has changed
+
