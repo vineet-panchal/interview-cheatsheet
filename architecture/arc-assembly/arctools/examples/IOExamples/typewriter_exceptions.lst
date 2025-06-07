@@ -1,0 +1,124 @@
+(ARCTools Version 2.0.2)
+ HexLoc     DecLoc    MachWord   Label        Instruction                Comment
+                                              .equ 0x3fffc0              !Starting point of the memory mapped region
+                                              .equ 0x0                   !0xffff0000 Console Data Port
+                                              .equ 0x4                   !0xffff0004 Console Status Port.
+                                              .equ 0x8                   !0xffff0008 Keyboard Data Port
+                                              .equ 0xc                   !0xffff000c Keyboard Control Port
+                                              .equ 0xff000150            !Keyboard IO trap table entry
+                                              .equ 0xff001000            !Keyboard interrupt service routine
+                                              .equ 0xff000160            !CRT IO trap table entry
+                                              .equ 0xff002000            !CRT interrupt service routine
+                                              .equ 3000                  
+                                                                         
+                                              .org 2048                  
+                                                                         !Global Variables
+00000800  0000002048  00000bb8  BuffPtr:                                 
+00000804  0000002052  00000000  Enter:                                   
+                                                                         
+                                                                         !Place memory mapped I/O region base address in %r4
+00000808  0000002056  88000000  main:         add %r0, %r0, %r4          !Clear r4
+0000080c  0000002060  093fffc0                sethi 4194240, %r4         !Place the I/O memory region base address in r4
+                                                                         
+                                                                         ! Enable traps
+00000810  0000002064  83480000                rd %psr, %r1               !Read %psr
+00000814  0000002068  82106020                or %r1, 32, %r1            !Set ET bit (enable traps)
+00000818  0000002072  81884000                wr %r1, %r0, %psr          !Write %psr
+                                                                         
+                                                                         !Enable KeyBoard Interrupts
+0000081c  0000002076  c201200c                ld %r4, [12], %r1          !Load CICTL
+00000820  0000002080  82106020                or %r1, 32, %r1            !Set enable interrupt bit
+00000824  0000002084  c221200c                st %r1, %r4, [12]          !Store CICTL
+                                                                         
+                                                                         ! Busy wait for the 'Enter' variable to go high
+00000828  0000002088  be07e001  Loop:         add %r31, 1, %r31          
+0000082c  0000002092  c2002804                ld [2052], %r1             
+00000830  0000002096  80a06000                subcc %r1, 0, %r0          !If 'Enter' is still zero
+00000834  0000002100  02bffffd                be -3                      !Then continue waiting
+                                                                         
+                                                                         !Disable Keyboard Interrupts
+00000838  0000002104  c201200c                ld %r4, [12], %r1          !Load CICTL
+0000083c  0000002108  82384000                xnor %r1, %r0, %r1         !Not CICTL
+00000840  0000002112  82106020                or %r1, 32, %r1            !Clear enable interrupt bit
+00000844  0000002116  82384000                xnor %r1, %r0, %r1         !Not CICTL
+00000848  0000002120  c221200c                st %r1, %r4, [12]          !Store CICTL
+                                                                         
+                                                                         !Reset 'Enter' and 'BuffPtr'
+0000084c  0000002124  c0202804                st %r0, [2052]             !Reset 'Enter'
+00000850  0000002128  82002bb8                add %r0, 3000, %r1         
+00000854  0000002132  c2202800                st %r1, [2048]             !Reset 'BuffPtr'
+                                                                         
+                                                                         !Enable Printer Interrupts
+00000858  0000002136  c2012004                ld %r4, [4], %r1           !Load COSTAT
+0000085c  0000002140  82106020                or %r1, 32, %r1            !Set enable interrupt bit
+00000860  0000002144  c2212004                st %r1, %r4, [4]           !store COSTAT
+00000864  0000002148  10bffff1                ba -15                     
+                                                                         
+00000868  0000002152  ffffffff  End:          halt                       !Exit Program
+                                                                         
+                                                                         !KeyBoard Trap and ISR:
+                                              .org Keyboard_Trap         
+ff000150  0-16776880  108003ac                ba 940                     !goto keyboard ISR
+                                                                         
+                                              .org Keyboard_ISR          
+ff001000  0-16773120  c4012008                ld %r4, [8], %r2           !Load waiting char
+ff001004  0-16773116  c6002800                ld [2048], %r3             !Load buffer pointer
+ff001008  0-16773112  c420e000                st %r2, %r3, [0]           !Store char in buffer
+ff00100c  0-16773108  8600e004                add %r3, 4, %r3            !Increment buffer pointer
+ff001010  0-16773104  c6202800                st %r3, [2048]             !Store buffer pointer
+ff001014  0-16773100  80a0a00a                subcc %r2, 10, %r0         !Compare char to 'new line'
+ff001018  0-16773096  12800003                bne 3                      !If Enter pressed
+ff00101c  0-16773092  86002001                add %r0, 1, %r3            
+ff001020  0-16773088  c6202804                st %r3, [2052]             !Then store 1 to 'Enter'
+                                                                         
+ff001024  0-16773084  81cc2004  KB_End:       rett %r16, 4               !Return to the next pc location
+                                                                         
+                                                                         !CRT Trap and ISR:
+                                              .org CRT_Trap              
+ff000160  0-16776864  108007a8                ba 1960                    
+                                                                         
+                                              .org CRT_ISR               
+ff002000  0-16769024  c4002800                ld [2048], %r2             !Load buffer pointer
+ff002004  0-16769020  c6008000                ld %r2, %r3                !Load char from buffer
+ff002008  0-16769016  8400a004                add %r2, 4, %r2            !Increment buffer pointer
+ff00200c  0-16769012  c4202800                st %r2, [2048]             
+                                                                         
+ff002010  0-16769008  80a0e00a                subcc %r3, 10, %r0         !Compare char to 'new line'
+ff002014  0-16769004  02800002                be 2                       !If 'new line' found goto CRT_Enter
+ff002018  0-16769000  1080000b                ba 11                      !Goto exit ISR
+                                                                         
+ff00201c  0-16768996  84002bb8  CRT_Enter:    add %r0, 3000, %r2         !Reset buffer pointer
+ff002020  0-16768992  c4202800                st %r2, [2048]             
+ff002024  0-16768988  c401200c                ld %r4, [12], %r2          !Load CICTL and enable interrupts
+ff002028  0-16768984  8410a020                or %r2, 32, %r2            
+ff00202c  0-16768980  c421200c                st %r2, %r4, [12]          
+ff002030  0-16768976  c4012004                ld %r4, [4], %r2           !Load COSTAT and disable interrupts
+ff002034  0-16768972  84388000                xnor %r2, %r0, %r2         
+ff002038  0-16768968  8410a020                or %r2, 32, %r2            
+ff00203c  0-16768964  84388000                xnor %r2, %r0, %r2         
+ff002040  0-16768960  c4212004                st %r2, %r4, [4]           
+                                                                         
+ff002044  0-16768956  c6212000  CRT_End:      st %r3, %r4, [0]           !Store char into COUT
+ff002048  0-16768952  81cc2004                rett %r16, 4               !Exit ISR
+                                                                         
+                                                                         
+
+--- Symbol Table ---
+Keyboard_ISR: -16773120
+Enter: 2052
+BuffPtr: 2048
+Buff: 3000
+Loop: 2088
+CIN: 8
+CICTL: 12
+main: 2056
+KB_End: -16773084
+CRT_Enter: -16768996
+Keyboard_Trap: -16776880
+COSTAT: 4
+End: 2152
+BASE: 4194240
+CRT_End: -16768956
+CRT_Trap: -16776864
+COUT: 0
+CRT_ISR: -16769024

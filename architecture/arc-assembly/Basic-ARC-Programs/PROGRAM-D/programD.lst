@@ -1,0 +1,35 @@
+(ARCTools Version 2.0.2)
+ HexLoc     DecLoc    MachWord   Label        Instruction                Comment
+                                              .org 2048                  ! start addresses at 2048 from this point
+00000800  0000002048  c2002bb8  main:         ld [3000], %r1             ! main function starts: load a into register 1
+00000804  0000002052  c4002bbc                ld [3004], %r2             ! load b into register 2
+00000808  0000002056  c6002bc0                ld [3008], %r3             ! load c into register 3
+0000080c  0000002060  80a12003  top:          subcc %r4, 3, %r0          ! top function starts: subtract register 4 with 3 and load it into register 0
+00000810  0000002064  0280000a                be 10                      ! branch if zero to the done subroutine
+00000814  0000002068  80a14006                subcc %r5, %r6, %r0        ! subtract register 5 and register 6, and load it into register 0
+00000818  0000002072  0c800004                bneg 4                     ! branch if negative to the else statement
+0000081c  0000002076  82904002                orcc %r1, %r2, %r1         ! bitwise or on register 1 and register 2, and load it into register 1
+00000820  0000002080  8c81a001                addcc %r6, 1, %r6          ! add register 6 with 1, and load it into register 6
+00000824  0000002084  10800003                ba 3                       ! branch unconditionally to the bottom subroutine
+00000828  0000002088  82884003  else:         andcc %r1, %r3, %r1        ! else function starts: bitwise and on register 1 and register 3, and load it into register 1
+0000082c  0000002092  8a816001                addcc %r5, 1, %r5          ! add register 5 with 1, and load it into register 5
+00000830  0000002096  88812001  bottom:       addcc %r4, 1, %r4          ! bottom function starts: add register 4 with 1, and load it into register 4
+00000834  0000002100  10bffff6                ba -10                     ! branch unconditionally to the top subroutine
+00000838  0000002104  c6202bc4  done:         st %r3, [3012]             ! store contents of register 3 to the memory location of y
+0000083c  0000002108  81c3e004                jmpl %r15, 4, %r0          ! jump to the address register 15 + 4, and store the address in register 0
+                                              .org 3000                  ! start addresses at 3000 from this point on
+00000bb8  0000003000  000000a0  a:                                       ! assign 0xa0 to variable a
+00000bbc  0000003004  00000033  b:                                       ! assign 0x33 to variable b
+00000bc0  0000003008  00000052  c:                                       ! assign 0x52 to variable c
+00000bc4  0000003012  00000002  y:                                       ! assign 2 to variable y
+
+--- Symbol Table ---
+bottom: 2096
+main: 2048
+done: 2104
+c: 3008
+y: 3012
+else: 2088
+top: 2060
+b: 3004
+a: 3000

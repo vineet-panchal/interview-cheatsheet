@@ -1,0 +1,10 @@
+(ARCTools Version 2.0.2)
+ HexLoc     DecLoc    MachWord   Label        Instruction                Comment
+                                              .org 2048                  
+00000800  0000002048  82886037                andcc %r1, 55, %r1         
+00000804  0000002052  82b0606e                orncc %r1, 110, %r1        
+00000808  0000002056  8a90a07b                orcc %r2, 123, %r5         
+0000080c  0000002060  8698bfff                xorcc %r2, -1, %r3         
+00000810  0000002064  ffffffff                halt                       
+
+--- Symbol Table ---

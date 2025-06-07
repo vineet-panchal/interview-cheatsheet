@@ -1,0 +1,23 @@
+(ARCTools Version 2.0.2)
+ HexLoc     DecLoc    MachWord   Label        Instruction                Comment
+                                              .org 2048                  ! start addresses at 2048
+00000800  0000002048  c2002824  m_start:      ld [2084], %r1             ! load x into register one
+00000804  0000002052  c4002828                ld [2088], %r2             ! load y into register two
+00000808  0000002056  80a04002                subcc %r1, %r2, %r0        ! subtract register one and two, and load it into register zero
+0000080c  0000002060  0c800003                bneg 3                     ! branch if the condition is negative and jump to the else statement
+00000810  0000002064  86884002                andcc %r1, %r2, %r3        ! and register one and two, and load it into register three
+00000814  0000002068  10800002                ba 2                       ! branch unconditionally to the done statement
+00000818  0000002072  86904002  else:         orcc %r1, %r2, %r3         ! or register one and two, and load it into register three
+0000081c  0000002076  c620282c  done:         st %r3, [2092]             ! store contents of register three to a
+00000820  0000002080  81c3e004                jmpl %r15, 4, %r0          ! jump to the address of register 15 + 4 bits
+00000824  0000002084  0000001e  x:                                       ! assign 30 to variable x
+00000828  0000002088  00000030  y:                                       ! assign 48 to variable y
+0000082c  0000002092  00000000  a:                                       ! assign 0 to variable a
+
+--- Symbol Table ---
+x: 2084
+a: 2092
+done: 2076
+m_start: 2048
+else: 2072
+y: 2088

@@ -1,0 +1,25 @@
+(ARCTools Version 2.0.2)
+ HexLoc     DecLoc    MachWord   Label        Instruction                Comment
+                                              .org 2048                  ! start addresses at 2048
+                                              .equ 4000                  ! equates dstart to 4000
+00000800  0000002048  c2002fa0                ld [4000], %r1             ! load a into register 1
+00000804  0000002052  c4002fa4                ld [4004], %r2             ! load b into register 2
+00000808  0000002056  c6002fa8                ld [4008], %r3             ! load c into register 3
+0000080c  0000002060  80808003                addcc %r2, %r3, %r0        ! add register 2 and register 3 (b + c), and load it into register 0
+00000810  0000002064  88804000                addcc %r1, %r0, %r4        ! add register 1 and register 0 (a + (b + c)), and load it into register 4
+00000814  0000002068  84a08004                subcc %r2, %r4, %r2        ! subtract register 2 and register 4 (b + (a + (b + c)), and load it into register 2
+00000818  0000002072  c0202fa0                st %r0, [4000]             ! store contents of register 0 to memory location of a
+0000081c  0000002076  c4202fac                st %r2, [4012]             ! store contents of register 2 to memory location of y
+00000820  0000002080  81c3e004                jmpl %r15, 4, %r0          ! jump to the address of register 15 + 4
+                                              .org dstart                ! sets the addresses after this point to dstart (3000)
+00000fa0  0000004000  0000000f  a:                                       ! assign 15 to variable a
+00000fa4  0000004004  00000036  b:                                       ! assign 52 to variable b
+00000fa8  0000004008  ffffffe3  c:                                       ! assign -29 to variable c
+00000fac  0000004012  00000000  y:                                       ! assign 0 to variable y
+
+--- Symbol Table ---
+b: 4004
+dstart: 4000
+a: 4000
+y: 4012
+c: 4008

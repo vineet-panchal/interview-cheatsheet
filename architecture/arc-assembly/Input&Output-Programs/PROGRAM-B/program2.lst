@@ -1,0 +1,33 @@
+(ARCTools Version 2.0.2)
+ HexLoc     DecLoc    MachWord   Label        Instruction                Comment
+                                              .equ 0x3fffc0              ! starting point of the memory mapped region
+                                              .equ 0x0                   ! 0xffff0000 console data port
+                                              .equ 0x4                   ! 0xffff0004 console status port
+                                              .equ 0x8                   ! 0xffff0008 keyboard data port
+                                              .equ 0xc                   ! 0xffff000c keyboard content port
+                                              .org 2048                  ! start addresses from this point at 2048
+00000800  0000002048  88800000                addcc %r0, %r0, %r4        ! (%r0 + %r0) -> %r4
+00000804  0000002052  093fffc0                sethi 4194240, %r4         ! set high 22 bits of BASE -> %r4
+00000808  0000002056  ffffffff  InWait:       halt                       ! the starting point of the main loop that waits for input
+0000080c  0000002060  c201200c                ld %r4, [12], %r1          ! load from memory location [%r4 + CICIL] -> %r1
+00000810  0000002064  82886080                andcc %r1, 128, %r1        ! bitwise AND (%r1 && 0x80) -> %r1
+00000814  0000002068  02bffffd                be -3                      ! branch if zero to the InWait subroutine
+00000818  0000002072  c6012008                ld %r4, [8], %r3           ! load from memory location [%r4 + CIN] -> %r3
+0000081c  0000002076  8aa0e01b                subcc %r3, 27, %r5         ! (%r3 - 27) -> %r5
+00000820  0000002080  02800006                be 6                       ! branch if zero to the End subroutine
+00000824  0000002084  c2012004  Wait:         ld %r4, [4], %r1           ! load from memory location [%r4 + COSTAT] -> %r1
+00000828  0000002088  82886080                andcc %r1, 128, %r1        ! (%r1 && 0x80) -> %r1
+0000082c  0000002092  02bffffe                be -2                      ! branch if zero to the Wait subroutine
+00000830  0000002096  c6212000                st %r3, %r4, [0]           ! store %r3 to memory location [%r4 + COUT]
+00000834  0000002100  10bffff5                ba -11                     ! branch unconditionally to the InWait subroutine
+00000838  0000002104  ffffffff  End:          halt                       ! non-standard instruction to end the assembler
+
+--- Symbol Table ---
+InWait: 2056
+BASE: 4194240
+Wait: 2084
+CICTL: 12
+End: 2104
+CIN: 8
+COUT: 0
+COSTAT: 4
