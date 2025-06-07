@@ -1,0 +1,28 @@
+HMWK:
+Write a shell program named paTest.sh which expects any number of command
+line arguments (CLAs). paTest.sh prompts the user for a list of argument
+numbers. It then passes this list to a function named printargs which
+prints the values of those argument numbers of paTest.sh. e.g.,
+> paTest.sh one two three four five six seven eight
+Enter the argument numbers you would like to print: 3 4 7
+three
+four
+seven
+>
+
+ANSW:
+#!/bin/bash
+printargs () {
+  #prints various command line arguments of its calling program,
+  #where the argument numbers are sent as arguments to printargs
+  for i ; do
+    echo "${A[$(($i-1))]}"
+  done
+}
+
+A=("$@")         #set array A to be all the positional parameters
+                 #didnt line them up just to mess with you
+echo -en "Enter the argument numbers you would like to print: "
+read args
+printargs $args    #eg, if args is "2 4 5" this is: printargs 2 4 5
+exit 0

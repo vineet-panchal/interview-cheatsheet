@@ -1,0 +1,29 @@
+HMWK: How would you list all file/dir names that:
+1. contained the letter "e";
+2. had a total of 7 characters and no extension;
+2a. are 7 characters long
+3. had 3 character extensions;
+3a. had 3 character alpha-numeric  extensions;
+4. contained the word "tst" *somewhere* in the name;
+5. started with the letter "A" and contained a dash (-);
+6. are at least 2 characters long and don't have the following letters
+   anywhere in the first 2 characters: a,b,c,f,h,x,y,z
+7. end in .ex with an optional c at the end
+8. are not java or text files (don't end in .jav or .txt)
+9. end in a : followed by a digit from 2-8 followed zero or more
+   digits.
+
+ANSW:
+1. ls *e*
+2.  ls [!\.][!\.][!\.][!\.][!\.][!\.][!\.]
+2.  ls [!.][!.][!.][!.][!.][!.][!.]
+2a. ls ???????
+3. ls *.[!\.][!\.][!\.]  #or with no backslashes, as above
+3a. ls *.[A-z0-9][A-z0-9][A-z0-9]
+4. ls *tst*
+5. ls A*-*
+6. ls [!abcfhxyz][!abcfhxyz]*
+7/8/9. shopt -s extglob  #this is for number 7, 8, 9.
+7. ls *.ex?(c)
+8. ls !(@(*.jav|*.txt))
+9. ls *:[2-8]*([0-9])

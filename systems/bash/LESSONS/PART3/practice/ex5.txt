@@ -1,0 +1,19 @@
+HMWK:
+1.re-write your homework program called nw.sh (from u2) so that if
+no argument is passed, all of your entries in the current dir are printed
+(instead of only 10 as before)
+2. write a shell program called x that makes your most recently created
+   file executable. (Note x has no extension. That is OK).
+
+1.
+#!/bin/bash
+if [ -z "$1" ] ; then
+  ls -t
+else
+  ls -t | head -$1
+fi
+exit 0
+
+2.
+#!/bin/bash
+chmod u+x `ls -t | head -1`

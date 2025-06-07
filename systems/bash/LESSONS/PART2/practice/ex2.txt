@@ -1,0 +1,76 @@
+HMWK: In the shell, is grep '[A-Za-z][A-Za-z]*' fname  the same as
+grep -i '[A-Z]*' fname ? Why or why not?
+Why do you think "\<" and \>" are used instead of simply "<" and ">" for
+beginning/end of line?
+For questions 1-6 below, write a different shell program.
+1. list all lines in file fname containing the string "dog";
+2. list all lines in fname containing the word "dog";
+3. list all lines in fname containing the string "dog" at the beginning of
+   a line;
+4. list all lines in fname containing the word "dog" at the beginning of a line.
+5. list all lines in fname containing exactly 6 "a"s in a row.
+6. list all lines in fname containing one or more words that start with 93 and
+   end in a sequence of any number of W (not 0)
+7. Give 2 different grep commands that will list lines of fname that
+   end in a lower-case vowel.
+8. Use the man page to find the option of grep that shows the matched string
+   in a different color. Try it.
+9. How would you change your program for #1 above so that instead of doing grep
+   directly from the file, it cat`s the file, then pipes that to grep which
+   greps from stdin?
+10. Print the first 3 lines of AlanTuringBio80 that contain the string 'machine'
+   (in any case). Use grep, pipe(s), head
+
+
+ANSW:
+No. The second one also finds blank lines. The first one says show lines containing
+     at least one alpha character. The second says show lines that DON'T contain
+     a string of upper-case letters (this will include the null string, thus, the
+     blank lines.)
+If we just used < and >, the shell would think these were input and output redirection.
+   Using \ before < and > protects them from shell interpretation, and sends literal < and >
+   to the grep command.
+
+For 1-8--the programs go into a file with u+x perms
+
+For 1.
+#!/bin/bash
+grep "dog" fname
+
+For 2.
+#!/bin/bash
+grep "\<dog\>" fname
+
+For 3.
+#!/bin/bash
+grep "^dog" fname
+
+For 4.
+#!/bin/bash
+grep "^\<dog\>" fname
+
+For 5.
+#!/bin/bash
+grep "aaaaaaaa" fname
+
+For 6.
+#!/bin/bash
+grep "\<93[^ ]*WW*\>" fname
+#grep '\<93[^ ]*W\{1,\}\>' fname
+
+For 7.
+grep "[aeiou]$" fname
+egrep 'a$|e$|i$|o$|u$' fname
+
+For 8:
+man grep   #use / to search for color and find option --color
+grep --color dog /usr/courses/cps393/dwoit/courseNotes/u1.txt
+
+For 9.
+#!/bin/bash
+#grep "dog" fname
+cat fname | grep "dog"
+
+For 10.
+grep -i machine AlanTuringBio80 | head -3
+

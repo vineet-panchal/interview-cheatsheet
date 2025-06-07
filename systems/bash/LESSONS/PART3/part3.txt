@@ -1,0 +1,888 @@
+
+<<< TRANSFORMERS AND TRANSLATORS >>>
+
+
+<< SED (STREAM EDITOR) >>
+
+  -sends each input line to stdout, possibly changed (edited)
+  -input from stdin or file. Original input is unchanged.
+
+  sed -e "s/linux/LINUX/" myfile
+  changes first occurrence of "linux" to "LINUX" on each line.
+  writes lines to stdout.
+
+
+  the -e means the string following is an edit command
+  the "s" means substitute second string for first
+  myfile is name of input file
+  may use regular expressions (like in grep)
+  use single quotes quotes for now
+
+
+  #\U is uppercase. & is matched string
+  sed -e 's/linux/\U&/'   #same as above command. \L for lowercase
+
+  #EVERY occurrence of 'the dog' to 'my cat' on each line (g=global)
+  sed -e 's/the dog/my cat/g' myfile
+
+  #third occurrence of 'the dog' to 'my cat' on each line
+  sed -e 's/the dog/my cat/3' myfile
+
+  #first occurrence of x or xx or xxx etc on a line to 1234 in myfile
+  sed -e 's/xx*/1234/' myfile
+
+  #first occurrence of x or xx or xxx etc on a line to matched
+  #string with 12 prepended and 34 appended
+  sed -e 's/xx*/12&34/' myfile
+
+  #first occurence of 'HI' to 'hi there' on lines 1-5 of stdin
+  sed -e '1,5 s/HI/hi there/'
+
+  #first occurence of 'HI' to 'hi there' on lines of stdin EXCEPT
+  #lines 1-5  Note need single quotes (see QUOTING below)
+  sed -e '1,5 !s/HI/hi there/'
+
+  #only apply the change to lines containing the string 'UNIX'
+  sed -e '/UNIX/ s/shell/Shell/' f1.txt
+
+  #only apply the change to lines that are exactly WoW
+  sed -e '/^WoW$/ s/W/MM/g' f1.txt
+  sed -e 's/^WoW$/MMoMM/g'  f1.txt   #does same thing
+
+  sed -e '/PuTTy/ d'    #deletes all lines containing PuTTy
+  sed -e '/[dD]ave/ d'  #deletes all lines containing Dave or dave
+  sed -e '1,5d'         #deletes lines 1-5
+
+  #prints lines 2-5 of stdin. p=print, -n=suppress automatic output
+  sed -n '2,5p'
+
+  #outputs y on stdout for every stdin line containing exactly A
+  sed -e 's/^A$/B/' -e 's/B/y/'
+
+
+can put edit commands into a file (named whatever you want). e.g.,
+File sedcmds:
+   s/shell/Shell/
+   s/c language/ C Language/
+
+Then:  sed -f sedcmds infile
+
+can edit a file in place with -i (with optional backup file)
+   sed -i.bak -e 's/X/x/' myF #copies myF to myF.bak first, then
+                              #modifies myF by applying the edit command
+                              #use any suffix (".bak" just an example)
+
+to include '/' in the substitute string, either protect it with \ or
+use another character to delimit, such as ?
+these all change every 'his/her' to 'their'
+       sed -e 's/his\/her/their/g'
+       sed -e 's?his/her?their?g'
+       sed -e 'sXhis/herXtheirXg'
+
+
+Substring like in grep. Capture with \( \) Replace with \1 \2 etc
+etc. Note some versions of sed use  \{\1\} instead of \1
+
+  #changes x to YxY or xx to YxxY or xxx to YxxxY etc
+   sed -e 's/\(xx*\)/Y\1Y/'    #substring like in grep
+
+  #these both change first linux to upper-case:
+   sed -e 's/\(linux\)/\U\1/'
+   sed -e 's/linux/\U&/'       #from earlier example
+
+  #changes <<<some string>>> at line start to **some string
+  #where 'some string' can be any string, including null
+   >echo '<<<some string>>>' | sed -e 's/^<<<\(.*\)>>>/**\1/'
+   **some string
+
+  #swaps first 3 chars with next 3 chars
+   >echo 'ABCabc'  | sed -e 's/\(...\)\(...\)/\2\1/'
+   abcABC
+
+
+This site has some good sed examples:
+https://linuxconfig.org/learning-linux-commands-sed
+This is example site mentioned in sed man page:
+https://sed.sourceforge.io/grabbag/tutorials/sedfaq.txt
+
+
+
+<< TR (TRANSLATE) >>
+
+
+-translates STDIN, character by character, and writes to stdout
+-given translation table specified by from-string and to-string
+-uses a 1:1 correspondence between from/to strings
+-if to-string too short, implicit repetition of last char of from-string
+
+
+tr ":" ";"      #changes all colons into semi-colons
+
+tr " x" "AX"    #changes all spaces to "A" and all "x" to "X"
+
+tr "A-Z" "a-z"  #changes all uppercase to lowercase letters
+                #(so stdout is a lowercase version of stdin)
+
+tr "a-zA-Z" "A-Za-z"   #changes all upper to lower, and lower to upper
+
+tr "a-z" "123"  #changes a to 1, b to 2, c-z to 3
+
+can use backslash escapes, \n (newline), \t (tab) etc
+tr " " "\n"     #changes all spaces to newlines
+
+can use octal codes, if begin with \ (see man ascii)
+tr " x" "\012y" #changes all spaces into newlines (\012 is octal newline)
+                #and all "x" to "y"
+
+tr '[:lower:]' '[:upper:]'   #see man tr for Character Classes
+
+tr -d "\n"      #removes all newline chars (-d=delete)
+
+tr -d "a-z"     #removes all lower case letters
+
+tr -s " " " "   # -s=squeeze
+                #replaces all strings of one or more spaces by a single space
+                #in general, replace repeated occurrences of char1 by one char2
+
+tr -s "Ae" " Y" #all strings of one or more "A"s are replaced by one space
+                #and all strings of one or more "e"s are replaced by one "Y"
+
+
+#prints each word of last 5 lines of Alan Turing bio on its own line
+#by squeezing all punctuation and horizontal whitespace into one newline
+   tail -5 AlanTuringBio80 | tr -s '[:punct:][:blank:]' '\n'
+
+(see man tr for more options)
+
+
+
+
+
+<<< ENVIRONMENT VARIABLES >>>
+
+-values maintained by the shell. Some are:
+-env command lists all env vars and values
+
+   HOME     -full path name of user`s home dir
+   PATH     -command search path
+   LOGNAME  -userid of current user
+   PS1      -primary prompt string
+   PS2      -secondary prompt string (used by bash to
+             let you know your command is incomplete)
+   PWD      -current/present (working) dir
+
+/home/dwoit: echo ${PRINTER}
+ENG281
+/home/dwoit: echo ${PS1}
+${PWD}:
+/home/dwoit: PS1='>> '
+>>
+>> PS1='${PWD}: '
+/home/dwoit:
+
+
+
+<<< LOCAL VARIABLES >>>
+
+-declare (optional):
+      delcare myname=Denise  #(or typeset). Declaration is optional
+
+-assign:
+      myname=Denise          #NO SPACES around = or interpreted as shell command
+      myname='Dr. Woit'      #quote if contains spaces or special chars
+
+-use:
+      echo "Professor is ${myname}"  #{} optional but prevents ambiguities
+                                     #double-quotes allow variables substitution
+                                     #(see QUOTING below)
+
+-ambiguities?
+      fn=Denise ; ln=Woit ; echo $fn$ln  #DeniseWoit
+  Try printing "M" between first and last name, to get: DeniseMWoit
+      echo $fnM$ln        #wrong. Why?
+      echo ${fn}M$ln      #correct
+      echo ${fn}M${ln}    #correct
+      echo "${fn}M${ln}"  #correct
+
+-discard (undefine) variable:
+      unset myname    #now myname is null
+
+-length operator #
+ echo ${#fn}  #prints 6 (length of Denise)
+
+
+-select substring after offset
+ name="BA3456GHIJ"
+ echo ${name:3}     #prints 456GHIJ  (everything after offset of 3)
+ echo ${name:3:5}   #prints 456GH    (5 chars after offset of 3)
+
+ -many others. Search "Parameter Expansion" in man bash
+
+
+
+<<< QUOTING >>>
+
+
+-Must protect white-space characters. Why?
+  Bash scans command line and divides into words by white space
+  and evaluates and substitutes for special chars
+
+-Suppose want to search for "Denise Woit" in file myfile
+
+  grep Denise Woit myfile   #WRONG
+                            #searches Denise in 2 files: Woit, myfile
+
+  grep 'Denise Woit' myfile #RIGHT (or "Denise Woit")
+
+-SINGLE QUOTES:
+   most restrictive; evaluates nothing within
+         > X=2 ; echo '$X *'   #prints $X *
+
+-DOUBLE QUOTES:
+   -evaluates these:
+         ${var}  variables
+         $(   )  and ` ` command substitution (see BACKQUOTES below)
+         \ (backslash char)  !  (not)
+
+   -does not evaluate globs (*, ?, etc):
+         > X=2 ; echo "$X *"     # prints 2 *
+         > cd                    #  now in /home/dwoit
+         > grep "${PWD}"         #  searches for /home/dwoit in stdin
+         > grep '${PWD}'         #  searches for ${PWD} in stdin
+
+
+   -preserves correct whitespace in variables
+    e.g., > var="l 1
+         Linux > l    2
+         Linux > l 3"
+         > echo "$var"
+         l 1
+         l    2
+         l 3
+         > echo $var
+         l 1 l 2 l 3
+
+
+-BACKQUOTES (Command Substitution):
+    -evaluates string in backquotes as a command, then
+    -substitutes in whatever that command printed to stdout
+   e.g.,
+       > TODAY=`date`
+       > echo $TODAY
+       Mon 23 Sep 2024 02:37:20 PM EDT
+
+   v.s.
+       > TODAY=date
+       > echo $TODAY
+       date
+
+
+   e.g., grep `pwd` *     does?
+
+               -assuming in dir /home/dwoit it searches for string
+                /home/dwoit/ in all the entries in /home/dwoit/
+
+
+ $(command) is alternate syntax for `command`
+   Better, because can nest it.
+       > TODAY=$(da$(echo te))
+       > echo $TODAY
+       Mon 23 Sep 2024 02:37:20 PM EDT
+
+
+   This does: grep "junkD" blob
+   /home/dwoit> cd junkD
+   /home/dwoit/junkD> grep "$(echo $(echo $PWD | cut -d'/' -f4))" blob
+
+
+
+<<< TEST  or [  ]  >>>
+
+-tests for conditions including:
+  if argument is: readable, writable, executable, a file, a directory
+  if 2 strings or ints are: >, <  or =
+  can do AND, OR, NOT logic
+
+
+  shell variable $? is assigned result of test:
+        0 = true     1 = false  (since 0 always true/good in bash)
+
+  test -x fname  #does fname have execute perms for user?
+  echo $?        #0 printed if yes; 1 if no
+
+     also -r, -w, -f, -d, -e, etc  (see man test)
+
+  test n1 -eq n2  # $? 0 (true) if integer n1 equal to n2
+
+     also -ne, -lt, -gt, -ge, -o -a
+
+  test -x fname -a -d bin
+                  # $? 0 (true) if fname is executable AND bin is a dir
+
+               -r for readable; -w for writable
+               -f for regular file; -d for directory
+               -e for exists
+               -ne for not equal; -lt for less-than; -o for or
+
+
+  Unquoted null-value variables can mess up test syntax:
+   NAME="Denise"
+   test $NAME = "Denise"
+   echo $?
+   0          #correct, since they are equal
+
+   Problem:
+   if NAME never set or null then  test $NAME = "Denise" becomes:
+           test = "Denise"
+   and get syntax error
+
+   Solution:
+   test "$NAME" = "Denise" which has OK syntax, becoming
+           test "" = "Denise"  #which is false
+
+-alternate syntax: [ ]
+  e.g.,    [ -x fname -a -d bin ]   #NEED whitespace after [ and before ]
+
+
+- man test  gives all the options
+
+
+
+<<< EXPR >>>
+-evaluates arguments and prints true or false (1 or 0 like C, Python)
+ to stdout (not in $? )
+
+
+e.g., a=1
+      b=2
+      expr $a = $b
+      0
+
+      STR="MYNAME"
+      expr "$STR" = "MYNAME"
+      1
+
+-can do simple math, e.g.,
+      a=3
+      expr $a + 1
+      4
+
+-operators:  *,/,%,+,-,=,!=,<,>,<=,>=
+             \_______/\_____________/
+               int       true/false
+
+  > a=`expr $a \* 5`   #or   a=`expr $a '*' 5` or a=$(expr $a \* 5)
+  > echo $a  #prints 15 since a was 3
+
+
+
+<<< ARITHMETIC EVALUATION >>>
+
+bash can do integer arithmetic:
+
+    > declare -i x=1    #or typeset -i
+    > x=x+1             #no need for $x in math
+    > echo $x
+    2
+
+vs. without declare -i:
+    > y=1
+    > y=y+1
+    > echo $y
+    y+1
+
+
+ -man bash and search for ^SHELL BUILTIN COMMANDS
+  then search under that for declare or typeset
+
+
+$(( ))  does integer arithmetic too
+
+    > unset a ; b=5
+    > a=$(($b * 5)) ; echo $a
+    25
+
+Has +, -, *, /, %, **, ==, !=, <, >, etc.
+
+ -man bash search for Arithmetic Expansion
+ -man bash search for ^ARITHMETIC EVALUATION
+
+
+
+
+<<< CONTROL STRUCTURES >>>
+
+;  separates commands   -saw previously
+() execute in subshell  -has all variables from calling shell
+                        -any variables it sets are gone when done
+                        -anything that alters shell environment is
+                         gone when done
+
+
+{} execute in current shell -has all variables from calling shell
+                        -any variables it sets are still set in
+                         calling shell when done
+                        -some things that alter shell environment are
+                         still set when done
+
+e.g.,
+/home/dwoit: x=4;y=2; ( x=9;y=9; echo $x $y; ); echo $x $y
+9 9
+4 2
+/home/dwoit: x=4;y=2; { x=9;y=9; echo $x $y; }; echo $x $y
+9 9
+9 9
+
+
+
+both () and {} group stdout commands into 1 stream
+both () and {} group stderr commands into 1 stream
+
+e.g., (head -4 AlanTuringBio80; tail -2 AlanTuringBio80) | tr "a" "A"
+         -prints first 4 and last 2 lines of AlanTuringBio80 with
+          all "a" in uppercase.
+         -without the ( ) what happens?
+
+           -first 4 lines of AlanTuringBio80 printed, and then
+           -the last 2 lines of it are printed with all "a" in uppercase
+
+e.g., (cat f1.txt; cat f2.txt) | grep -c dwoit
+         -remember -c counts matching lines and prints a number
+         -prints num of lines in f1.txt AND f2.txt containing "dwoit"
+
+         -without the ( ) what happens?
+
+           -f1.txt is catted to stdout, and then
+           -the num of lines of f2.txt containing "dwoit" is printed
+
+
+   Note: do not need spaces around ( )
+         but DO need space after { and DO need ; before }
+         { cat f1; cat f2;} | grep -c dwoit
+
+
+
+&&    Tests for true and executes
+      e.g.,  cmd1 && cmd2  -execute cmd2 if cmd1 returns true (true=0)
+
+||    Tests for false and executes
+      e.g.,  cmd1 || cmd2  -execute cmd2 if cmd1 returns false (false=1)
+
+e.g.,  cmd1 || ( cmd2; cmd3 )
+
+       is it the same as  cmd1 || cmd2; cmd3 ??  NO!
+
+e.g.,
+       x=3
+       [ $x = 3 ] ||  ( echo "x was not 3" ; echo "x was $x" )
+            #nothing printed on stdout
+       x=9
+       [ $x = 3 ] ||  ( echo "x was not 3" ; echo "x was $x" )
+       x was not 3
+       x was 9
+
+
+! expr Returns false if expr true; true if expr false
+      e.g.,
+         ls kjkj 2>/dev/null ; echo $?
+         2
+         ! ls kjkj 2>/dev/null ; echo $?
+         0
+
+
+[ cmd ] is a short form for test cmd
+
+[[ cmd ]]  is same but  more functionality (for example,
+           it can do > < (greater/less than) for strings,
+           and pattern matching whereas  [ ] cannot
+           e.g., [[ $x = *abc ]]  true if $x ends in abc
+           see man bash search: \[\[
+
+
+
+<< IF >>
+
+if  test-conditions
+then
+    cmd-list1
+elif test-conditions #optional
+then                 #optional
+    cmd-list2        #optional
+else                 #optional
+    cmd-list3        #optional
+fi
+
+
+e.g.,  if [ -f fname -a -x fname ] ; then
+           echo fname is an executable file
+       else
+           echo fname is not executable and/or not a file
+       fi
+
+       x=dog              #a string
+       if [ "$x" = "dog" ]
+       then
+            echo YES      #always echoed
+       fi
+
+       declare -i a=2
+       if [ $a -gt 0 ]    #greater than
+       then
+          echo a is positive
+       fi
+
+ -eq, -lt, -ne, -gt, -ge etc for numbers and = != for strings
+ -o, -a   for "or" and "and"
+ -r, -w, -f, -d, -e, etc  for files/dirs
+     -r for readable; -w for writable
+     -f for regular file; -d for directory
+     -e for exists
+
+
+ null string "" is false; any non-null string is true, e.g.,
+      #!/bin/bash
+      #source ff.sh
+      if [ "$(grep $1 file1)" ]
+      then
+         echo "string $1 is contained in file file1"
+      else
+         echo "string $1 is not contained in file file1"
+      fi
+      #works because grep prints null to stdout if not found, and
+      #some line(s) if it is found
+
+      #what happens if $1 is contained on multiple lines of file1?
+      #what happens if $1 has spaces, like "is just"
+      #what happens if run this with $1 not set?
+
+
+      if on multiple lines, works fine, since string is not null
+      if $1 has spaces, get syntax error. To fix, see ff2.sh
+      if $1 not set, greps for 'file1' in stdin, so waits for input
+         to fix that, see ff1.sh or ff2.sh
+
+
+See man test for test operators
+Some other useful ones are:
+     -n string            True, if length of string is non-zero.
+     -z string            True, if length of string is zero.
+     file1 -nt file2      True, if file1 is newer than file2.
+
+
+See man bash and search for Compound Commands for if-statement
+
+
+<< CASE >>
+
+#!/bin/bash
+#Source: datecase.sh
+mnth=$(date +%m)    #formats it as mm (month)
+case ${mnth} in
+     01)
+          echo "January"
+          ;;
+     02)
+          echo "February"
+          ;;
+     03)
+          echo "March"
+          ;;
+     04)
+          echo "April"
+          ;;
+     09)
+          echo "September"
+          ;;
+     10)
+          echo "October"
+          ;;
+     11)
+          echo "November"
+          ;;
+     12)
+          echo "December"
+          ;;
+     *)
+          echo "some other month"
+          ;;
+esac
+exit 0
+
+
+case ${userdate} in                  # userdate is a variable here
+          01|Jan|January)            # multiple matches
+               echo "first month"
+               ;;
+          02|Feb|February)
+          .
+          .
+          .
+esac
+
+Can use glob constructs (that is why default is *)
+01|Jan*)          match 01 or anything starting with Jan
+???)              match anything with exactly 3 chars
+[0-9][0-9][0-9])  match exactly 3 digits
+
+case $(($count < 100)) in
+   1) echo $count is less than 100;;
+   0) echo $count is more than 99;;
+esac
+
+
+
+<< FOR >>
+
+
+for variable in value1  value2  value3 ...  valueN
+do
+  ...
+done                # loops   N  times,
+                    # 1st:    $variable is value1
+                    # 2nd:    $variable is value2  etc.
+
+for variable        #in a shell program, loops over
+do                  #its command-line arguments (CLAs)
+ ...
+done
+
+
+  #!/bin/bash
+  #Source tryfor.sh
+  echo "not much" >f1
+  cp f1 f2; cp f1 f3; cp f1 f4
+
+  ls -l f[1-4]
+  for  file in  f1   f2   f3   f4
+  do
+     chmod u-w  $file
+     ls -l $file
+  done
+  rm -i f1 f2 f3 f4
+  exit 0
+
+  #!/bin/bash
+  #source cla.sh
+  #program to print out all command line args one at a time
+  for i
+  do
+     echo "$i"      #quotes preserve whitespace within $i
+  done
+  exit 0
+
+
+Note: for i in "$@" also loops over command line args
+      (processes whitespace properly, unlike $*)
+
+
+  #!/bin/bash
+  #Source filedir.sh
+  #prints if each entry in current dir is file or dir
+
+   for  file  in *
+   do
+        if  [  -f  $file ]
+        then
+             echo  "$file  is  file"
+        else
+             if  [  -d  $file  ]
+             then
+                  echo  "  $file  is  dir. "
+             fi
+        fi
+   done
+   exit 0
+
+
+   #!/bin/bash
+   #source renamePgm.sh
+   #renames all files whose name contains "sample" so that the
+   #"sample" part of the name becomes "Ch1.sample"
+   for i in *sample* ; do
+       if [ -f "$i" ] ; then
+           cp $i `echo $i | sed -e 's/sample/Ch1.sample/'` 2>/dev/null
+           if [ $? = "0" ] ; then
+               echo copied $i
+           else
+               echo could not copy $i >&2
+           fi
+       fi
+   done
+
+
+  RANGES in for-loops:
+    e.g.,
+    #!/bin/bash
+    #source: forRange.sh
+    #loops over 1 2 3 4 5
+    echo -e '\n using {start..end} syntax'
+    for i in {1..5}
+    do
+       echo "i is: $i "
+    done
+
+    #loops over 0 2 4 6 8 10
+    echo -e '\n using {start..end..inc} syntax'
+    for i in {0..10..2}
+      do
+         echo "i is: $i"
+     done
+
+
+In current directory,
+how would you copy all files in the current dir into a backup directory
+called /home/userid/bak (where userid is replaced by your userid),
+assuming that if bak exists, it is used; if not, it is created first?
+
+  #!/bin/bash
+  #Source: backup
+  test -d /home/dwoit/bak || mkdir /home/dwoit/bak
+  for f in *
+  do
+    if [ -f $f ]
+    then
+       cp ${f} /home/dwoit/bak/${f}
+    fi
+  done
+  exit 0
+  #note: should error-check (bak writable, properly created, etc.)
+
+
+
+
+<< READ >>
+
+read line < fn
+echo $line                 #prints line 1 of file fn
+                           #in general reads 1 line of stdin
+                           #returns  non-0  value (in $?) if EOF (end-of-file)
+
+
+read -n1 char    # read returns after reading 1 character  rather than waiting
+                 # for a complete line of input.
+read -nX chars   # read returns after reading X characters rather ...
+
+read -p "Enter your string: " myinput   #prints prompt string and reads
+abcde  fgh i     #user types input and enter
+echo $myinput    #prints abcde  fgh i
+
+
+read arg1 arg2 arg3        #reads "words" on one line (strings separated
+                 #by whitespace. reads word1 into arg1, word2 into arg2, and
+                 #the REST OF THE LINE into arg3
+
+
+
+read a b c <fn3  #reads from stdin which is redirected
+
+But does not work if read`s input is from a pipe, e.g.,
+
+var="hi there"
+echo $var | read x y
+echo $x $y  #prints nothing!!
+
+Work-arounds:
+1. Put read in a while loop. e.g.,
+echo $var | while read x y ; do
+  echo $x $y    #prints hi there
+done     #works, but $x and $y only have value INSIDE loop
+
+2. Put subshell after |  e.g.,
+echo $var | (read x y; echo $x $y)  # prints hi there, but again,
+                                    #$x and $y only have value INSIDE ()
+
+3. use a here-string. e.g.,
+read x y <<< $var
+echo $x $y     #prints hi there as expected. x and y set in shell
+
+
+good to ask user for forgotten arguments
+
+     #!/bin/bash
+     #Source: backup1
+     if  [ $# -eq 0 ]
+     then
+          echo "Enter filename"
+          read  fn
+     else
+          fn=$1
+     fi
+     cp  $fn  ${fn}.bak
+     exit 0
+
+
+<< WHILE >>
+
+
+while [ ... ]
+do
+ ...
+done
+
+
+#!/bin/bash
+#Source: list10.sh
+#Note: command seq 1 10 does the same thing
+x=1
+while  [ $x  -le  10 ]
+do
+     echo  $x
+     x=$((x+1))
+done
+exit 0
+
+#if did declare -i x=1 could have simply done x=x+1
+
+
+  while  [ 1 ]        infinite-loop
+
+  Note: nothing special about "1"; any non-null string works.
+  while [ 0 ]  while [ mouse ]  while [ "mouse" ] also infinite loops
+  while [ ] while [ "" ]  are both false (null string)              "
+
+
+  y=`grep second fn1`  #all lines of fn1 containing second put in var y
+  if [ "$y" ]   etc    true if second found at least once in fn1
+                          otws $y is null  and if-condition is false
+
+
+
+
+<< EXTENDING VARIABLE VALUES BEYOND WHILE LOOP >>
+
+  Suppose modify countod above to read from a file, supplied on
+  command line:  ./countodFile0 countodInput
+
+  Problem: Doesn`t work now because $ordfile and $dirfile are null
+           in final echo statements.
+  To Fix:  many possibilities, e.g., subshell or redirection:
+
+  Use a subshell:
+   ./countodFile1 countodInput
+   It uses a subshell to extend variable scope past end of while loop
+   cat $1 | ( while  read filenam
+      ...
+   done
+   echo -e "The number of ordinary files:\t  $ordfile"
+   echo -e "The number of directories:\t  $dirfile"
+   )
+
+  Redirect read`s input:
+   ./countodFile2 countodInput
+   It redirects loop`s input to come from a file
+   while read filenam
+   ...
+   done < $1
+
+
+<< OTHER CONTROL CONSTRUCTS >>
+
+man bash gives additional control constructs, e.g.,
+
+  for (( expr1 ; expr2 ; expr3 )) ; do list ; done
+  select name [ in word ] ; do list ; done
+  until [ expr ] ; do list ; done
+
+
+
+

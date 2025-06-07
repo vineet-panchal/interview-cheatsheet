@@ -1,0 +1,18 @@
+HMWK: Re-write shell program ff.sh above so that it does something
+      reasonable when the user invokes it without a command argument
+      (or with a null argument as in:  ff ""  )
+
+
+ANSW:
+#!/bin/bash
+if [ -z "$1" ] ; then
+   echo "argument missing" >/dev/stderr
+   exit 1
+fi
+if [ "`grep $1 f1`" ]
+then
+   echo string $1 is contained in file f1
+else
+   echo string $1 is not contained in file f1
+fi
+exit 0

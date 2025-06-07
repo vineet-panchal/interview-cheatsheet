@@ -1,0 +1,10 @@
+1. write a shell program called clean that removes all files called
+"core" from your directory structure, and then removes all files that
+have size 0 (0 bytes) from your dir structure. That's your WHOLE
+dir structure, not just the current dir.
+(note: "find" can find files that are zero bytes long)
+
+#/bin/bash
+find ~/. -type f -name "core" 2>/dev/null | xargs rm
+find ~/. -empty -type f 2>/dev/null       | xargs rm
+

@@ -1,0 +1,674 @@
+Unix Notes 1
+
+<< INTRODUCTION TO UNIX >>
+
+==> Linux/Unix is an operating system (OS). 
+
+OS ==> program(s) helping us communicate with computer's resources,
+       e.g., memory, processor, storage, etc.
+
+==> Branches Of Linux: Ubuntu, Fedora, Debian, Solaris, FreeBSD
+==> Some OS's based on Linus/Unix are MacOS, ChromeOS, Android, iOS
+
+OS is layered:
+
+        utilities: commands available (e.g. to copy files)
+        ---------
+        shell:     a pgm that reads our commands, figures out what
+        -----      we want done, and gets it done
+
+                Win:  shell called command interpreter (Command, PowerShell)
+                      get it from GUI by start->command
+                        prompts C:\>
+                        reads
+                        does
+                Linux/Unix: several shells available:
+                Bourne Shell (sh), Korn Shell (ksh),
+                C Shell (csh), Bourne Again Shell (bash)
+
+        kernel: heart of OS
+        ------
+                        controls access to hardware, files
+                        manages computer`s memory
+                        maintains file system
+                        allocates resources among various activities
+                        (e.g. CPU time)
+
+we can communicate with kernel through a shell through utilities:
+
+        e.g.    /home>    cat myfile
+                display file named myfile on screen.
+                we do not care *how* data accessed from disk,
+                or *how* display works
+
+we can use application programs:
+        e.g.    browsers, games, music players
+                which communicate with kernel through utilities
+
+
+Bash
+==> command-line interface, a special scripting language for Unix that uses the shell window
+==> reads commands, does them, and displays the results
+
+Vim
+==> file editor used to edit and create files in Unix
+
+
+
+<< FILE SYSTEM IN OS >>
+Unix:  commercial (like Win, iOS, macOS)
+Linux: open-source distribution (Ubuntu, Android, etc)
+
+Files and directories treated similarly
+In these notes
+  -we may say "file"  to mean "file or directory"
+  -we may say "entry" to mean "file or directory"
+
+entry names:
+    CASE-SENSITIVE; 2 different files: MyFile myfile
+    max 255 characters (but system dependent)
+    no suffix needed  e.g., myfile and myfile.jav both OK
+
+
+File Organization:
+        files and directories  (similar to Win)
+        file system like a tree  (like Win)
+        top of tree is / (called "root")
+
+                       / (root directory)
+                               |
+               --------------------------------
+               |               |              |
+            home        bin (commands)       usr
+             |                 |              |
+       --------------      ---------        work
+       |          |        |   |   |          |
+     vineet      tmu      cp  rm  mv      ----------
+       |                                  |       
+  ---------                              bin    
+  |                                       |          
+projects                               ------     
+                                       |     |       
+                                    x86_64   sparc        
+
+
+
+<< LINUX COMMANDS >>
+
+ls      lists contents of current directory
+        /home>                          ls 
+                                        vineet tmu
+
+cd      change current directory 
+        /home>                          cd vineet
+        /vineet>                        cd .. (goes back to parent directory)
+        /home>                          cd /vineet/projects
+        /vineet/projects>               cd  (goes to home directory)
+        /> 
+
+pwd     (print working directory) shows you what directory you are in
+        (useful when shell environment does not display working
+        dir in prompt)
+        />                              pwd
+                                        /home
+
+cat     displays contents of file(s)  no paging
+        /home> cat f1          #file f1 displayed on screen
+        this is line 1 of
+        the file
+        here is last line
+        /home> cat fn1 fn2 fn3     #3 files displayed consecutively
+
+tac     cat lines in reverse order (last line to first line)
+
+more    like cat but paginated, shows sections of the file
+        (spacebar gets next screenfull, enter gets next line, q quits
+
+less    like more, but has extended commands/features
+
+cp      copies one file (or directory) to another
+        /home>                          cp class.list  new.class.list
+        /home>                          ls
+                                        class.list  new.class.list   labs
+
+rm      deletes (removes) a file(s)
+        /home>     rm class.list new.class.list
+
+mkdir   creates a new directory
+        /home>                          mkdir admin
+        /home>                          ls
+                                        admin labs lab1.txt
+
+rmdir   deletes a directory (it must be empty)
+        /home>     rmdir admin
+
+mv      renames a file (or directory)   "moves" it in filesystem
+        /home>                          mv lab1.txt  lab1
+        /home>                          last
+                                        lab1    lab2.txt
+
+wc      gives size (lines, words, chars) of files
+        useful to help count things
+        /home/cps393/labs>        wc u1M.txt
+                                        975  4349 33784 u1M.txt
+
+diff    shows difference between 2 files (prints nothing if identical)
+        home> cat f1
+        abc def
+        ghi jk
+        home> cat f2
+        abc def
+        ghi jkl
+        home> diff f1 f2   #line 2 of f1 needs to 'c'hange in order
+        2c2                      #to match line 2 of f2
+        < ghi jk                 #and shows the differing lines in each
+        ---
+        > ghi jkl
+        home> diff f1 f1
+        home>              #they are identical so no output
+
+touch   creates file(s) or updates modification time(s)
+        /home> mkdir newdir
+        /home> cd newdir
+        /home> touch abc def ghi
+        /home> ls
+                               abc def ghi
+
+echo    prints the given string
+        /home> echo hi there
+                               hi there
+        /home> echo "hi there"
+                               hi there
+
+printf  similar to the usual printf
+        /home>  printf "hi %s %.2f\n" "there" 72.4
+        hi there 72.40
+        /home>
+
+
+head    prints first 10 lines of given file
+        /home> head myfile
+                              first 10 lines of myfile printed
+
+tail    prints last 10 lines of given file
+        /home> tail myfile
+                              last 10 lines of myfile printed
+
+rev     prints each line in reverse (characterwise)
+        /home> cat MF
+        line1
+        line2
+        /home> rev MV
+        1enil
+        2enil
+
+uniq    prints each line, but omits duplicates
+        /home> cat F2
+        zbc def
+        zbc def
+        zbc def
+        blue fish
+        blue fish
+        white mice
+        zbc def
+        /home> uniq F2
+        zbc def
+        blue fish
+        white mice
+        zbc def
+
+sort    sorts input lines
+        /home> sort F2
+        blue fish
+        blue fish
+        white mice
+        zbc def
+        zbc def
+        zbc def
+        zbc def
+
+tree    prints sideways tree rooted at given dir
+        /home> tree /usr/courses/cps393/labs/vimLab/
+        /usr/courses/cps393/labs/vimLab/
+        ├── ConnectToMoonRemotely.pdf
+        ├── vim-files
+        │   ├── vim-cheat-sheet.txt
+        │   ├── vim-colors.txt
+        │   ├── vim-summary.txt
+        │   ├── web-ref-card.txt
+        │   └── web-tutorial.txt
+        ├── vimLab.txt
+        └── vimTutorial.txt
+
+#       comments chars on line after #
+        /home> touch f1 f2 f3 f4
+        /home> ls f1 f2 #f3 f4
+                     f1 f2
+
+
+
+<< COMMAND OPTIONS >>
+    -change behavior of command
+    -specified following a - (dash)
+
+    -limits number of different cmds need to memorize
+
+     e.g.,
+        ls -t   sorts newest to oldest
+        ls -R   recursively lists all subdirs and files
+        ls -p   print / following directory names
+        ls -l   long list
+          /usr/courses/cps393> ls -l
+           drwx------ 15 dwoit cps393 4096 Jul  8 14:25 archive
+           drwxr-xr-x  5 dwoit cps393 4096 Feb 29 11:25 courseNotes
+           drwxr-xr-x 14 dwoit cps393 4096 Jul  8 15:16 labs
+
+
+
+        diff -q X Y   if files differ, print brief message instead of
+                      default output (all the differences)
+        diff -s X Y   if files identical, print message instead of nothing
+        diff -sq X Y  prints only brief message saying identical or differ
+        echo -n "hi there"  does not print the newline at end
+        echo -e "hi\tthere\nagain"    enable backslash escapes
+                      hi        there
+                      again
+        try the above echo without the -e
+        head -4 X     prints only first 4 lines of file X
+        tail -28 X    prints last 28 lines of file X
+        sort -n X     numeric sort (vs text sort)
+        rm -r labs    ("recursively" erases whole sub-tree rooted at labs)
+
+    -can combine. Order usually irrelevant. Same:
+                                ls -l -t
+                                ls -t -l
+                                ls -lt
+                                ls -tl
+     e.g.,
+          /usr/courses/cps393> ls -tl
+          drwxr-xr-x 14 dwoit cps393 4096 Jul  8 15:16 labs
+          drwx------ 15 dwoit cps393 4096 Jul  8 14:25 archive
+          drwxr-xr-x  5 dwoit cps393 4096 Feb 29 11:25 courseNotes
+
+
+
+<< COMMAND-LINE MANUAL >>
+
+man     basic manual pages
+        /home>    man ls         #the man pages for "ls" command
+                                       #are "more"d on your screen
+        /home>    man -k zip     #keyword/apropos search for "zip"
+        /home>    man -k rename  #keyword/apropos search for "rename"
+info    /home>    info mv        #the info pages for "mv" command
+                                       #more friendly? emacs-like
+info --vi-keys                         #for vi-like movements
+
+many online, e.g.,
+   https://linux.die.net/man/
+   https://www.gnu.org/software/bash/manual/html_node/
+
+
+
+<< LINUX SECURITY >>
+
+each user:
+   userid, password, home directory /home/userid/
+   may login many times simultaneously
+   normally only userid may manipulate files/dirs under /home/userid
+   but userid may give other users various permissions too
+
+
+
+<< OWNERS AND GROUPS >>
+
+  each file and dir has an    owner and a  group associated with it
+  Owner:       -when you create a file, you become its owner (usually)
+  Group:       -users can join "groups" of other users with whom they
+                 can share files & dirs
+               -users can join many groups, but have one primary group
+               -users can "work" in different groups (change groups with
+                 newgrp newgroup)
+               -when a user creates a file, the file`s group is made to
+                 be the group the user was in when the file was created
+                 (for you, typically your primary group)
+
+
+
+
+<< PERMISSIONS >>
+
+  rwx (read/write/execute) for each of ugo (user/group/other)
+                           note "user" means entry "owner"
+
+permissions on a file/dir indicate:
+  -how owner, group members and other users may operate on it
+for each file/dir:
+  -each of user (u), group members (g), and other users (o) have
+   a set of read (r), write (w), and execute (x) permissions
+   (in that order)
+
+r: file: can be displayed, copied
+    dir: can look at its contents (list dir`s entries )
+         But cannot display contents of a file inside dir (requires
+         r on the file and x on dir for that)
+w: file: can modify or delete file
+    dir: add/del entries to/from dir
+         Note can modify a file in dir without w on dir (if w on file)
+x: file: can run it, if it is a runnable (executable) file
+         e.g., /usr/bin/ncal
+    dir: weaker than r. Can access an entry of dir, if know its name
+         but cannot list contents of dir
+         e.g., typically, public_html has only x for other. Thus,
+               anyone may display/read index.html (and any file/dir
+               whose name they know), but cannot list contents of
+               public_html to see what else it contains
+
+
+Permissions Examples:
+ wchan wants anyone who knows the name and location of
+ /home/wchan/labs/myfile to be able to execute it,
+ but does not want anyone to be able to copy it, see its
+ contents, delete it
+ Perms:
+   -exactly  --x for other on myfile
+   -at least --x for other on all dirs down filetree to myfile
+    so anyone can GET to it: /home, /home/wchan, /home/wchan/labs
+
+ wchan wants http://www.cs.torontomu.ca/wchan to display her
+ index.html, but does not want anybody on moons to be able to
+ discover what other files she has in public_html, nor
+ add/delete files to/from her public_html
+ Perms:
+   -at least r-- for other on index.html
+   -exactly --x for other on /home/wchan/public_html
+   -at least --x for other on /home, /home/wchan
+
+ dmason wants to keep all his files/dirs private
+ Perms:
+   -group and other --- on /home/dmason
+
+ kavi wants no other student to be able to steal her
+ assignment 1 file, which professor said must be named
+ Assignment_1 It is located in her home directory.
+ Perms:
+   -Assignment_1 has --- for group/other
+
+ dwoit accidentally removes w perms for user on /home
+ So what happens?
+ She can still modify files that already exist in /home
+ (as long as they have rw perms for user) but cannot delete
+ the files, nor add any new ones to /home
+
+ file /home/kavi/myfile has -w- for user.
+ kavi can change the file; however, kavi CANNOT read it.
+ How can kavi change the contents of myfile?
+ Not with an editor, like vim because vim must read it first.
+ Can still "change" it other ways like the linux commands:
+     cp /home/wchan/public_html/index.html myfile
+     echo "new stuff" >>myfile  #meaning of >> is below
+
+
+
+<< VIEWING/CHANGING PERMISSIONS >>
+
+Can see perms with command: ls -l
+
+-rwxr-xr--  1  dwoit  cps393ta 1734 Aug 19 2024  myFile
+^\ /\ /\ /  ^    ^      ^      ^     ^           ^
+| |  |  |   |    |      |      |     |           file name
+| |  |  |   |    |      |      |     last modification date
+| |  |  |   |    |      |      size in bytes
+| |  |  |   |    |      group name
+| |  |  |   |    owner
+| |  |  |   number of links to file
+| |  |  permissions for other users (only read here)
+| |  permissions for members of group (only read and execute here)
+| permissions for owner of this file (read, write and execute here)
+file or directory? - = file,  d = directory
+
+for each of user, group, other, there are 3 possible permissions
+ (read,write,execute)
+if read    is set, "r" in first position, otherwise "-"
+if write   is set, "w" in second position, otherwise "-"
+if execute is set, "x" in third position, otherwise "-"
+In example above, owner has read, write and execute perms on myFile,
+                        group has only read and execute perms on it
+                        all others have only read perms on it
+
+only owner can change permissions on entries
+use chmod command in Symbolic or Numeric Mode.
+
+Symbolic Mode:
+
+chmod (ugoa)(+-=)(rwx) name(s)
+             = changes to exactly those given perms
+             +/- add, remove given perms
+
+
+e.g.
+   suppose myFile starts with perms -rwxr-xr--
+        chmod g+w myFile            -rwxrwxr--
+        chmod ug-x myFile           -rw-rw-r--
+        chmod a+r+w+x myFile        -rwxrwxrwx
+        chmod go=rx myFile          -rwxr-xr-x
+        chmod g=x,o+w myFile        -rwx--xrwx
+
+Numeric Mode:
+
+          - - -   (000)   0
+          - - x   (001)   1
+          - w -   (010)   2
+          - w x   (011)   3
+          r - -   (100)   4
+          r - x   (101)   5
+          r w -   (110)   6
+          r w x   (111)   7
+
+          chmod 160 myFile  sets only x for user, only rw for group
+          and no perms for others
+
+
+
+<<< INPUT/OUTPUT (I/O) STREAMS >>>
+
+
+Linux commands, and pgms,  do I/O   e.g.,
+ls      *writes* results to screen (output);
+passwd  *writes* a messages to screen (asking for old/new passwords, etc)
+passwd  *reads* your old/new passwords from the keyboard
+
+How does shell know WHERE to read/write to?
+The shell associates *streams*  with the command.
+
+a stream
+    is a flow of data
+    like a tunnel (data in one end and out the other)
+    data flows through a stream in one direction only
+
+The shell assigns 3 standard streams to any command:
+        stdin, stdout, stderr
+The command may then:
+  read data  from stdin
+  write data to stdout
+  write error messages to stderr
+e.g.,
+           stdin                              stdout
+      ----------------------        ------------------------
+    data in -->              passwd               data out -->
+      ----------------------        ------------------------
+                              |  |
+                              |  | stderr
+
+
+The shell normally attaches other end of the streams to devices,
+        such as the keyboard and monitor
+
+e.g.,
+           stdin              |  |            stdout
+      ----------------------        ------------------------
+keyboard                     passwd                       monitor
+      ----------------------        ------------------------
+                              |  |
+                              |  | stderr
+                             monitor
+
+
+when passwd wants input (e.g., the current password)
+        reads from stdin  ==  reading from keyboard
+        (passwd does not know or care that keyboard is attached to
+        stdin, just reads from stdin)
+Output similar
+when passwd encounters error, writes error msg on stderr
+        (it ends up appearing on monitor, but passwd does not
+        know or care)
+
+
+NOTE:  many commands ignore stdin if you give them a file to operate on.
+       e.g.,   cat lab1   #ignores stdin & reads directly from lab1 instead
+       e.g.,   wc  lab1   #similarly
+
+Try these with no arguments. What are stdin, stdout, and stderr?
+(note ctrl-d closes stdin once you`re finished typing)
+   wc
+   rev
+   cat
+
+
+
+<<< I/O REDIRECTION >>>
+
+You can tell shell to redirect any std stream
+
+   /home> ls > myfile       #redirects stdout
+
+
+shell attaches other end of stdout to file myfile
+to see output of ls command, must view contents of myfile (vim, more, cat etc)
+
+      >  myfile               clobbers (over-writes) myfile
+      >> myfile               appends to end of myfile
+
+
+
+   /home> wc < myfile       #redirects stdin
+
+e.g.,  if  cat   cmd is given no argument, stdin is keyboard
+   /home> cat  >outfile
+   /home> my first line
+   /home> my second line
+   /home> ^d                 #Linux end of file/stdin (^z in Win)
+                                   #NOT ^z. It does something else in Linux
+
+   now file outfile contains:
+                        my first line
+                        my second line
+
+   /home> cat  <infile  >outfile
+   /home>                   #nothing displayed
+
+   /home> cat <outfile
+                        #file outfile displayed on screen
+                        #now has same contents as infile
+
+   #these have same result
+   /home> tail -37  infile >lastPart
+   /home> tail -37 <infile >lastPart
+                        #file lastPart contains a copy of the
+                        #last 37 lines of infile
+
+The diff command allows - for stdin so this diffs file XYZ and stdin
+   /home> diff XYZ -
+   whatever
+   ^d                             #end of file (stdin)
+   #diff gives no output if XYZ contains only "whatever",
+   #and shows differences, otherwise
+
+
+to redirect stderr use    "2>"
+
+e.g., Suppose labs does not exist. Then error msg on stderr:
+            /home>  ls labs
+            ls: cannot access 'labs': No such file or directory
+            /home>
+
+      If redirect stderr, error msgs written elsewhere:
+            /home>  ls labs 2>errfile
+            /home>
+            /home>  cat errfile
+            ls: cannot access 'labs': No such file or directory
+
+Use redirect and /dev/null to throw output away
+         /home> ls labs 2>/dev/null
+         /home>
+
+
+Aside:  why 2> ??
+        each stream given a number by shell
+        stdin 0, stdout 1, stderr 2 (ls >outfile is same as ls 1>outfile)
+                                  (cat <infile is same as cat 0<infile)
+
+To redirect stderr to stdout:
+   2>&1
+
+to redirect both stdout and stderr at once
+   &>outfile
+or
+    >outfile 2>&1
+
+
+<<< DEVICES >>>
+
+device: usually a piece of equipment for storing or
+                communicating data,
+                e.g., printer, disk drive, terminal, modem
+
+on Linux, we access devices as if they were (special) files,
+ typically in dir /dev
+        e.g., a printer might be "file"  /dev/lp0
+        therefore       cp myfile /dev/lp0
+                        prints myfile on line printer
+        e.g., writing a message directly to a terminal:
+                        echo "hi there" >/dev/pts/4
+
+ stdin/stdout/stderr are
+      /dev/stdin, /dev/stdout, /dev/stderr
+      displaying file contents on stderr could be done:
+             cp blah /dev/stderr
+ bash assigns stdin/stdout/stderr to file descriptor 0/1/2
+      so
+             echo blah blah >&2  #writes to stderr
+      these both redirect stdout:
+             echo blah  >file
+             echo blah 1>file
+      these both redirect stdin:
+             cat <file
+             cat 0<file
+
+
+when OS recognizes an operation on a special file, it calls
+a pgm called a device driver to do the op (e.g., cause data
+to be displayed on screen)
+
+
+Null Device  (/dev/null)  the garbage can, black hole -- data
+can go in but never come back out.
+        sending output to /dev/null = throwing it away
+        sometimes commands produce output we want to disregard
+
+        e.g., get error msgs if some files do not exist
+        /home> wc file1 file3 file4 file5 file6
+        wc file1 file3 file4 file5 file6
+          7   8  34 file1
+        wc: 'file3': No such file or directory
+        wc: 'file4': No such file or directory
+         28  32 136 file5
+         21  24 102 file6
+         56  64 272 total
+
+        Throw away only the errors:
+        /home> wc file1 file3 file4 file5 file6 2>/dev/null
+         7   8  34 file1
+        28  32 136 file5
+        21  24 102 file6
+        56  64 272 total
+

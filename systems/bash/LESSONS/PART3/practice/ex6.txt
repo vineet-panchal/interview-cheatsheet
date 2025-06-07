@@ -1,0 +1,54 @@
+HMWK: 1.write a shell pgm called lst which acts like ls -F, using
+      a shell for loop (Note ls -F puts a '/' after dir names and
+      a '*' after any files  that are user executable and a '@'
+      before any that are symbolic links. Look at 'man bash' or
+      'man test' to find the test for symbolic links)
+      2. write a shell program called num.sh that prints the number
+      of entries in the current directory. USE A LOOP and counter. No pipes.
+      3. modify your program nw from previous homework so that if the
+      argument is a number larger than the number of entries IN the
+      current directory, the following message is printed:
+       there are only $num entries in this directory
+      The new nw should use your program num from above to assign the
+      number of files/dirs to a variable.
+
+ANSW:
+1.
+#!/bin/bash
+for i  ; do
+  if [ -d "$i" ]  ; then
+     echo "${i}/"
+  elif [ -x "$i" ] ; then
+     echo "${i}*"
+  elif [ -h "$i" ]  ; then
+     echo "${i}@"
+  else
+     echo "${i}"
+  fi
+done
+
+2.
+> cat num
+#!/bin/bash
+declare -i count=0
+for i in $(ls) ; do
+   count=count+1
+done
+echo $count
+> #double-check it. These should give same number:
+> ls | wc -l
+> ./num
+
+3.
+#!/bin/bash
+if [ -z "$1" ] ; then
+  ls -t
+else
+  numEntries="$(num)"
+  if [ "$numEntries" -lt "$1" ]  ; then
+     echo there are only $numEntries entries in this directory
+  else
+     ls -t | head -$1
+  fi
+fi
+exit 0

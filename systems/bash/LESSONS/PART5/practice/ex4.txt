@@ -1,0 +1,52 @@
+5. Write a shell program called findext which will list directories
+  under a given path that contain files/dirs having the given extensions.
+  Program findext takes at least 2 command line arguments. Its usage is:
+  findext path ext1 ext2 ...
+  where "path" is the path to the start of the directory structure
+  you wish to search, and ext1, ext2, etc are extensions.
+  Program findext will print out the directories under path which
+  contain files/dirs that end in .ext1 .ext2  etc
+  Your program does not need to work properly if the user passes glob
+  constructs or special chars as arguments.
+  For example:
+  findext /home/dwoit/courses c scm
+  will list all directories under /home/dwoit/courses that contain
+  files/dirs named *.c and/or *.scm
+
+  If findext is sent less than 2 command line args, it should print
+  on stderr
+    Usage: findext path arg1 arg2
+  and exit with exitcode 1
+  (the word findext above should be printed using $0)
+  If it is passed 2 or more arguments, it should print a list of dirs
+  in which files/dirs of the form *.ext1 *.ext2 etc reside. Then it
+  should exit with exitcode 0.
+  Note that only the DIRECTORY names are printed. Therefore you will
+  have to chop off the trailing file/dir name (the part after the last "/")
+  You can do this with ${var%/*} which says to match pattern "/*" (slash
+  followed by anything) at the END of variable var; and delete the shortest
+  part that matches and return the rest. You will also find utilities
+  sort and uniq useful.
+
+ANSW:
+#!/bin/bash
+if [[ $# -lt 2 ]]
+then
+   echo " Usage: $0 path arg1 arg2 ..." >/dev/stderr
+   exit 1
+fi
+start=$1
+shift
+for ext
+do
+  #find $start -name "*.$ext" -print -follow 2>/dev/null
+  find $start -name "*.$ext" -print  2>/dev/null
+done  | \
+while read thepath
+do
+ echo ${thepath%/*}  #match pattern "/*" (slash followed by
+#                    #anything) at end of variable thepath
+#                    #delete the shortest part that matches
+#                    #and return the rest
+done | sort | uniq
+exit 0

@@ -1,0 +1,39 @@
+HMWK: use eval to write a shell program called revargs which will
+print out its command line args in reverse order.
+White-space preservation not necessary.
+Write a shell program the doesn't use eval to print its command
+line args in reverse order.
+
+ANSW:
+
+#!/bin/bash
+typeset -i x=$#
+while [[ $x -gt 0 ]] ; do
+  y="\$$x"
+  eval "echo $y"
+  x=x-1
+done
+
+#!/bin/bash
+typeset -i x=$#
+while [[ $x -gt 0 ]] ; do
+  eval "echo \$$x"
+  #eval echo '$'$x   #even this works
+  x=x-1
+done
+
+
+#!/bin/bash
+#preserves whitespace in CLAs
+for y ; do
+ echo "$y"
+done | tac
+
+
+#!/bin/bash
+#preserves whitespace in CLAs
+rev=""
+for i ; do
+  rev="$i $rev"
+done
+echo "$rev"

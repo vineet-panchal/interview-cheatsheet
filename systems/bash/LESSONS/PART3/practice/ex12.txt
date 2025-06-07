@@ -1,0 +1,18 @@
+
+HMWK:  A.
+       Write a shell program that tells you how many windows a user
+       has open. Note that each open window is assigned a unique port
+       number, which you can see with the who command. e.g.,
+       > who
+       dwoit    pts/0   ....
+       eharley  pts/3   ....
+       dwoit    pts/2   ....
+       This shows dwoit has 2 windows open (pts/0 and pts/2)
+       The user is given as a command line argument to your program ($1).
+
+
+ANSW: A.
+#!/bin/bash
+echo "$1 has $(who | grep "$1" | tr -s " " " " \
+      | cut -d' ' -f2 | wc -l) open windows"
+

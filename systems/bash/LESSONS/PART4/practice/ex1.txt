@@ -1,0 +1,15 @@
+HMWK:  Use arrays to write a shell program called revarg.sh that will
+         print out its command line args in reverse order.
+
+#!/bin/bash
+declare -i i=1
+for onearg ; do
+   A[$i]=$onearg
+   i=i+1
+done
+typeset -i x=$#
+while [[ $x -gt 0 ]] ; do
+   echo ${A[$x]}
+   x=x-1
+done
+

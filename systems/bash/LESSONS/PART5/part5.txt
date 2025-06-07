@@ -1,0 +1,673 @@
+
+<<< TESTING & DEBUGGING SHELL PGMS >>>
+---------------------------------
+
+use shell parameter  -x  to debug interactively
+
+    bash -x pgm   #displays every command in pgm just before executing it,
+                  #with variables replaced by their actual values
+                  #bash -v pgm same except variables NOT replaced by values
+
+> cat fromto.sh
+#!/bin/bash
+#takes 3 CLAs, Filename, S and E
+#displays lines S-E inclusive of file Filename, but
+#in reverse order (line E, line E-1, ... Line S)
+#ASSUME proper CLAs, so no error checking.
+File=$1 ; S=$2 ; E=$3
+cat ${File} | head -$E | tail -$(($E-$S+1)) | tac
+>
+>
+> fromto.sh gfile 2 3          #run it normally
+ccc
+BBBaaaaaaaaBBBBBBBBBBBB
+>
+> bash -x fromto.sh gfile 2 3  #run it using -x
++ File=gfile
++ S=2
++ E=3
++ cat gfile
++ head -3
++ tail -2
++ tac
+ccc
+BBBaaaaaaaaBBBBBBBBBBBB
+>
+
+
+
+Program findtrunc.sh is supposed to truncate its $1 to 8 characters,
+and then print Found if the resulting (truncated) string is found
+in file gfile, and Not Found otherwise:
+
+> cat gfile
+abc11111111abcd22222 xxx yyyy z
+BBBaaaaaaaaBBBBBBBBBBBB
+ccc
+dddddddd
+>
+> findtrunc.sh 11111111234567
+Found
+> findtrunc.sh ddddXddd
+Not Found
+>
+
+Program findtruncBAD.sh is supposed to do the same thing. But
+it always prints "Not Found" no matter what $1 is.
+>
+> findtruncBAD.sh 11111111234567
+Not Found
+>
+
+You look at the code for findtruncBAD.sh but can't see any problem:
+
+#!/bin/bash
+#Source:  findtruncBAD.sh      truncates $1 to  8  characters and
+#searches for it in file   gfile
+# a msg is printed to indicate if Found/Not Found
+
+trunc=$(echo  "$1" | cut  -c1-8)
+if  [ "$(grep  trunc  gfile)" ]
+then  echo  Found
+else   echo   Not Found
+fi
+
+
+To figure out the problem with findtruncBAD.sh, run it with bash -x
+
+> bash -x findtruncBAD.sh 11111111234567
+++ echo 11111111234567
+++ cut -c1-8
++ trunc=11111111
+++ grep trunc gfile
++ '[' '' ']'                    <--- the condition evaluated to NULL string!
++ echo Not Found                     so grep did not find trunc in gfile
+Not Found
+>
+
+So we see grep did not find trunc in gfile. Why not?
+Check that gfile contains what you think it does. Yes.
+Check that grep 11111111 gfile DOES produce output when run in shell. Yes.
+Something must be wrong with this line of code: grep trunc gfile
+Ah ha. It is searching for the literal string 'trunc' in gfile, instead of
+the value of the variable named trunc.
+Line should be: grep $trunc gfile
+
+
+A year later, you have forgotten how to run findtrunc.sh, so you try this:
+
+> findtrunc.sh
+                           but you get no output. It just hangs there.
+                           To stop it:
+                   ^C      and it terminates, or
+                   ^D      and it prints "Not Found"
+
+
+What is the problem with findtrunc.sh? Why does it hang?
+Use -x to find out why:
+
+> bash -x findtrunc.sh
+++ echo ''
+++ cut  -c1-8
++  trunc=
+++ grep gfile       <---- hangs, because grep is searching for string
+                          gfile from stdin. If type ^D signals
+                          end of stdin, giving...
++ '[' '' ']'        <---- since grep printed nothing on stdout
++ echo not found    <---- since [ ] is false
+Not Found
+
+
+bash -x helps us tell where the program was hanging, and helps us find
+the problem.  In this case, there's no problem with the given code. The
+problem is that the user forgot the argument to findtrunc.sh, so it was null
+
+Could fix this by adding quotes around "$trunc" as in:
+if  [ "`grep  "$trunc"  gfile`" ]
+But this is not ideal because it will print Found if $1 is null, since
+null string is everywhere!
+Better to fix this by adding a conditional that makes sure user has
+supplied an argument. See findtruncGOOD.sh
+
+
+
+<<< SHIFT >>>
+-------------
+
+  -shifts positional parameters ($1 $2 $3 ...) one to the left.
+   so supposing       $1 $2 $3 $4 were:   a b c d
+   then after shift   $1 $2 $3 $4 are:    b c d ''
+
+  -shift n shifts n positions to the left
+   so supposing         $1 $2 $3 $4 were:   a b c d
+   then after shift 2   $1 $2 $3 $4 are:    c d '' ''
+
+
+#!/bin/bash
+#Source: shiftex.sh
+#pgm to print its args.
+
+     while  [ "$1" ]        #<--- stops when  $1 is null
+     do
+          echo  "$1"        #<--- so spaces preserved
+          shift             #<--- moves  $2  to  $1,  $3 to $2  etc.
+     done
+     exit 0
+
+Helpful when you need to loop over the tail of the CLAs.
+e.g.,
+  > repl.sh str1 str2 f1 f2 f3 f4 f5 f6 f7
+  replaces str1 by str2 in all the files f1, f2, etc.
+
+  repl.sh can accomplish this by:
+    -Save $1 and $2 in variables and then
+    -shift 2
+    -for i ; do
+
+shift $(($# -1))
+
+OR
+
+while [ "$1" && !"$2" ] 
+do
+shift
+
+<<< XARGS >>>
+---------
+
+  -to perform a command  on a group of things from stdin
+  -helps you take output of one command, and pass it as an
+   argument to another command
+
+  e.g., list lines containing 'bash' from all files whose NAME
+  starts with 'f', where files are located anywhere in the
+  filetree under current directory
+
+  > find . -type f -name "f*" | xargs grep bash
+  #prints LINES in files f* that contain the string bash
+  #assuming all files starting with f were: ./f1, ./f2, and ./f3
+  #ends up running: grep bash ./f1 ./f2 ./f3
+
+
+  #Note that without xargs, it does something much different
+  > find . -type f -name "f*" | grep bash
+  #prints NAMES of files f* whose NAME also contains string bash,
+  #like: f1bashy.txt, fashybashy.sh, etc.
+
+
+  > find . -type d -empty | xargs rmdir
+  #remove empty directories from filetree under current dir
+  #assuming the only empty directories were ./a, ./b/c, ./d
+  #ends up running: rmdir ./a ./b/c ./d
+  #Note that without xargs, get error: rmdir: missing operand
+
+  #The -p option PROMPTS before doing the command.
+  #Assuming same as above, except adding -p (enter y or n)
+  > find . -type d -empty | xargs -p rmdir
+  rmdir ./a ./b/c ./d ?...y    #<--user typed the y for "yes"
+  #now those 3 dirs are deleted (if type n rmdir does not run)
+
+  #If no command is given, xargs uses echo by default. e.g.,
+  > ls | xargs
+  #assuming current dir contains only files a, b, c, d
+  #ends up running: echo a b c d
+
+  #The -ni option says instead of sending stdin as one string,
+  #split the string into chunks of i words
+  > ls | xargs -n2
+  #assuming current dir contains only files a, b, c, d
+  #ends up running: echo a b ; echo c d
+
+  #both -n and -p together
+  > echo abc de fghi jkl mn | xargs -n2 -p
+  echo abc de ?...y
+  abc de
+  echo fghi jkl ?...n
+  echo mn ?...y
+  mn
+  >
+
+
+  #option -0 (zero) processes whitespace in items properly.
+  #often used with -print0 (zero) option of find (which produces
+  #output with whitespace properly preserved
+  #e.g., suppose files included these 3 files which all contained string bash:
+  # f0 f1 'f s'
+  #To find files starting with f which contain string bash:
+  > find . -type f -name "f*" -print0 | xargs -0 grep bash
+  #If don't use -print0 and -0 the whitespace causes errors
+
+
+  #To delimit input, xargs uses blanks and newlines
+  #-d changes input delimiter (a single character only)
+  > echo "abc.d.efghi jkl.m.nop" | xargs -d. -n2
+  abc d
+  efghi jkl m
+  nop
+
+
+  The -I option runs the command once for each item in stdin (like -n1)
+  except each time, {} in command is replaced with item:
+
+  ls  |  xargs  -I{}  cp  {}  {}.bak   # make backup copy of
+                                       #all files in current dir.
+  #assuming current dir contains only files a, b, c
+  #ends up running: cp a a.bak ; cp b b.bak ; cp c c.bak
+
+  #could have done this with a loop but more typing:
+  # ls | while read file ; do cp $file ${file}.bak ; done
+  Note: if b is a dir get cp b b.bak -- error, but xargs just
+        prints msg on stderr and continues on with next item
+
+  e.g., what does this print on stdout?
+  (echo a b c ; echo d e ; echo f)  |  xargs  -I{}  echo  :{}:
+
+
+
+
+<<< BUILT-IN COMMANDS >>>
+-------------------------
+
+Saw some already: echo, exit, pwd, shopt, break, cd, test, read, declare, etc
+(man bash and search for "^SHELL BUILTIN COMMANDS")
+
+
+<< EVAL >>  
+
+eg)  v1="cat  fn | grep 5"
+
+     #suppose want to run the command in v1. Try:
+     $v1
+     #but get file fn catted to screen, followed by:
+     cat: '|': No such file or directory
+     cat: grep: No such file or directory
+     cat: 5: No such file or directory
+
+     #Why?  Because bash thinks you want to cat 4 files: fn, |, grep, 5
+     #The "|" is not recognized as a pipe.
+     #solution:
+
+     eval $v1
+
+
+
+
+eg)  v1="cat  fn | grep 5"
+     v2="grep 3 | more "
+
+     #we wish to execute the command:  cat fn | grep 5 | grep 3 | more
+     #so we try this:
+     $v1 | $v2
+                    #but it does not work. Get errors because shell does not
+                    #recognize 1st and 3rd "|" as pipes (since part of variables).
+                    #errors include:
+
+      grep: |: No such file or directory
+      grep: more: No such file or directory
+
+
+     eval  "$v1 | $v2"        #sends lines of fn with both "5" and "3" in
+                              #them to more
+     eval:  2 passes:
+               1) makes substitutions
+                  eval "cat  fn | grep 5 | grep 3 | more"
+               2) result evaluated i.e, meta chars etc. interpreted properly
+
+
+#!/bin/bash
+#Source: printXth.sh
+#Expects a bunch of command line arguments.
+#Prompts user and reads an integer (call it X)
+#then it prints the Xth command line argument
+
+echo -n "enter an integer: "
+read X
+the_arg='$'${X}
+#note the difference in output:
+     echo "command line arg number ${X} is:  ${the_arg}"
+eval echo "command line arg number ${X} is:  ${the_arg}"
+
+
+#!/bin/bash
+#Source: looptail.sh
+#loops over CLAs $3,$4,$5,... (skipping $1 $2)
+#without using shift
+#First, create the string: $3 $4 $5 ... $#
+#Then loop over the VALUES of the string
+#works if spaces in CLAs (solutions using 'read' will not)
+declare -i j=3
+loopStr=""
+#loop for j from 3 to $# and each time add ' $j' to loopStr
+while [ $j -le $# ] ; do
+   loopStr="${loopStr} \$$j"
+   j=j+1
+done
+#loopStr contains $3 $4 $5 ... $#
+for i in $(eval echo $loopStr) ; do #eval replaces $i with value
+  echo $i
+done
+
+
+Recall {1..3} generates list 1 2 3
+> echo {1..3}
+1
+2
+3
+>
+But only if start and end match
+> echo {1..R}
+{1..R}
+>
+
+Useful in loops:
+> for i in {1..4} ; do echo $i ; done
+1
+2
+3
+4
+>
+
+Want to do the same, but instead of 4 use value in $X
+However, it does not produce the same output as above.
+> X=4
+> for i in {1..$X} ; do echo $i ; done
+{1..4}
+>
+Fix this by using eval:
+> for i in $(eval "echo {1..$X}" ) ; do echo $i ; done
+1
+2
+3
+4
+>
+
+
+
+<<< SHELL  CMDS >>>
+-------------------
+
+  most shell cmds  (not builtin ones) in "bins"
+
+          /bin,  /usr/bin , /usr/local/bin , even   ~/bin
+
+  shell searches directories to find cmds.
+
+          searches those in "PATH"
+
+  to see path:
+          > echo $PATH
+          /usr/bin:/bin:/etc:/usr/local/bin::
+                                            ^
+                                            |
+                                         current dir
+
+
+ To add (or change) default path, reset PATH in  .bash_profile
+ (or, .profile if that is what you use instead)
+
+ Also add to .bashrc for non-interactive, non-login shells,
+ which you only get by opening a new terminal window from GUI
+ once you are already logged into your machine (your linux laptop,
+ a lab machine booted to linux). Putty windows are login shells,
+ so .bashrc not relevant. Note Mac OS X’s Terminal.app runs
+ .profile for both types of windows.
+
+
+     PATH=${PATH}:${HOME}/bin
+     export  PATH
+
+          - Adds /home/dwoit/bin to end of current path (for prof)
+               (prof keeps some personal shell pgms in  /home/dwoit/bin)
+
+          -export makes  PATH global
+             (so all subsequent processes can use it.)
+
+  If  2 different cmds with same name, shell executes  1st  one
+  it finds in path
+
+   i.e.  if you write your own "rm" in ~dwoit/bin/rm to use instead
+         of  /bin/rm you must put YOUR ~dwoit/bin before  /bin
+         in  PATH. However, the best way to accomplish getting
+         your own rm run is to make it a function or alias, which are
+         always done first
+
+
+
+
+<<< SHELL  VARIABLES >>>
+------------------------
+
+problem:   referencing a variable before it is
+           assigned a value  (i.e. programmer error)
+           it will be null and shell pgm may behave unexpectedly
+    e.g., grep "$var" fname
+    If $var unset, get grep "" fname, which prints all lines of fname
+    which is probably not what you want
+
+
+set  -u      # if any variable unset, referencing it causes error message
+set  +u      # no error message for unset var
+
+fix above:
+set -u
+grep "$var" fname
+-bash: var: unbound variable
+
+
+can set DEFAULT values:
+   ${var:=value}  #if var empty, assign value; if !empty no new assignment
+   > unset X
+   > echo ${X:=abc}
+   abc
+   X=def
+   > echo ${X:=abc}
+   def
+   >
+
+
+for more default values see man bash (search for := )
+
+
+Can use set to set value of $1 $2, $3, etc.  in shell program
+or on command line
+
+     set "val1" "val2"...   #sets $1 to  "val1", $2 to "val2" ...
+     set --                 #unsets them all
+
+     set - *     #sets $1, $2, $3 ...  to all files in current dir
+
+
+
+
+<<< HERE DOCUMENTS >>>
+
+#!/bin/bash
+#Source: menupgm.sh
+#prints a menu and executes selected choice
+#reprints menu for another selection
+#continues until user selects the exit option
+#
+#illustrates use of  "here document"
+#         -any string could replace string "here" in pgm
+#         -uses following lines as stdin until
+#           the string "here" appears in col. 1
+#
+while  [ true ]
+do
+     clear
+     #print  menu  display
+     cat  << here
+               MAIN  MENU
+          1)   Print working dir.
+          2)   List all entries in current dir.
+          3)   Print date & time
+          4)   Display contents of file
+          5)   Create backup files
+          X)   Exit
+here
+     #prompt for user input using continuation char
+     echo  -e "Please enter selection  ${LOGNAME}:  \c"
+     read selection
+
+     case  $selection  in
+
+          1)   pwd
+               ;;
+          2)   ls -1
+               ;;
+          3)   date
+               ;;
+          4)   echo  -e "Enter a file name:  \c"
+               read  fname
+               if  [ -f  $fname ]
+               then
+                    echo   "Contents of  $fname are: "
+                    more  $fname
+               else
+                    echo "file $fname does not exist"
+               fi
+               ;;
+          5)   echo  -e "Enter filenames:  \c"
+               read  fnames
+               for  fn  in  $fnames
+               do
+                    cp    $fn   $fn.bak
+               done
+               ;;
+
+          X)   exit  0
+               ;;
+          *)   echo   -e "Invalid choice.  Try again  \a"
+               ;;
+     esac
+     #pause before redisplaying menu
+     echo   -e "\n\n  Press return to continue  \c"
+     read  hold
+done
+exit 0
+
+
+Can use a here-document interactively in shell:
+
+> wc <<HERE
+Linux> here we have
+Linux> exactly 3 lines
+Linux> of text
+HERE
+ 3  8 37
+>
+
+Here documents are expanded like double-quoted strings.  Expands:
+$var, $(command), $((X+1)), and backslash to protect \`$
+> X=5
+> cat <<HERE
+Linux > value of X: $X
+Linux > date is:    $(date)
+Linux >  X+1 is:     $((X+1))
+Linux > HERE
+value of X: 5
+date is:    Sat 16 Nov 2024 03:38:33 PM EST
+ X+1 is:     6
+>
+
+Can suppress expansion by single-quoting HERE (or whatever you use)
+> cat <<'HERE'
+Linux > value of X: $X
+Linux > date is:    $(date)
+Linux >  X+1 is:     $((X+1))
+Linux > HERE
+value of X: $X
+date is:    $(date)
+ X+1 is:     $((X+1))
+>
+
+
+<<< ARGUMENT PROCESSING >>>
+---------------------------
+
+ commands usually have options of form -x, with some options
+ requiring an additional argument
+
+     eg)  ls -F -t
+     eg)  wc -lw fname1 fname2
+     eg)  gcc -o pgm pgm.c
+
+#!/bin/bash
+#Source: argp.sh
+#process single arguments which can be -a, -b or -f
+#arg -f expects filename after it
+#e.g., argp.sh -b -f myfile -a
+
+  while  [ "$1" ] ; do
+    case  $1  in
+         -a | -b)
+              echo arg is -a or -b
+              #process these options
+              ;;
+         -f)
+              #process option -f filename
+              if [ "`echo $2 | cut -c1`" = "-" -o -z "$2" ] ; then
+                 echo "missing filename for -f"
+              elif [ "$2" ] ; then
+                # process -f filename
+                echo arg is -f $2
+                shift
+              fi
+              ;;
+         *)
+              echo  "$1  invalid argument"
+              ;;
+    esac
+    shift
+  done
+  exit 0
+
+<<< GETOPTS  >>>
+----------------
+
+  getopts  cmd  can parse  args of a shell pgm.
+
+  getopts reads arguments 1 by 1 & puts in c (you name it)
+
+  ?  is assigned to  c if  arg  not in list you provide
+
+#!/bin/bash
+#Source: gopsPgm.sh
+#parses command line arguments using getops command
+#getopts list arg
+#list is a list of valid options, e.g., below they
+#     are a,b,d or o
+#the ":" after any char in list indicates that option
+#    requires an argument.
+#so valid usage of gopsPgm.sh is:
+#  gopsPgm.sh -o dog
+#  gopsPgm.sh -o "dog mouse"
+#  gopsPgm.sh -d "abce" -b
+#  gopsPgm.sh -a -o dog -b
+#  gopsPgm.sh -ab -o dog -d mouse
+#invalid are:
+#  gopsPgm.sh -o
+#  gopsPgm.sh -x
+#in these cases, error messages are printed automatically and $c is
+#set to ? so that it matches the last part (so both exit 1)
+
+ while getopts abd:o: c  #when done returns false
+          do
+               case $c in
+               a | b)    #do some processing here
+                         echo "in case a|b, option is $c"
+                         ;;
+               d)       # $OPTARG is now whatever came
+                        # after the -d
+                         echo "in case d, option is $c arg is $OPTARG "
+                         ;;
+               o)       # $OPTARG is now whatever came
+                        # after the -o
+                         echo "in case o, option is $c arg is $OPTARG "
+                         ;;
+               \?)       #error msg is automatically written
+                         #from the getopts command
+                         exit 1;;   #STOPS gopsPgm.sh and sets $? to 1
+               esac
+          done
+  exit 0

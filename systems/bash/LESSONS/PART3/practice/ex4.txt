@@ -1,0 +1,36 @@
+HMWK: Write a shell program that will tell you how long another
+user`s session has been idle.
+If the user has more than one idle session, just look at the first one.
+To see idle time, use the who command with options -H -u.
+Idle time is given in minutes. If a user is idle for less than a minute,
+a . appears instead of a time.
+The program will take a userid as an argument
+and will do one of (a), (b), or (c) below:
+   (a) print "user userid is not logged in" and exit 1
+   (b) print "user userid has been idle at least 1 minute and exit 0
+   (c) print "user userid has been idle less than 1 minute and exit 0
+
+
+ANSW:
+
+#!/bin/bash
+#this tells if a user has been on for less than a minute by looking for
+#a . for a user`s idle time. As of F23 it would appear in column 42,
+#but this could change in subsequent implementations
+#!/bin/bash
+if [ -z "$1" ] ; then
+   echo "Usage: $0 userid" >/dev/stderr
+   exit 1
+fi
+userLine="`who -u -H | grep $1 | head -1`"
+if [ -z "$userLine" ] ; then
+  echo "user $1 is not logged in"
+  exit 1
+fi
+col42="`who -u -H | grep $1 | head -1 | cut -c42`"
+if [ "$col42" = '.' ] ; then
+  echo "user $1 has been idle less than 1 minute"
+else
+  echo "user $1 has been idle at least 1 minute"
+fi
+exit 0

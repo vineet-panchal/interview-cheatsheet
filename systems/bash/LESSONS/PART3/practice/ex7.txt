@@ -1,0 +1,21 @@
+HMWK:
+0. If the numbers from 1 to 4321 were written out, how many times would the
+   digit '5' appear? Write a shell program to figure this out.
+
+
+#!/bin/bash
+seq 4321 | \
+  while read -n1 digit; do
+     echo $digit
+  done | grep -c 5
+
+#!/bin/bash
+typeset -i n=1
+while [ $n -le  4321 ] ; do
+  echo $n
+  n=n+1
+done | \
+  while read -n1 digit; do
+     echo $digit
+  done | grep -c 5
+

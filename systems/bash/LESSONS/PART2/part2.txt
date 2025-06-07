@@ -1,0 +1,612 @@
+START OF WEEK 2 of Linux
+
+<<< FILE TIMESTAMP >>>
+  -The up to date file is: /usr/courses/cps393/dwoit/courseNotes/
+  -If you are viewing your own copy, check it is up to date
+  -If you are viewing from a link in the Course Outline, be aware it may be outdated.
+
+
+
+<<< PIPES >>>
+
+a pipe  |  connects stdout of one command to stdin of another
+
+e.g.,
+  cd /usr/courses/cps393/dwoit/courseNotes/Programs/linux
+  ls |  more             # lists all files in current dir, one
+                         # screen at a time
+  ls -lt | head          # lists the 10 most recently modified
+                         # files in this dir
+
+  ls -lt | head >outfile # prints output into file outfile
+
+  last | head            #show first 10 logins on this machine since wtmp
+                         #last output has oldest at end. 
+
+  #print line 54 of AlanTuringBio80 
+  cat AlanTuringBio80 | head -54 | tail -1
+
+  #print line 54 in reverse character order
+  cat AlanTuringBio80 | head -54 | tail -1 | rev
+
+
+  #print the 18-20th-last lines of AlanTuringBio80 
+  tac AlanTuringBio80 | head -20 | tail -3 | tac
+  cat AlanTuringBio80 | tail -20 | head -3
+
+
+pipes contribute to shell`s usefulness and flexibility
+  -no need to create new commands to perform a task--can combine
+   existing commands to perform more complex tasks
+  -no need for "temp" files
+
+
+
+<< TEE COMMAND >>
+
+saves the data passing through the pipe
+writes stdin to stdout AND to a given file
+
+e.g.,   changing: cat AlanTuringBio80 | head -54 | tail -1
+        to:       cat AlanTuringBio80 | head -54 | tee first54 | tail -1
+        the same, but ALSO saves first 54 lines in file first54
+
+
+
+<<< GLOB CONSTRUCTS, METACHARACTERS AND OTHER SPECIAL CHARACTERS >>>
+
+
+?  *  [   ]              #some glob constructs
+                         #man bash search for: Pathname Expansion
+
+saves typing,  time
+encourages good naming conventions
+
+when shell encounters a glob construct:
+  -first expands construct to matching entries
+  -then does resulting command
+
+*       string of characters (incl. null string)
+?       single character
+[...]   single char from set of chars within the brackets
+
+e.g., assume /home/dwoit has 7 files:
+
+                lab1.jav lb2.jav new.c pie.c prog1.c prog2.c top.c
+
+        /home/dwoit> ls *.c
+                                new.c pie.c prog1.c prog2.c top.c
+        /home/dwoit> ls *
+                                lab1.jav lb2.jav new.c pie.c prog1.c
+                                prog2.c  top.c
+
+        /home/dwoit> ls prog?.c
+                                prog1.c prog2.c
+        /home/dwoit> ls p*.c
+                                prog1.c prog2.c pie.c
+        /home/dwoit> ls ???.*
+                                lb2.jav new.c pie.c top.c
+        /home/dwoit> ls prog[123].c
+                                prog1.c prog2.c
+        /home/dwoit> ls prog[abc].c     #since no expansion, uses literal string
+                                ls: cannot access 'prog[abc].c': No such file or directory
+        /home/dwoit> ls [m-s]*          # all files starting with one of these:
+                                        # m n o p q r s
+                                new.c pie.c prog1.c prog2.c
+
+        [1-58]          matches any single char in 1 2 3 4 5 8
+        [A-Za-z]        matches any single char in A,B,...Z,a,b,...z
+                             systems may differ depending on $LC_COLLATE
+                             or globalasciiranges, etc.
+                             see man bash search for Pattern Matching
+        [!ABC]          matches any single char *except* A, B or C
+        [!a-z0-4]       matches any single char *except* a,b,...z,0,1,2,3,4
+                        (in some bash, ^ can be used instead of !)
+
+        These Character Classes can be used within [ ]
+        [:alnum:]  [:alpha:]  [:blank:]  [:cntrl:]
+        [:digit:]  [:graph:]  [:lower:]  [:print:]
+        [:punct:]  [:space:]  [:upper:]  [:xdigit:]
+
+        note    [:upper:]   is A-Z
+        so     [[:upper:]]  is [A-Z]
+
+        /home/dwoit> ls [[:upper:]]* matches files whose name starts
+                                     with an upper-case letter A-Z
+
+        What is the difference between these?:
+        ls [[:upper:][:upper:]]*
+        ls [[:upper:]][[:upper:]]*
+
+        First one matches files whose name starts with an upper case letter
+        Second one matches files whose name starts with two upper case letters
+
+Other special characters:
+
+\       protects the character following it from being expanded
+\       at end of line, means continued on next line (see program trump_born.sh)
+;       separates commands: mkdir newDir ; cd newDir ; touch newFile
+~       your home directory name  (/home/dwoit for prof)
+
+~usr    the home dir of user with userid "usr"
+~-      your previous working dir  (note in bash  cd - same as cd ~-)
+~+      your current working dir
+
+      /home/dwoit>  echo list java files by: ls \*.jav
+                    list java files by: ls *.jav
+      /home/dwoit>  echo list java files by: ls *.jav
+                    list java files by: ls lab1.jav lb2.jav
+
+     from any dir,  ls ~    lists your home dir (/home/dwoit for prof)
+     from any dir,  cd ~/bin changes into dir /home/dwoit/bin for prof
+
+toggle between 2 dirs with "cd ~-" (or with "cd -" in bash)
+      /home/dwoit>     cd bin
+      /home/dwoit/bin> cd -
+      /home/dwoit>     cd -
+      /home/dwoit/bin>
+
+execute a pgm called myprog in dmason`s dir cps209
+      /home/dwoit>    ~dmason/cps209/myprog #assuming correct perms:
+                                            # x on dirs, and 
+                                            # x  on myprog (if a compiled program), or
+                                            # rx on myprog (if a shell program)
+      /home/dwoit/bin>   echo my working dir is ~+
+                         my working dir is /home/dwoit/bin
+
+
+could use quotes instead of escape character \
+all these print this on stdout: list the java files in this dir by *.jav
+
+      /home/dwoit>  echo list the java files in this dir by \*.jav
+      /home/dwoit>  echo list the java files in this dir by "*".jav
+      /home/dwoit>  echo list the java files in this dir by "*.jav"
+      /home/dwoit>  echo "list the java files in this dir by *.jav"
+
+
+
+<< PATTERNS AND REGULAR EXPRESSIONS IN SHELL >>
+
+The extended globs below require bash option extglob to be set.
+To see which shell options are set:
+echo $BASHOPTS
+If extglob is not set, set it by:
+shopt -s extglob
+
+
+ *(exp)           0 or more occurrences of exp
+ +(exp)           1 or more occurrences of exp
+ ?(exp)           0 or 1 occurrences of exp
+ @(exp1|exp2|...) exp1 or exp2 or ...
+ !(exp)           entries that do NOT match exp
+
+e.g.,
+ if you had files in the current dir:
+     A  Ax  Axxx  Axxxx  Ay  X  X.bak  x  xx  xxxx
+ then
+  shopt -s extglob   if necessary
+  ls A*(x)           prints A Ax Axxx Axxxx
+  ls A*(xx)          prints A  Axxxx
+  ls A+(x)           prints Ax Axxx Axxxx
+  ls A?(x)           prints A Ax
+  ls X?(.bak)        prints X X.bak
+  ls @(*xx|*ak)      prints Axxx  Axxxx  X.bak  xx  xxxx
+  ls !(@(*xx|*ak))   prints A  Ax  Ay  X  x
+
+Note: See "man bash" and search for "Pattern Matching"
+      for help on globs, patterns, etc.
+
+
+
+<<< INTERACTIVE SHELL USE >>>
+
+-typing on command line
+-one-time task
+-prototyping
+
+
+<<< SHELL PROGRAMS (SHELL SCRIPTS, SHELLS) >>>
+
+-executable file containing shell commands
+-can run like a program (type its name on command line)
+
+
+Why?
+  -task is complex
+  -repeat it later
+  -repeat it in different context (arguments)
+
+Typically file containing shell program has .sh suffix
+but in cps393 we sometimes omit suffix
+
+
+#!/bin/bash
+#source: showSource.sh
+#shell program to list all java and c files in current directory
+echo -n "Current directory is: "
+pwd
+echo "C files are:"
+ls *.c
+echo "Java files are:"
+ls *.jav
+exit 0
+
+To run:
+  Make sure it is executable (x permissions for user running it), then
+  type its name on command line after ./
+
+  If you own the program, need rx perms for user
+  If you don`t own it,    need rx perms for other
+
+
+  > cd /usr/courses/cps393/dwoit/courseNotes/Programs/linux
+  > ls -l showSource.sh
+  -rwxr-xr-x 1 dwoit cps393 203 Jul  2 14:57 showSource.sh
+  > ./showSource.sh
+  Current directory is: /usr/courses/cps393/dwoit/courseNotes/Programs/linux
+  C files are:
+  blah.c
+  Java files are:
+  blah.jav  color.jav  pgm1.jav  TextStackViewer.jav  ttt.jav  VisibleStack.jav  xyz.jav
+  >
+
+
+  > cd     #for prof
+  > cp /usr/courses/cps393/dwoit/courseNotes/Programs/linux/showSource.sh showSourceCopy.sh
+  > ./showSourceCopy.sh
+  Current directory is: /home/dwoit
+  C files are:
+  ls: cannot access '*.c': No such file or directory
+  Java files are:
+  DAC.jav skipList.jav
+
+
+
+Shell Script Arguments:
+            $1  $2  $3  etc.
+            $0  name of shell pgm
+            $#  the number of args passed
+            $@  lists args as one string: "arg1 arg2 ..."
+            $*  lists args as separate:   "arg1" "arg2" ...
+
+#!/bin/bash
+#source: prnargs.sh
+#shell pgm to print out its first 2 args
+echo The first argument is:  $1
+echo The second argument is: $2
+echo dollar zero is: $0
+exit 0
+
+
+  /home/dwoit>  cp /usr/courses/cps393/dwoit/courseNotes/Programs/linux/prnargs.sh .
+  /home/dwoit>  ./prnargs.sh  "Hello there" world
+  The first argument is: Hello there
+  The second argument is: world
+  dollar zero is: ./prnargs.sh
+
+
+  Note: spacing in program differs from spacing in output
+  Why?  echo squeezes multiple whitespace to single space
+
+
+  Could line up spacing with quotes or tabs:
+       echo "The first argument is:  $1"
+       echo "The second argument is: $2"
+
+       echo -e "The first argument is:\t$1"
+       echo -e "The second argument is:\t$2"
+
+
+  Could leave out the ./ if current dir in your path.
+      e.g.,    /home/dwoit> prnargs.sh   (instead of ./prnargs.sh)
+      If it says prnargs.sh "not found" can fix by adding the current dir to your path
+         e.g., in your .profile or .bash_profile or .bashrc at the end put:
+           PATH=$PATH::
+           export PATH
+         Must login again for it to take effect.
+         Now, whenever you login, current dir always in path.
+
+
+<<< FILTERS >>>
+
+filter: refines or transforms its input to produce (usually different) output
+most shell commands are filters.
+
+             stdin -------> filter --------> stdout
+
+e.g.,  more <file1
+         transforms sequence of characters from file1 (its input)
+         into the same sequence but with  pagination
+       rev
+         transforms each stdin line to line in reverse
+         (remember ctrl-d to end)
+       uniq
+         filters out duplicate lines
+
+
+e.g.,  more <file1
+         transforms sequence of characters from file1 (its input)
+         into the same sequence but with  pagination
+       rev
+         transforms each stdin line to line in reverse
+         (remember ctrl-d to end)
+       uniq
+         filters out duplicate lines
+
+Some filters filter input from either stdin or file(s)
+
+
+<< GREP  (GLOBAL REGULAR EXPRESSION PRINT) >>
+        (globally search for a regular expression and print it)
+
+
+grep string filename(s)
+                string:         the string to search for
+                filename(s):    one or more files to search in
+                result:         displays lines of file(s)
+                                        that that contain string
+grep string
+                searches stdin instead of file(s)
+                sends to stdout lines of stdin that contain string
+                ctrl-d "ends" stdin when you are typing on keyboard
+
+
+e.g.  grep  'applet' lab1.jav lab2.jav
+        sends to stdout (screen) those lines of files lab1.jav and
+        lab2.jav that contain the string applet
+        /home/jchan>    grep 'applet' lab1.jav lab2.jav
+                                lab1.jav:       applet.init();
+                                lab1.jav:       applet.start();
+                                lab2.jav:       applet.num=6;
+
+e.g. Which course notes mention touch?
+     Try searching for 'touch' in all u?.txt files:
+
+     /usr/courses/cps393/dwoit/courseNotes> grep 'touch' u?.txt
+     u1.txt:     ls, cd, pwd, cat, more, cp, rm, mkdir, rmdir, mv, wc, touch,
+     u1.txt:touch   creates file(s) or updates modification time(s)
+     u1.txt:        /home/dwoit> touch abc def ghi
+     u1.txt:        /home/dwoit> touch f1 f2 f3 f4
+     u2.txt:;       separates commands: mkdir newDir ; cd newDir ; touch newFile
+
+
+Note: single quotes are good for now. Once we study variables, you
+      may have reason to use double quotes around the search string.
+
+
+Options:
+-i  ignore case of search string
+-v  print lines *not* matching search string
+-x  search string must match ENTIRE line
+-w  search string must match a whole word
+-l  print only names of files that match, not individual lines
+   (man grep gives all the options)
+
+Regular Expressions:
+The grep search string above can be specified as a regex, i.e.,
+    can contain metacharacters for pattern matching
+
+.       any character, except newline (like ? in glob)
+*       0 or more repetitions of previous character (unlike glob)
+^       beginning of line
+$       end of line
+[...]   any character inside the brackets (like glob)
+[^...]  any character not inside the brackets (like ! in glob)
+\{m\}   exactly m repetitions of previous character
+\{m,\}  at least m repetitions of previous character
+\{m,n\} any number of repetitions of prev char between m and n inclusive
+\<      beginning of word
+\>      end of word
+        remember to quote these as in: grep '\<theWord\>' a_file
+\(str\) group string str into a substring
+
+To match an actual metacharacter such as . protect it: \.
+
+e.g.,  searching in file fname (and later stdin):
+grep '^Assignment' fname    # lines starting with Assignment
+grep -v '^Assignment' fname # lines not starting with Assignment
+grep 'Assignment$' fname    # lines ending with Assignment
+grep 'd.g' fname            # lines containing dag, dbg, dcg, d0g, d1g, etc
+grep 'su*m' fname           # lines containing sm, sum, suum, suuum, etc
+grep 'suu*m' fname          # lines containing     sum, suum, suuum, etc
+grep '\<so\>' fname         # the word so (vs. social, absolute)
+grep '[A-Za-z][A-Za-z]*' fname  # lines containing ANY alpha string (no blank
+                                # lines, no lines with only digits, etc)
+grep '^[A-Za-z][A-Za-z]*$' fname  # lines containing ONLY alpha characters
+grep 'xyz\.[^ ]* '         # lines containing string xyz followed by a dot
+                           # followed by 0 or more non-spaces, then one space
+                           # e.g., "xyz. " "xyz.w "  "xyz.ta "  etc
+grep 'xyz\.w\{2,3\}X'      # lines containing xyz.wwX or xyz.wwwX
+grep 'A\(bc\)\{2,3\}D'     # lines containing AbcbcD or AbcbcbcD
+grep -x "abc"              # lines that contain exactly and only abc
+
+
+Extended Regular Expressions:
+
+use grep -E  (or egrep, but deprecated)
+
+|       OR
++       1 or more repetitions of previous character
+( and ) do not need escaping (substring)
+{ and } do not need escaping (repetition)
+\n      backreference: \1 replaced by substring 1, \2 by substring 2, etc
+
+e.g.,
+grep -E 'dog|cat|bird'         # lines with at least 1 of dog, cat, or bird
+grep -E '[A-Za-z]+'            # lines with at least one alpha char
+grep    '[A-Za-z][A-Za-z]*'    # same as above if no -E option
+grep -E 'xyz\.w{2,3}X'         # lines containing xyz.wwX or xyz.wwwX
+grep -E 'A(ab){2,3}D'          # lines containing AababD or AabababD
+grep -E 'A([aei]+)B(.*)C\2\1'  # lines containing strings such as:
+                               # AieiBxyzCxyziei  or  AiBCi etc
+
+
+See "man grep" and search for "REGULAR EXPRESSIONS" for help on them
+
+
+
+<< FIND  (LIST ALL FILES AND DIRS MEETING CERTAIN CRITERIA) >>
+
+
+   e.g., this lists all java files in portion of the filesystem
+         rooted at /home/dwoit:
+
+
+    find /home/dwoit -name "*.jav"
+          ^           ^
+          |           |
+          |           |
+          |           match any entry with name *.jav (glob)
+          dir to begin search (whole subtree of filesystem starting here)
+
+
+     find . -type f          # only FILES in filetree under current dir (.)
+     find . -type d          # only DIRECTORIES in filetree under .
+
+     find /usr -name tali 2>/dev/null        #if takes too long ctrl-c and... 
+
+     find /usr/[!c]* -name tali 2>/dev/null  #eliminate /usr/courses
+                                             #or use -prune (see below)
+
+     find . -type d -perm -g+r,u+r   # dirs readable by BOTH owner and group 
+     find . -type d -perm /g+r,u+r   # dirs readable by EITHER or BOTH owner & group
+     find . -type d -perm /a+w       # dirs with at least one write bit set
+     find . -type d ! -perm /a+x     # dirs having no x perms at all
+     LOTS of ways to specify perms--see man find
+
+     cd /usr/courses/cps393/dwoit/courseNotes/Programs/c
+     find . -name "m*.c"     #get matches from ./c1 ./c2 ./c3 and ./c4
+     #eliminate ./c2 from the search using -prune:
+     find . -name c2 -prune -o -name "m*.c" -print
+                             #-o means "or". 
+                             #need -print to print the one that recurses
+                             #otherwise dir name ./c2 itself is still printed
+                             #-print is normally implicit. However, if explicitly
+                             # include it, then only commands WITH -print get printed
+                             # and not any other commnds (just right-side of -o and 
+                             # not left side, since left has no -print)
+     #could eliminate /usr/courses from tali search using -prune
+     find /usr -name courses -prune -o -name tali -print 2>/dev/null
+
+
+   LOTS of options to find. Some useful ones are:
+   -newer xyz   #list entries that have been modified more recently than file xyz
+   -maxdepth 1  #descend only 1 level down directories (can use any integer)
+
+   Why quote arguments to -name?:
+      If argument has unquoted glob constructs, bash EXPANDS it first
+      and then sends result to find. But that`s not what we wanted:
+      /home/dwoit/testdir> ls
+                           abc.c  dir1/  dir2/  dir3/
+      #correct way to find all entries matching name pattern a*.c
+      /home/dwoit/testdir> find . -name 'a*.c'
+      ./dir1/a1.c
+      ./dir1/a2.c
+      ./dir2/arc.c
+      ./dir3/am.c
+      ./abc.c
+      #INcorrect way. Expands to: find . -name abc.c 
+      /home/dwoit/testdir> find . -name a*.c
+      ./abc.c
+      /home/dwoit/testdir>
+
+
+
+<< MORE ADVANCED HEAD, TAIL OPTIONS >>
+
+Saw previously:
+  head -2 f1 f2 f3  #sends to stdout first 2 lines of f1, f2, f3 
+  head -19          #sends to stdout first 19 lines of stdin 
+
+option -n-X for head and -n+X for tail:
+
+  # sends to stdout all lines of f1 starting at line 3
+  tail -n+3 f1
+
+  # sends to stdout all but the last 2 lines of f1
+  head -n-2 f1
+
+  #print list of recent logins minus the final 2 lines
+  last | head -n-2          #last logins without the final 2 lines
+
+
+  #note, tail -n-3 is same as tail -3
+  #      head -n+2 is same as head -2
+
+
+(options are in man pages. Lots for tail. )
+
+
+#!/bin/bash
+#program to print line 6 of vimSummary.txt
+head -6 /usr/courses/cps393/dwoit/courseNotes/vimSummary.txt | tail -1
+
+Copy the code into a file called showline and modify it as follows:
+      Make it able to show ANY line of ANY file, with
+      line and file given as a command line argument, as in:
+      ./showline 5  myfile  #to show line 5  of file myfile
+      ./showline 54 dog     #to show line 54 of file dog
+
+
+<< CUT, PASTE COMMANDS >>
+
+cut     extract specified input columns
+paste   combine input columns
+
+both take input from stdin or files
+
+cut -c8 myfile  # outputs 8th column of each line of myfile
+cut -c5-7,25-   # outputs columns 5,6,7,25... of each line of stdin
+cut -f2 myfile  # outputs second field of each line of myfile 
+                #         (assumes fields delimited by one tab)
+cut -d' ' -f3   # outputs field 3, fields delimited by one space
+
+paste f1 f2     # linei to stdout contains linei of f1 followed by
+                # a tab followed by linei of f2
+paste -d' ' f1 f2  # uses single space instead of tab
+
+
+Aside:
+   If you have things separated by tabs in a file, and want the tabs
+     converted to spaces, use the command: expand
+   cat -A will show tabs, newlines, etc. (see man page)
+
+
+Some shell programs:
+
+#!/bin/bash
+#source profs.sh
+#prints names of profs.sh logged in
+who | grep dwoit | cut -c1-8 | uniq
+who | grep eharley | cut -c1-8 | uniq
+who | grep aabhari | cut -c1-8 | uniq
+who | grep -w mes | cut -c1-8 | uniq #string in other userids
+exit 0
+#or who | grep -Ew "dwoit|eharley|mes" | cut -c1-8 | sort -u
+
+
+Try this: use any of ls, cut, sort, uniq, head, tail and pipes
+to get a listing of all the different GROUPS entries belong to
+in the current directory. List each group only once.
+
+
+#!/bin/bash
+#source prof1.sh
+#prints names of a prof logged in
+#name supplied as command line argument
+who | grep -w $1 | cut -c1-8 | uniq
+
+See what happens if you use prof1.sh without an argument.
+How do you fix it? (hint: use double quotes in grep)
+
+
+
+Note 2 pipes and line continuation character \
+
+#!/bin/bash
+#source: trump_born.sh
+echo "Donald Trump's Birthday: "
+lynx -dump "https://en.wikipedia.org/wiki/Donald_Trump" 2>/dev/null | \
+      grep "Trump.*born" | head -1
+echo ""
+exit 0

@@ -1,0 +1,46 @@
+3. modify the program in 2 above so that it will take any number of files
+  as command line args, and number them consecutively on stdout. Call this
+  program num3.sh
+  e.g.,
+  if file f1 was:
+  abc def
+  gh ij
+  k
+  and file f2 was:
+  a b c
+  deflsjk
+  ds
+  fkl
+  Then  num3.sh f1 f2
+  would print
+  1. abc def
+  2. gh ij
+  3. k
+  4. a b c
+  5. deflsjk
+  6. ds
+  7. fkl
+
+
+#!/bin/bash
+if [ -z "$1" ] ; then
+  typeset -i lineNum=1
+  while read line ; do
+    echo "${lineNum}. $line"
+    lineNum=lineNum+1
+  done
+  exit 0
+fi
+
+typeset -i lineNum=1
+for aFile ; do
+   if [ ! -f "$aFile" -o ! -r "$aFile" ] ; then
+     echo "$0: $aFile is not readable file" >/dev/stderr
+   else
+     while read line ; do
+       echo "${lineNum}. $line"
+       lineNum=lineNum+1
+     done <$aFile
+   fi
+done
+exit 0

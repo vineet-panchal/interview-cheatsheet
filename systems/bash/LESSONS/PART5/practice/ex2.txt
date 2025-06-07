@@ -1,0 +1,29 @@
+Write a program that replaces one string with another in
+one or more files. The 2 strings and the file(s) are given
+on the command line:
+ >repl abc "A B C" rf1 rf2 rf3 rf4
+
+The program must use shift so that the commmand line arguments
+shift 2 over, enabling it to use this loop to process the
+files:   for i in "$@"   #either this
+         for i           #or this
+It must use the -i option of sed to replace strings in place
+(so the files are modified).
+
+#!/bin/bash
+#Source: repl.sh
+#Usage:  repl.sh str1 str2 file1 [file2 ... filen]
+#Purpose: replace str1 with str2 in the file(s)
+#         using shift and for as required
+if [ $# -lt 3 ] ; then
+   echo: Usage: $0 str1 str2 file1 [file2 ... filen] >/dev/stderr
+   exit 1
+fi
+str1=$1
+str2=$2
+shift ; shift    #or shift 2
+for i ; do
+   cp $i ${i}~   #make a backup just in case
+   sed -i "s/${str1}/${str2}/g" $i
+done
+exit 0

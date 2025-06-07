@@ -1,0 +1,28 @@
+2. write a program like numit.sh above, except that IF a command line
+  arg is given, it will check to see if the arg is a file, and if so,
+  will output to stdout that file with line numbers as above. If it`s
+  not a file, or not readable, it will print an error message.
+  Call this program num2.sh
+
+
+> cat num2
+#!/bin/bash
+if [ -z "$1" ] ; then
+  typeset -i lineNum=1
+  while read line ; do
+    echo "${lineNum}. $line"
+    lineNum=lineNum+1
+  done
+  exit 0
+fi
+
+if [ ! -f "$1" -o ! -r "$1" ] ; then
+  echo "$0: $1 is not readable file"
+  exit 1
+fi
+typeset -i lineNum=1
+while read line ; do
+  echo "${lineNum}. $line"
+  lineNum=lineNum+1
+done <$1
+exit 0

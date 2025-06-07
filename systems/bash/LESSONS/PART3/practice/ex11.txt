@@ -1,0 +1,31 @@
+4. Write a program called biggest.sh that takes any number of arguments.
+For all the arguments that are files, it finds
+the file with the most words in it, and prints a line such as:
+ File whatever has largest number of words (37)
+assuming the file called "whatever" has 37 words, which is more (or the
+same) as any other files in the current directory.
+If no arguments were valid files, then the following
+line should be printed to stderr:
+biggest.sh: no valid filenames were specified
+You may find the wc command useful, especially wc -w
+
+#!/bin/bash
+validFiles="NO"
+typeset -i maxWords=0
+typeset -i aFileWords=0
+for aFile ; do
+  if [  -f $aFile -a  -r $aFile ] ; then
+     validFiles="YES"
+     aFileWords="`wc -w $aFile | cut -d' ' -f1`"
+     if [ $aFileWords -gt $maxWords ] ; then
+        maxWords=$aFileWords
+        maxFile=$aFile
+     fi
+  fi
+done
+if [ $validFiles = "NO" ] ; then
+   echo "$0: no valid filenames were specified" >/dev/stderr
+   exit 1
+fi
+echo "File $maxFile has the largest number of words (${maxWords})"
+exit 0

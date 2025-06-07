@@ -1,0 +1,22 @@
+HMWK:
+1. Give a sed command that changes every occurrance of the string
+"xyz" on stdin to "zyx".
+2. Give a sed command that changes every occurrance of the string
+"xyz" to "zyx" on lines stdin EXCEPT lines 3-5.
+3. Give a sed command that makes all alpha characters on stdin lower-case.
+4. Give a sed command that deletes all lines of stdin containing
+three or more digits in a row.
+5. Give a sed command that deletes the third occurrance of string
+"xyz" on every line of stdin.
+6. Give a sed command that puts double quotes around any string of
+two or more repeated A characters. e.g.,
+this line: abcAbcAAzzzzAAAAzzABCC
+becomes  : abcAbc"AA"zzzz"AAAA"zzABCC
+
+1. sed -e 's/xyz/zyx/g'
+2. sed -e '3,5 !s/xyz/zyx/g'
+3. sed -e 's/[A-Z]/\L&/g'
+4. sed -e '/[0-9][0-9][0-9]/'d
+5. sed -e 's/xyz//3'
+6. sed -e 's/\(AAA*\)/"\1"/g'
+

@@ -1,0 +1,30 @@
+
+HMWK: Write a shell program called sg.sh that takes 2 command line arguments.
+      The first argument is a textual string; the second a file name.
+      If other than 2 args are supplied it prints on stderr:
+      sg.sh: Usage: sg.sh str file
+      (the sg.sh is printes so that if you change the name of the program,
+      the "Usage line" changes automatically.)
+      If the second arg is not a readable file, print on stderr:
+      sg.sh: file xxx invalid or not readable
+      where "xxx" is arg2
+      Your program will return 0 if string is contained somewhere in the
+      file, and 1 if something wrong with args, and 2 if string not in
+      file (but args OK).  (use grep in your program).
+
+ANSW:
+> cat sg.sh
+#!/bin/bash
+if [ $# -ne 2 ] ; then
+  echo "$0: Usage: $0 str file" >/dev/stderr
+  exit 1
+fi
+if [ ! -r "$2" ] ; then
+  echo "$0: file $2 invalid or not readable" >/dev/stderr
+  exit 1
+fi
+if [ "`grep $1 $2`" ] ; then
+  exit 0
+else
+  exit 2
+fi
