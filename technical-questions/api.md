@@ -1,5 +1,6 @@
 # API Questions
 
+
 #### 1. You implemented Websockets with Socket.io. Can you explain the difference between WebSockets and HTTP, and when you'd use each?
 
 - HTTP is a request-response protocol where the client initiates communication nad the server responds. 
@@ -9,6 +10,59 @@
 - When on user sends a message, all other users need to receive it instantly without refreshing the page.
 - HTTP would require constant polling, which is inefficient
 - Socket.io was perfect because it provides WebSocket functionality with fallbacks for older browsers and additional features like rooms and namespaces
+
+## RESTful APIs
+
+#### 1. Can you explain RESTful APIs?
+
+- REST is the most widely used standard for communication between a client and server over the internet
+
+
+#### 2. Can you break down what a REST request would look like?
+
+- A RESTful api request usually has 3 different components
+- the first is the HTTP method (GET, POST, PATCH, DELETE)
+- the second is the resource, REST APIs revolve around resources, this is something like books, users, or products, something like that
+- finally, there is a unique identifier, to request for a specific object
+
+
+#### 3. Can you explain how you name RESTful resources?
+
+- I name resources with nouns, and not verbs
+- the action is dictated by the HTTP method you're using like GET or DELETE, and the resource is always the same
+- so we can have GET books or DELETE books
+
+
+#### 4. What if we want to make multiple requests can we maintain state on the server side?
+
+- a RESTful API should be stateless, meaning we don't have to remember anything about the client on the server side
+- if we did need to source some information about the client we could do it in a database, but never in memory on the server
+
+
+#### 5. Should there be any caching?
+
+- because REST APIs are stateless, caching should also be possible
+
+
+#### 6. What kind of response should a user expect to get within the JSON payload?
+
+- RESTful APIs use standard HTTP response codes
+- 2xx --> successful request
+- 4xx --> client error
+- 5xx --> server error
+
+
+#### 7. Can you explain the difference between GET and POST?
+
+- GET and POST are two HTTP methods
+- GET retrieves data from a server with parameters visible in the URL query string
+- POST sends data in the request body to create or modify server resources, allowing for larger payloads
+- GET is idempotent meaning, it doesn't change server state, even after multiple calls
+- while POST is not idempotent and can change the server state
+- GET is less secure as parameters are visible in the URLs, and in browser history
+- while in POST parameters aren't exposed in URLs
+
+
 
 
 ## About Your Experience and Projects
