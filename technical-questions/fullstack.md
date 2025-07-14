@@ -1,14 +1,9 @@
 # Full-Stack Development Questions
 
 
-## About Your Experience and Projects
-#### 1. I see you build a MERN application with JWT authentication. Can you walk me through how JWT works and why you chose it over other authentication methods?
 
-- JWT (JSON Web Token) is a stateless authentication method where the server generates a signed token containing user information and permissions
-- When a user logs in, the server creates a JWT and sends it to the client. The client stores this token and includes it in the Authorization header for subsequent requests.
-- I chose JWT because it's stateless - the server doesn't need to store session information, making it scalable for distributed systems.
-- The token contains all necessary user information, and since it's signed, we can verify its authenticity.
-- For our MERN application, this worked well because it allowed seamless communication between our React frontend and Express backend without requiring server-side session storage.
+
+## About Your Experience and Projects
 
 #### 2. You mention implementing role-based routing. How did you structure this in your application?
 

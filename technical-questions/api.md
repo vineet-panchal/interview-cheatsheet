@@ -1,15 +1,7 @@
 # API Questions
 
+## General Questions
 
-#### 1. You implemented Websockets with Socket.io. Can you explain the difference between WebSockets and HTTP, and when you'd use each?
-
-- HTTP is a request-response protocol where the client initiates communication nad the server responds. 
-- It's stateless and works well for traditional web applications
-- WebSockets, however, provide full-duplex communication, both client and server can initiate communication at any time 
-- I used WebSockets for our chat functionality because we needed real-time bidirectional communication
-- When on user sends a message, all other users need to receive it instantly without refreshing the page.
-- HTTP would require constant polling, which is inefficient
-- Socket.io was perfect because it provides WebSocket functionality with fallbacks for older browsers and additional features like rooms and namespaces
 
 ## RESTful APIs
 
@@ -62,6 +54,46 @@
 - GET is less secure as parameters are visible in the URLs, and in browser history
 - while in POST parameters aren't exposed in URLs
 
+
+#### 8. Can you explain the difference between POST and PUT?
+
+- 
+
+## GraphQL
+
+#### 1. What is GraphQL?
+
+- GraphQL is a query language that describes a api request, it exists as a layer between the frontend and backend
+- Which allows you to expose the data that you sent from your server to your client in the format that is described by the GraphQL
+- GraphQL basically sets standards for the information it accepts
+- GraphQL is usually divided into its schema and its resolvers
+- The schema is a way to describe how you api will work, including what it will receive, send, and mutate
+
+## WebSockets and Socket.io
+
+#### 1. What are WebSockets?
+
+- WebSockets build real-time features by establishing two way connections between a client and a server
+- They offer continuous exchange or connection without having to close the connection after every exchange
+- the client sends an HTTP request to the server, asking it to open a connection, and if the server accepts the request, it creates a hand-shake
+- So WebSockets basically have an open connection between client and a server, allowing for real-time updates
+
+
+#### 2. What is Socket.io?
+
+- Socket.io is an JavaScript library built on top of WebSockets, providing additional features and simplifying development
+- it essentially acts as an system to manage WebSockets, and ensures communication between multiple servers or clients, with automatic reconnection
+
+
+#### 3. You implemented Websockets with Socket.io. Can you explain the difference between WebSockets and HTTP, and when you'd use each?
+
+- HTTP is a request-response protocol where the client initiates communication nad the server responds. 
+- It's stateless and works well for traditional web applications
+- WebSockets, however, provide full-duplex communication, both client and server can initiate communication at any time 
+- I used WebSockets for our chat functionality because we needed real-time bidirectional communication
+- When on user sends a message, all other users need to receive it instantly without refreshing the page.
+- HTTP would require constant polling, which is inefficient
+- Socket.io was perfect because it provides WebSocket functionality with fallbacks for older browsers and additional features like rooms and namespaces
 
 
 
