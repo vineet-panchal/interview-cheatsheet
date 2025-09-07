@@ -23,3 +23,19 @@
 > brew install maven
 > mvn -version
 > Apache Maven 3.9.5
+```
+
+3. Now, you can create a new Spring Boot project using the Spring Initializr
+[Spring Initializr](https://start.spring.io/)
+- Select the project metadata (Group, Artifact, Name, etc.)
+- Choose the dependencies you need (e.g., Spring Web, Spring Data JPA, etc)
+- Click on "Generate" to download the project as a ZIP file
+
+
+## Project Structure
+
+- /.idea
+  -> misc.xml, modules.xml, workspace.xml
+- /.mvn
+  -> /wrapper
+    -> maven-wrapper.jar, maven-wrapper.properties
