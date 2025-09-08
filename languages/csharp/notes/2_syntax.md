@@ -244,7 +244,121 @@ int numberOfEmployees = 15;
 numberOfEmployees++; 
 ```
 
-## Int Methods
+## Int, Char, and Double Methods
 ```cs
-int age = 35;
+// =========================
+// Integer (int) Methods
+// =========================
+int num = 42;
 
+// Parsing & Conversion
+int.Parse("123");                // Convert string to int
+int.TryParse("123", out num);    // Safe parse
+Convert.ToInt32("123");          // Convert object/string to int
+
+// Comparison
+num.CompareTo(50);   // -1 if less, 0 if equal, 1 if greater
+num.Equals(42);      // true
+
+// Formatting
+num.ToString();       // "42"
+num.ToString("D4");   // "0042" (decimal, padded)
+
+// Static Methods
+int.MinValue;        // -2,147,483,648
+int.MaxValue;        //  2,147,483,647
+
+// =========================
+// Character (char) Methods
+// =========================
+char c = 'A';
+
+// Checking character types
+char.IsDigit(c);         // false
+char.IsLetter(c);        // true
+char.IsLetterOrDigit(c); // true
+char.IsLower(c);         // false
+char.IsUpper(c);         // true
+char.IsWhiteSpace(' ');  // true
+char.IsPunctuation('.'); // true
+char.IsSymbol('$');      // true
+char.IsControl('\n');    // true
+char.IsNumber('5');      // true
+
+// Conversion
+char.ToLower(c);   // 'a'
+char.ToUpper(c);   // 'A'
+
+// Classification with Unicode
+char.GetNumericValue('9'); // 9
+char.GetUnicodeCategory(c); // UnicodeCategory.UppercaseLetter
+
+// =========================
+// Double Methods
+// =========================
+double d = 3.14159;
+
+// Parsing & Conversion
+double.Parse("3.14");                 // Convert string to double
+double.TryParse("3.14", out d);       // Safe parse
+Convert.ToDouble("3.14");             // Convert object/string
+
+// Comparison
+d.CompareTo(5.0);   // -1 if less, 0 if equal, 1 if greater
+d.Equals(3.14159);  // true
+
+// Formatting
+d.ToString();          // "3.14159"
+d.ToString("F2");      // "3.14" (2 decimal places)
+d.ToString("E");       // "3.141590E+000"
+
+// Special Values
+double.MinValue;       // Smallest possible double
+double.MaxValue;       // Largest possible double
+double.Epsilon;        // Smallest positive Double > 0
+double.NaN;            // Not a Number
+double.PositiveInfinity;
+double.NegativeInfinity
+
+// Static Methods (via System.Math)
+Math.Round(d);         // 3
+Math.Floor(d);         // 3
+Math.Ceiling(d);       // 4
+Math.Sqrt(16);         // 4
+Math.Pow(2, 3);        // 8
+Math.Abs(-3.5);        // 3.5
+Math.Sin(0);           // 0
+Math.Cos(0);           // 1
+Math.Tan(0);           // 0
+```
+
+### Date and Time Types
+```cs
+DateTime hireDate = new DateTime(2022, 3, 28, 14, 30, 0);
+
+DateTime exitDate = new DateTime(2025, 12, 11);
+
+DateTime startDate = hireDate.AddDays(15);
+
+DateTime currentDate = DateTime.Now;
+bool areWeInDst = currentDate.IsDaylightSavingTime();
+
+DateTime startHour = DateTime.Now;
+TimeSpan workTime = new TimeSpan();
+DateTime endHJour = startHour.Add(workTime);
+
+Console.WriteLine(startHour.ToLongDateString());
+Console.WriteLine(endHour.ToShortTimeString());
+```
+
+## Casting
+
+```cs
+int numberOfHoursWorked = 165;
+long veryLongMonth = numberOfHoursWorked; // valid
+
+double d = 1234567.89;
+int x = (int) d;
+
+int intVeryLongMonth = (int) veryLongMonth;
+```
