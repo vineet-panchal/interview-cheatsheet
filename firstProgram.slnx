@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/languages/" />
+  <Folder Name="/languages/csharp/" />
+  <Folder Name="/languages/csharp/examples/">
+    <Project Path="languages/csharp/examples/firstProgram/firstProgram.csproj" />
+  </Folder>
+</Solution>
