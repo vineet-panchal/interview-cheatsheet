@@ -4,7 +4,7 @@
 - It can be used to build apps that run on desktops, mobile devices, and the web, as well as games, and even PowerShell cmdlets
 - it is the main language iused for .NET development
 - it is a typed language
-
+- C# is actively maintained
 
 ## Hello World
 
@@ -38,3 +38,22 @@ Console.WriteLine("Hello " + name);
 - ***[ProjectName].csproj*** -> contains project configuration and dependencies
 
 
+## Understanding The CLI
+```bash
+# creating a new project
+/> dotnet new console -n "FirstProgram"
+
+# compile your application
+/> dotnet build FirstProgram.cs
+
+# execute your application 
+/> dotnet run FirstProgram.cs
+
+# interacting with the dotnet sdk
+/> dotnet
+
+```
+
+
+## The C# Documentation
+https://learn.microsoft.com/en-us/dotnet/csharp/
