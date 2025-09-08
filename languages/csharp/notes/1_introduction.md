@@ -14,8 +14,26 @@ Console.WriteLine("Hello World");
 
 ## C# Syntax
 
+- ***;*** -> end of every line
+- **{ }** -> used for code blocks
+- **( )** -> used for parameters and expressions
+- **[ ]** -> used for arrays and attributes
+- **" "** -> used for strings
+- **//** -> single line comments
+- **/* */** -> multi-line comments
+- **.** -> used for member access and decimal points
+
 ```cs
 Console.WriteLine("Please enter your name: ");
 string name = Console.ReadLine();
 Console.WriteLine("Hello " + name);
 ```
+
+## The Project Structure
+
+- ***\bin*** -> contains compiled files and runtime components
+- ***\obj*** -> contains intermediate files during compilation
+- ***\Properties*** -> contains assembly information and other settings
+- ***Program.cs*** -> contains the main entry point of the application
+- ***[ProjectName].csproj*** -> contains project configuration and dependencies
+
