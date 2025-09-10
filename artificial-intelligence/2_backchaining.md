@@ -20,7 +20,7 @@ Query (i.e, goal): Given a KB, establish atomic sentence Q is true
 
 - if sentence has variables, you will need to replace variable with atoms
 
-## Example
+## Back-Chaining Examples
 ***The Knowledge Base***
 1. tesla123 is a sedan.
 2. rav456 is a suv.
@@ -29,7 +29,7 @@ Query (i.e, goal): Given a KB, establish atomic sentence Q is true
 5. if (X is a sedan) then (X is a car)
 6. if (X is a car) and (X is electric) then (X is an ev)
 
-**Example 1**
+**Example 1**: 
 Establish "tesla123 is a sedan"
 
 ```
@@ -40,15 +40,42 @@ a) match on 1
 success.
 ```
 
-**Example 2**
+**Example 2**:
 Establish "rav456 is a car"
+
 ```
-asdfas
+Q = "rav456 is a car"
+
+a) fail
+b) match on 4 with X = rav456   // rav456 could be a car, if it is an suv
+c) Establish "rav456 is a suv"  // you can show b, if you can establish that it is an suv
+  "rav456 is a suv"    // check if rav456 is a suv
+  a) match on 2
+
+success.
 ```
 
-**Example 3**
+**Example 3**:
 Establish "tesla123 is an ev"
 ```
-asdfasdf
-```
+Q = "tesla123 is an ev"
 
+a) fail
+b) match on 6 with X = tesla123     // tesla123 could be an ev, if it is a car and is electric
+c) Establish "tesla123 is a car and is electric"   // you can show b, if you can establish that it is a car and is electric
+  "tesla123 is a car"   // check if tesla123 is a car
+  a) fail
+  b) match on 4 with X = tesla123    // tesla123 could be a car, if it is a suv
+  c) Establish "tesla123 is a suv"   // you can show b, if you can establish that it is a suv
+    "tesla123 is a suv"   // check if tesla123 is a suv
+    a) fail
+    b) fail
+  b) match on 5 with X = tesla123    // tesla123 could be a car, if it is a sedan
+  c) Establish "tesla123 is a sedan"   // you can show b, if you can establish that it is a sedan
+    "tesla123 is a sedan"   // check if tesla123 is a suv
+    a) match on 1    // tesla123 is a car
+      "tesla123 is electric"   // check if tesla123 is electric
+      a) match on 3    // tesla123 is electric
+
+success.
+```
