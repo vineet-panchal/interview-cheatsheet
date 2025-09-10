@@ -79,3 +79,47 @@ c) Establish "tesla123 is a car and is electric"   // you can show b, if you can
 
 success.
 ```
+
+## Retrieval
+- can use back-chaining to find individuals for a given property
+  - Establish "tesla123 is a car" means confirm that tesla123 is a car
+  - Establish "Z is a car" means locate an individual Z that is a car
+
+## Retrieval Examples
+
+***Example 1***:
+Establish "Z is a car"
+
+```
+Q = "Z is a car"
+
+a) fail
+b) match on 4 with X = Z
+c) Establish if Z is a suv
+  "Z is a suv"
+  a) match on 2 with Z = rav456
+  success.
+  more?
+
+  a) fail
+  b) fail
+b) match on 5 with X = Z
+c) Establish "Z is a sedan"
+  "Z is a sedan"
+  a) match on 1 with Z = tesla123
+  success.
+  more?
+
+  a) fail
+  b) fail
+b) fail
+
+success.
+```
+
+***Example 2***:
+Establish "Z is ev"
+
+```
+
+```
