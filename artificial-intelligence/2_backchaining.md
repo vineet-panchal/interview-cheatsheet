@@ -121,5 +121,68 @@ success.
 Establish "Z is ev"
 
 ```
+a) fail
+b) match on 6 with X = Z
+c) Establish "Z is a car" and "Z is electric"
+  "Z is a car"
+  a) fail
+  b) match on 4 with X = Z
+  c) Establish "Z is a suv"
+    "Z is a suv"
+    c) match on 2 with Z = rav456
+      "rav456 is electric"
+      a) fail
+      b) fail
+    a) fail
+    b) fail
+  b) match on 5 with X = Z
+  c) Establish "Z is a sedan"
+  a) match on 1 with Z = tesla123
+    "tesla123 is electric"
+    a) match on 3
+    success.
 
+    a) fail
+  a) fail
+  b) fail
+b) fail 
 ```
+
+## Variable Collision
+- variables add an additional complication
+```
+if X plays for Y and Y won stanley_cup then X won stanley_cup
+
+if we want to establish(kadri won stanley_cup)
+  establish(kadri plays for Y) and (Y won stanley_cup)
+
+if we want to establish(Z won stanley_cup)
+  establish(Z plays for Y) and (Y won stanley_cup)
+
+if X plays for Y and Y won stanley_cup then X won stanley_cup
+
+if we want to establish(Y won stanley_cup)
+  establish(Y plays for Y) and (Y won stanley_cup)
+```
+- before using a conditional, rename variables so different from goal variables
+
+## Properties of Back-Chaining
+- Back-chaining is **sound**
+  - anything it establishes is actually entailed by the KB
+<br />
+- Back-chaining is complete
+  - given enough time, will eventually entail establish any possible atomic entailments
+  - need to avoid cyclic rules: if X is a car then X is a car
+<br />
+- Back-chaining is goal-directed
+  - starts with what you want, not just what you know (forward-chaining)
+
+## Back-Chaining as a Computational Process
+- Back-chaining is a well-defined computational process, so we are able to implement it
+
+- the basis of the PROLOG (Programming in Logic)
+  - declarative language
+  - define a knowledge base (program)
+  - make queries
+  - program execution is back-chaining with backtracking
+
