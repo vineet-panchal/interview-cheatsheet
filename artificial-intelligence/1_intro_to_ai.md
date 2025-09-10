@@ -40,7 +40,7 @@
   - "My keys are in my coat pocket"
   - "Reptiles are warm-blooded"
 
-- Propositions are abstract entities (like numbers)
+Propositions are abstract entities (like numbers)
   - they hold or not hold. It is true if it holds
   - propositions are related to each other: they can imply each other, contradict
 
