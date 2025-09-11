@@ -17,11 +17,11 @@
 
 <br />
 
-- a **target concept** is the function to be learned
+- a *target concept* is the function to be learned
   - inference of the concept from the training instances so that it maps inputs with outputs
 
 <br />
 
-- a **training set** is the set of <mark> instances that are used to figure out the target concept </mark>
+- a _training set_ is the set of <mark> instances that are used to figure out the target concept </mark>
   - includes the ==inputs and outputs== pairs
   - 
