@@ -39,19 +39,15 @@
 
 ## Classification: Definition
 Task: 
-
 <br />
 
 - learn a model that maps each attribute set ```x``` into one of the predefined class labels ```y```
 
 <br />
-
 Given a colleciton of instances (training set)
-
 <br />
 
 - each instance is by characterized by a tuple ```(x, y)```, where ```x``` is the attribute set and ```y``` is the class label
   - ***```x```***: attribute, independent variable, input
   - ***```y```***: class, response, dependent variable, output
 
-  
