@@ -49,20 +49,20 @@ Yes
 ? - connected(tony, jennifer).
 Yes
 
-? - student(tony).        -> not in KB
+? - student(tony).  %  not in KB
 No
 
-? - connected(jennifer, tony).  -> symmetry isn't assumed
+? - connected(jennifer, tony). % symmetry isn't assumed
 No
 
 ? - student(jennifer), connected(tony, jennifer). 
 Yes
--> "is Jennifer a student that is connected to Tony?" or "is Jennifer a student and is Tony connected to Jennifer?"
--> comma means "and"
+% "is Jennifer a student that is connected to Tony?" or "is Jennifer a student and is Tony connected to Jennifer?"
+% comma means "and"
 
 ? - student(tony), student(jennifer)
 No
--> only second statement is correct
+% only second statement is correct
 ```
 - checks atomic statements from left to right
   - only succeeds if all succeed
@@ -128,4 +128,62 @@ student(henry).
 (5) ↓ X = sam       | (6) ↓ X = jennifer
       student(sam)  |       student(jennifer)
       fail          | (9) ↓ success
+```
+
+## Variables and Negation
+- recall that "A and B" means the same as "B and A" in logic
+```prolog
+? - connectedTo(tony, X), not student(X).
+% is there someone who is connected to tony and not a student?
+
+X = sam
+Yes (maybe more)
+
+? - not student(X), connectedTo(tony, X).
+% does there not exist a student? query is student(X), which succeeds
+No
+
+? - not student(sam), connectedTo(tony, sam).
+Yes
+```
+- make sure variables in negation are instantiated first by preceding terms
+
+## The Equality Predicate
+- is tony connected to two people? 
+```prolog
+? - connected(tony, X), connected(tony, Y).
+```
+- can return the same X and Y by using equality predicate
+```prolog
+? - connected(tony, X), connected(tony, Y), not X = Y.
+
+X = sam
+Y = jennifer
+Yes (maybe more);
+
+X = jennifer
+Y = sam
+Yes (maybe more);
+```
+- PROLOG doesn't check for equivalent answers
+- Equality in PROLOG actually means unification
+  - tries to make both sides the same as generally as possible
+  - inefficient when unnecessary
+
+## Equality for Arithmetic
+- Equality ("=") tries to make both sides equal in terms of symbols
+  - this is what unification does
+  - use "is" when trying to evaluate an arithmetic expression
+```prolog
+? - X = 6, Y = X + 5
+
+X = 6
+Y = X + 5
+Yes
+
+? - X is 6, Y is X + 5
+
+X = 6
+Y = 11
+Yes
 ```
