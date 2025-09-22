@@ -34,7 +34,7 @@ a :- .  % not recommended
 - PROLOG programs are just sequences of clauses
   - unit clauses and rules
 
-## Example Of A PROLOG Program
+## Examples Of A PROLOG Program
 ```prolog
 hasAccount(jennifer).  % 1)
 hasAccount(tony).      % 2)
@@ -65,4 +65,41 @@ unemployed(X) :- hasAccount(X), not student(X), not atCompany(X, Y).  % 19)
 
 connectionAtCompany(P1, P2, C) :- connected(P1, P2), atCompany(P2, C).          % 20)
 connectionAtCompany(P1, P2, C) :- degree2Connection(P1, P2), atCompany(P2, C).  % 21)
+```
+
+***Example 1***:
+connectionAtCompany(jennifer, P2, bell).
+
+```prolog
+20  ↓ P1 = jennifer
+    ↓ C = bell
+    connected(jennifer, P2), atCompany(P2, bell).
+6   ↓ P2 = tony
+    % true for connected(jennifer, tony)
+    atCompany(tony, bell).
+18  ↓ X = tony, Y = bell
+    worksAt(tony, bell, S).
+14  ↓ S = 2015
+    success.
+
+20, 6, 8, 14
+```
+
+***Example 2***:
+connectionAtCompany(jennifer, P2, apple).
+
+```prolog
+20  ↓ P1 = jennifer             ↑-----------------> 21  ↓ P1 = jennifer
+    ↓ C = apple                 ↑                       ↓ C = apple
+    connected(jennifer, P2), atCompany(P2, apple).      degree2Connection(jennifer, P2), atCompany(P2, apple).
+6   ↓ P2 = tony                 ↑                   17  ↓ X = jennifer, Y = P2
+    atCompany(tony, apple).     ↑                       connected(jennifer, Z), connected(Z, P2), not jennifer = P2, atCompany(P2, apple).
+18  ↓ worksAt(tony, apple, S).  ↑                   6   ↓ Z = tony        ↑-----------------------------------------------------------------> 8  ↓ P2 = tim
+    ↓                           ↑                       connected(tony, P2), no jennifer = P2, atCompany(P2, apple).                             not jennifer = tim, atCompany(tim, apple).
+    fail.                       ↑                   7   ↓ P2 = jennifer   ↑                                                                   18 ↓ X = tim, Y = apple
+                                                        not jennifer = jennifer, atCompany(jennifer, apple).                                     worksAt(tim, apple, S).
+                                                        ↓                 ↑                                                                   15 ↓ S = 2022
+                                                        fail.             ↑                                                                      success.        
+
+20, 6, 18, 21, 17, 6, 7, 8, 18, 15
 ```
