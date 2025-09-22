@@ -34,7 +34,7 @@ a :- .  % not recommended
 - PROLOG programs are just sequences of clauses
   - unit clauses and rules
 
-## Examples Of A PROLOG Program
+## A PROLOG Program Example
 ```prolog
 hasAccount(jennifer).  % 1)
 hasAccount(tony).      % 2)
@@ -102,4 +102,33 @@ connectionAtCompany(jennifer, P2, apple).
                                                         fail.             ↑                                                                      success.        
 
 20, 6, 18, 21, 17, 6, 7, 8, 18, 15
+```
+
+## Simplified PROLOG Example
+```prolog
+hasAccount(jennifer).  % 1)
+hasAccount(tony).      % 2)
+hasAccount(tim).       % 3) 
+hasAccount(sam).       % 4)
+hasAccount(michelle).  % 5)
+
+connected(jennifer, tony).  % 6)
+connected(tony, jennifer).  % 7)
+connected(tony, tim).       % 8)
+connected(tim, tony).       % 9)
+
+student(jennifer).  % 10)
+student(sam).       % 11) 
+student(michelle).  % 12) 
+
+worksAt(jennifer, google, 2020).  % 13)
+worksAt(tony, bell, 2015).        % 14)
+worksAt(tim, apple, 2022).        % 15)
+
+unemployed(X) :- hasAccount(X), not student(X), not atCompany(X, Y).  % 19)
+```
+
+***Example 3***:
+unemployed(tim).
+```prolog
 ```
