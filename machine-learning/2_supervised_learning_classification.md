@@ -88,3 +88,43 @@ Given a colleciton of instances (training set)
 <img width="599" height="325" alt="Image" src="https://github.com/user-attachments/assets/961ea53e-243e-4eb5-a5d8-fa47df627075" />
 
 ## Another Example of Decision Tree
+
+<img width="701" height="338" alt="Image" src="https://github.com/user-attachments/assets/cbf60ec8-7a6c-48b0-94bd-764e067d7544" />
+
+
+## General Strcuture of Hunt's Algorithm
+- Let ```Dt``` be the set of training instances that reac a node ```t```
+
+General Procedure:
+1. if ```Dt``` contains instances that belong the same class ```yt```, then ```t``` is a leaf node labeled with class ```yt```
+2. if ```Dt``` contains records that belong to more than one class, use an attribute to split the data into smaller subsets
+3. recursively apply the procedure to each subset
+
+<img width="801" height="436" alt="Image" src="https://github.com/user-attachments/assets/01d33f47-39fd-44c0-b028-d6377f92b753" />
+
+## Design Issues of Decision Tree Induction
+- how should training instances be split?
+  - method for expressing test conditions
+  - measure for evaluating the goodness of a test condition
+
+- how should the splitting procedure stop?
+
+## Test Conditions
+- Multi-way splits
+  - use as many partitions as distinct values
+
+<img width="487" height="153" alt="Image" src="https://github.com/user-attachments/assets/890d77f4-583f-44c3-945c-96d0c02fac24" />
+
+- Binary split:
+  - divides values into two subsets
+  - preserve order property among attribute values
+  - this grouping violates order property among attribute values
+
+<img width="412" height="169" alt="Image" src="https://github.com/user-attachments/assets/7041a774-056a-4317-9fb9-894fcb5deb6a" />
+
+
+## How To Select the Best Split?
+Greedy approach: select the attribute that most effectively splits the data into subsets enriched in one class or the other
+- nodes with purer class distributions are preferred
+- need a measure of node impurity
+
