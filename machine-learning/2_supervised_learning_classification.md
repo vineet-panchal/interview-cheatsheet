@@ -1,12 +1,47 @@
 # Supervised Learning: Classification
 
+- supervised learning has two main tasks: 
+  1. ***Classification***: predict categories
+  2. ***Regression***: predict continuous values
+
+#### Examples
+| Examples | Type |
+| -- | -- |
+| Predicting if a person will default on a loan | Classification |
+| Predicting house prices | Regression |
+| Determining if an email is spam or not | Classification |
+| Predicting future stock price | Regression |
+
+#### Rule of Thumb:
+- if the output is a label (e.g., "Yes/No", "Cat/Dog") -> Classification
+- if the output is a number (e.g., 10.5, $200k, 75%) -> Regression
+
 ## Classification
 - task of assigning objects to one of several predefined categories also known as class
-- **Goal:** finding a model to map each attribute to a predefined class, so that we can use this model on new records to assign them to a class as accurately as possible in future
+***predict categories***
+<br />
+
+#### Goal
+- finding a model to map each attribute to a predefined class, so that we can use this model on new records to assign them to a class as accurately as possible in future
+- in simpler terms, find a model (or function) that maps input attributes -> correct class labels, then use it to predict new, unseen data
+
+#### Example
+| Income | Homeowner | Marital Status | Creditworthy |
+| -- | -- | -- | -- |
+| 90K | No | Single | Yes |
+| 60K | No | Married | No | 
+
+- we can have a rule like: 
+  - if income < 80K -> No
+  - if income > 80K and Single -> Yes
+- that rule (or model) can then classify new people
 
 ## Terminology
 
-- a ***dataset*** is a collection of data objects
+***Dataset***: a collection of data objects
+- ***Examples***: 10 customer records
+
+<br />
   - an object is also known as: ***instance***, ***record***, ***point***, case, sample, entity
 
 <br />
