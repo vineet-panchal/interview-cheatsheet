@@ -128,3 +128,245 @@ Greedy approach: select the attribute that most effectively splits the data into
 - nodes with purer class distributions are preferred
 - need a measure of node impurity
 
+### Measures Of Node Impurity
+
+***Gini Index***:
+
+```
+               (c-1)
+Gini Index = 1 - ∑ pi(t)^2
+               (i=0)
+```
+
+***Entropy***:
+
+```
+          (c-1)
+Entropy = - ∑ pi(t)(log2)pi(t)
+          (i=0)
+```
+
+***Classification Error***:
+
+```
+Classification Error = 1 - max[pi(t)]
+```
+
+## Entropy
+
+- entropy at give node ```t```
+
+```
+          (c-1)
+Entropy = - ∑ pi(t)(log2)pi(t)
+          (i=0)
+```
+- where ***pi(t)*** is the grequency of class ***i*** at node ***t***, and ***c*** is the total number of classes
+
+- ***Maximum*** of ```log2(c)``` when records are equally distributed among all classes, implying the least beneficial situation for classification
+
+- ***Minimum*** of 0 when all records belong to one class, implying most beneficial situation for classification
+
+## Computing Entropy of a Single Node
+
+```
+          (c-1)
+Entropy = - ∑ pi(t)(log2)pi(t)
+          (i=0)
+```
+
+#### Example 1: 
+| C1 | 0 |
+| -- | -- |
+| C2 | 6 |
+
+```
+P(C1) = 0/6 = 0
+P(C2) = 6/6 = 1
+Entropy = -(0)log0 - (1)log1 = - 0 - 0 = 1
+```
+- in practical implementations, if any probability is 0, the entropy calculation shoudl simply ignore that term
+
+#### Example 2
+| C1 | 1 |
+| -- | -- |
+| C2 | 5 |
+
+```
+P(C1) = 1/6
+P(C2) = 5/6
+Entropy = - (1/6)log2(1/6) - (5/6)log2(5/6) = 0.65
+```
+
+#### Example 3
+| C1 | 2 |
+| -- | -- |
+| C2 | 4 |
+
+```
+P(C1) = 2/6
+P(C2) = 4/6
+Entropy = - (2/6)log2(2/6) - (4/6)log2(4/6) = 0.92
+```
+
+
+## How Should Training Instances Be Split?
+
+### Finding the Best Split
+
+1. Compute impurity measure (P) before splitting
+2. Compute impurity measure (M) after splitting
+  - compute impurity measure of each child node
+  - M is the weighted impurity of child nodes
+3. Choose the attribute test condition that produces the highest gain
+```
+Gain = P - M
+```
+  - or equivalently, lowest impurity measure after splitting (M)
+
+
+<img width="562" height="322" alt="Image" src="https://github.com/user-attachments/assets/6313a906-1d33-48a9-9e60-554db73f8aca" />
+
+
+## Computing Entropy for a Collection of Nodes
+
+- when a node ```p``` is split into ```k``` partitions (children)
+
+```
+                (k)
+Entropy(split) = ∑ (ni/n)Entropy(i)
+               (i=1)
+```
+where, 
+- ```ni``` = number of records at child ```i```
+- ```n``` = number of records at parent node ```p```
+
+## Computing Information Gain After Splitting
+
+```
+                          (k)
+Gain(split) = Entropy(p) - ∑ (ni/n)Entropy(i)
+                         (i=1)
+```
+- parent node, ```p``` is split into ```k``` partitions (children)
+- ```ni``` is the number of records in child node ```i```
+
+- choose the split that achieves most reduction (maximizes GAIN)
+
+## Binary Attributes: Computing Entropy
+```
+                (k)
+Entropy(split) = ∑ (ni/n)Entropy(i)
+               (i=1)
+
+                          (k)
+Gain(split) = Entropy(p) - ∑ (ni/n)Entropy(i)
+                         (i=1)
+```
+
+| | Parent |
+| -- | -- |
+| C1 | 7 |
+| C2 | 5 |
+Entropy = 0.980
+
+| | N1 | N2 |
+| -- | -- | -- |
+| C1 | 5 | 2 |
+| C2 | 1 | 4 |
+Entropy = 0.785
+
+```
+         A?
+ (Yes) /    \ (No)
+ Node N1     Node N2
+```
+
+```
+Entropy(N1) = -(5/6)log(5/6) - (1/6)log(1/6) = 0.65
+
+Entropy(N2) = -(2/6)log(2/6) - (4/6)log(4/6) = 0.92
+
+Weighted Entropy of N1 & N2
+= 6/12 * 0.65 + 6/12 * 0.92
+= 0.785
+
+Gain = 0.0980 - 0.785 = 0.195
+```
+
+## Continuous Attributes: Computing Entropy
+<img width="299" height="297" alt="Image" src="https://github.com/user-attachments/assets/e7b251b0-0b14-4c68-906e-7bdf34654a2f" />
+
+- use binary decisions based on one value
+
+<img width="246" height="144" alt="Image" src="https://github.com/user-attachments/assets/5a44abde-bb2a-428c-99a8-8c0beeb2dfbc" />
+
+- for efficient computation: for each attribute, 
+  - sort the attribute on values
+
+<img width="654" height="113" alt="Image" src="https://github.com/user-attachments/assets/67f427c6-5ac1-47df-8d11-b68950da90ba" />
+
+  - the candidate split values are halfway between two sorted values
+
+<img width="637" height="125" alt="Image" src="https://github.com/user-attachments/assets/a9f5e918-c2d1-43e6-877d-3196fcdca6ec" />
+
+  - compute the entropy for each candidate split values
+
+<img width="642" height="219" alt="Image" src="https://github.com/user-attachments/assets/e71eb0db-2c0a-4326-b8c8-e33ea6398119" />
+
+<img width="654" height="218" alt="Image" src="https://github.com/user-attachments/assets/c0748987-994b-4e3f-be53-392cc4331faa" />
+
+  - choose the split position that has the least entropy
+
+<img width="641" height="210" alt="Image" src="https://github.com/user-attachments/assets/31dc6315-761f-4f0b-912e-fc8c07f14689" />
+
+
+## Problem with large number of partitions
+- Node impurity measures tend to prefer splits that result in large number of partitions, each being small but pure
+
+<img width="546" height="131" alt="Image" src="https://github.com/user-attachments/assets/6b843235-6b4c-4139-9818-edd039b597ea" />
+
+## Gain Ratio
+
+```
+Gain Ratio = Gain(split) / Split Info
+
+               (k)
+Split Info. = - ∑ (ni/n)log2(ni/n)
+              (i=1)
+```
+- Parent Node, ```p``` is split into ```k``` partitions (children)
+- ```n``` is the number of instances in parent node
+- ```ni``` is the number of instances in child node ```i```
+<br />
+
+- Adjusts Information Gain by the uncertainty of the split (Split Info)
+***Larger number of small partitions is penalized***
+- Designed to overcome the disadvantage of Information Gain
+
+<img width="675" height="149" alt="Image" src="https://github.com/user-attachments/assets/0e18c905-3b46-485c-a802-8829bdbb0ec5" />
+
+## Design Issues Of Decision Tree Induction
+- How should training records be split?
+  - method for expressing test condition
+  ***depending on attribute types***
+  - measure for evaluating the goodness of a test condition
+- How should the splitting procedure stop?
+
+## Stopping Criteria for Tree Induction
+- stop expanding a node when all the instances belong to the same class
+- stop expanding a node when all the instances have similar attribute values
+- early termination when number of instances below minimum threshold
+
+## Decision Tree Based Classification
+- Advantages:
+  - relatively inexpensive to construct
+  - extremely fast at classifying unknown records
+  - easy to interpret for small-sized trees
+  - robust to noise (especially when methods to avoid overfitting are employed)
+  - can easily handle redudant attributes
+  - can easily handle irrelevant attributes (unless the attributes are interacting)
+
+- Disadvantages:
+  - greedy nature of splitting criterion: attributes that can distinguish between classes together but not individually, may be passed over in favor of other attributes
+  - each decision boundary involves only a single attribute
