@@ -38,69 +38,105 @@
 
 ## Terminology
 
-***Dataset***: a collection of data objects
+***Dataset*** -> a collection of data objects
 - ***Examples***: 10 customer records
 
 <br />
-  - an object is also known as: ***instance***, ***record***, ***point***, case, sample, entity
+
+***Instance / Record / Point / Case / Sample / Entity*** -> an object, a row in a dataset
+- ***Examples***: One person's info
 
 <br />
 
-- an ***attribute*** is a property or characteristic of an object
-  - **Examples**: eye color of a person, temperature, etc.
-  - attribute is also know as variable, field, characteristic, dimension, or feature
+***Attribute / Feature*** -> property or characteristic describing an instance/object
+- ***Examples***: eye color of a person, temperature, age, income, marital status, etc.
+- attribute is also known as a variable, field, characteristic, dimension, or feature
 
 <br />
 
-- a ***target concept*** is the function to be learned
-  - inference of the concept from the training instances so that it maps inputs with outputs
+***Target Concept*** -> the true mapping function you want to learn
+- inference of the concept from the training instances so that it maps inputs with outputs
+- ***Examples***: "Creditworthy = ?"
 
 <br />
 
-- a ***training set*** is the set of instances that are used to figure out the target concept
-  - includes the inputs and outputs pairs
-  - **Inductive Learning**: give lots of examples of instances, and what their labels are. The goal is to generalize these examples
+***Training Set*** -> the set of instances that are used to figure out the target concept
+- includes the inputs and output pairs
+- it is the data used to teach the model
+- ***Examples***: 80% of dataset
 
 <br />
 
-- a ***candidate*** is a concept that might be the target concept
+***Inductive Learning*** -> gives lots of examples of instances, and what their labels are
+- the goal is to generalize these examples
 
 <br />
 
-- a ***test set*** is the set of instances that are used to evaluate the candidate concept
-  - test and training set should have different instances for unbiased evaluation
+***Candidate Concept*** -> a potential hypothesis for the target concept, a concept that might tbe the target concept
+- ***Examples***: "if income > 90K -> Yes"
+
+<br />
+
+***Test Set*** -> the set of instances that are used to evaluate the candidate concept
+- it is the data used to test the model
+- test and training set should have different instances for unbiased evaluation
+
+<br />
+
+***Training = "learning"***
+***Testing = "checking how well it learned"***
 
 <img width="325" height="333" alt="Image" src="https://github.com/user-attachments/assets/a198d37f-11d6-40f2-9ad4-015dec8f337e" />
 
+
 ## Classification: Definition
 Task: 
-<br />
-
 - learn a model that maps each attribute set ```x``` into one of the predefined class labels ```y```
 <br />
-Given a colleciton of instances (training set)
-<br />
 
+Given a colleciton of instances (training set)
 - each instance is by characterized by a tuple ```(x, y)```, where ```x``` is the attribute set and ```y``` is the class label
   - ***```x```***: attribute, independent variable, input
   - ***```y```***: class, response, dependent variable, output
 
-## Examples of Classification Task
-| Task | Attribtue set, ```x``` | Class label, ```y``` |
-| -- | -- | -- | 
-| Categorizing email messages | Features extracted from email message header and content | spam or non-spam |
-| Identifying tumor cells | Features extracted from medical images | malignant or benign cells |
+<br />
 
-## Classification Techniques
+In Simpler terms, mathematically:
+- you have input ```x``` (attributes)
+- and output ```y``` (class labels)
+- you want to learn a function ```f(x) = y```
+
+<br />
+
+Example:
+```
+x = (income = 100K, homeowner = No, married = Yes)
+y = No
+```
+- you train a model to predict ```y``` from ```x``` for unseen data
+
+## Examples of Classification Task
+| Task | Attribute set, ```x``` | Class label, ```y``` |
+| -- | -- | -- | 
+| Email Classification: Categorizing email messages | word frequency, subject, sender: features extracted from email message header and content | spam or non-spam |
+| Identifying tumor cells | size, shape, texture: features extracted from medical images | malignant or benign cells |
+
+## Classification Techniques/Algorithms
+These are the main families of algorithms:
 - Decision Trees
 - Neural Networks
-- Ensemble (Boosting, Bagging)
-- Support Vector Machines
-- Bayesian Learning
+- Ensemble methods (Boosting, Bagging)
+- Support Vector Machines (SVM)
+- Bayesian Learning / Naive Bayes
 - Rule-based Methods
-- Nearest-neighbor
+- Nearest-neighbor (KNN)
 
 ## General Approach for Building Classification Model
+
+Process:
+1. Split data into training and test sets
+2. Use a learning algorithm (e.g., Decision Tree) to learn patterns
+3. Apply the model on new (test) data to predict classes
 
 <img width="585" height="403" alt="Image" src="https://github.com/user-attachments/assets/c7907b94-b30a-49f7-a1c0-7ef2b34d266c" />
 
@@ -135,6 +171,21 @@ General Procedure:
 2. if ```Dt``` contains records that belong to more than one class, use an attribute to split the data into smaller subsets
 3. recursively apply the procedure to each subset
 
+<br />
+
+Simpler Idea:
+1. Start with all data at the root
+2. If all instances have the same class -> stop
+3. Else, pick the ***best attribute*** to split on
+4. Split the data -> create branches
+5. Repeat for each branch (recursively)
+
+<br />
+
+This process continues until: 
+- all data in a node are the same class, or
+- no more attributes to split on
+
 <img width="801" height="436" alt="Image" src="https://github.com/user-attachments/assets/01d33f47-39fd-44c0-b028-d6377f92b753" />
 
 ## Design Issues of Decision Tree Induction
@@ -144,7 +195,9 @@ General Procedure:
 
 - how should the splitting procedure stop?
 
-## Test Conditions
+## How Should Training Instances Be Split?
+
+#### Test Conditions
 - Multi-way splits
   - use as many partitions as distinct values
 
@@ -159,14 +212,26 @@ General Procedure:
 
 
 ## How To Select the Best Split?
+- how do we decide which attribute is the best to split on?
+- we need a measure of ***purity*** or ***impurity***
+<br />
+
 Greedy approach: select the attribute that most effectively splits the data into subsets enriched in one class or the other
 - nodes with purer class distributions are preferred
 - need a measure of node impurity
 
+<br />
+Imagine: 
+- Node A: 5 Yes, 5 No -> Impure
+- Node B: 9 Yes, 1 No -> Purer
+
+<br />
+- we want splits that make nodes as pure as possible
+
 ### Measures Of Node Impurity
+Common Impurity Measures:
 
 ***Gini Index***:
-
 ```
                (c-1)
 Gini Index = 1 - ∑ pi(t)^2
@@ -174,7 +239,6 @@ Gini Index = 1 - ∑ pi(t)^2
 ```
 
 ***Entropy***:
-
 ```
           (c-1)
 Entropy = - ∑ pi(t)(log2)pi(t)
@@ -182,27 +246,27 @@ Entropy = - ∑ pi(t)(log2)pi(t)
 ```
 
 ***Classification Error***:
-
 ```
 Classification Error = 1 - max[pi(t)]
 ```
 
 ## Entropy
 
-- entropy at give node ```t```
+- entropy at give node ```t```: 
 
 ```
           (c-1)
 Entropy = - ∑ pi(t)(log2)pi(t)
           (i=0)
 ```
-- where ***pi(t)*** is the grequency of class ***i*** at node ***t***, and ***c*** is the total number of classes
+- where ***pi(t)*** is the frequency of class ***i*** at node ***t***, and ***c*** is the total number of classes
 
-- ***Maximum*** of ```log2(c)``` when records are equally distributed among all classes, implying the least beneficial situation for classification
+  - ***Maximum*** of ```log2(c)``` when records are equally distributed among all classes, implying the least beneficial situation for classification
 
-- ***Minimum*** of 0 when all records belong to one class, implying most beneficial situation for classification
+  - ***Minimum*** of 0 when all records belong to one class, implying most beneficial situation for classification
 
-## Computing Entropy of a Single Node
+
+### Computing Entropy of a Single Node
 
 ```
           (c-1)
@@ -218,7 +282,7 @@ Entropy = - ∑ pi(t)(log2)pi(t)
 ```
 P(C1) = 0/6 = 0
 P(C2) = 6/6 = 1
-Entropy = -(0)log0 - (1)log1 = - 0 - 0 = 1
+Entropy = -(0)log0 - (1)log1 = - 0 - 0 = 0
 ```
 - in practical implementations, if any probability is 0, the entropy calculation shoudl simply ignore that term
 
@@ -243,6 +307,10 @@ P(C1) = 2/6
 P(C2) = 4/6
 Entropy = - (2/6)log2(2/6) - (4/6)log2(4/6) = 0.92
 ```
+
+#### Key Idea:
+- Entropy = 0 -> node is pure (all one class)
+- Entropy = 1 -> node is mixed (50/50 classes)
 
 
 ## How Should Training Instances Be Split?
@@ -277,8 +345,11 @@ where,
 - ```n``` = number of records at parent node ```p```
 
 ## Computing Information Gain After Splitting
+- when you split, you want the largest drop in Entropy
 
 ```
+Gain = Entropy(parent) - WeightedAverage(Entropy(children))
+
                           (k)
 Gain(split) = Entropy(p) - ∑ (ni/n)Entropy(i)
                          (i=1)
@@ -288,7 +359,7 @@ Gain(split) = Entropy(p) - ∑ (ni/n)Entropy(i)
 
 - choose the split that achieves most reduction (maximizes GAIN)
 
-## Binary Attributes: Computing Entropy
+### Binary Attributes: Computing Entropy
 ```
                 (k)
 Entropy(split) = ∑ (ni/n)Entropy(i)
@@ -328,8 +399,19 @@ Weighted Entropy of N1 & N2
 
 Gain = 0.0980 - 0.785 = 0.195
 ```
+***Higher Gain = Better Split***
 
 ## Continuous Attributes: Computing Entropy
+- for numeric data (like income), we find a threshold
+
+Steps:
+1. Sort values
+2. Try split points between them (e.g., 70K, 85K, 100K)
+3. Compute entropy for each split
+4. Choose the one with the lowest entropy (highest information gain)
+
+***Best threshold gives purest groups***
+
 <img width="299" height="297" alt="Image" src="https://github.com/user-attachments/assets/e7b251b0-0b14-4c68-906e-7bdf34654a2f" />
 
 - use binary decisions based on one value
@@ -357,12 +439,15 @@ Gain = 0.0980 - 0.785 = 0.195
 
 
 ## Problem with large number of partitions
+- if you split too finely (like by Customer ID), every node becomes pure (one record each).
+- that's called ***overfitting***, the tree memorizes data instead of learning patterns
+
 - Node impurity measures tend to prefer splits that result in large number of partitions, each being small but pure
 
 <img width="546" height="131" alt="Image" src="https://github.com/user-attachments/assets/6b843235-6b4c-4139-9818-edd039b597ea" />
 
 ## Gain Ratio
-
+- to fix overfitting, we use Gain Ratio, which adjusts for splits that create too many tiny branches
 ```
 Gain Ratio = Gain(split) / Split Info
 
@@ -370,9 +455,12 @@ Gain Ratio = Gain(split) / Split Info
 Split Info. = - ∑ (ni/n)log2(ni/n)
               (i=1)
 ```
+- Split Info measures how "spread out" the data is among child nodes
 - Parent Node, ```p``` is split into ```k``` partitions (children)
 - ```n``` is the number of instances in parent node
 - ```ni``` is the number of instances in child node ```i```
+
+***reward good splits, penalize overly complex ones***
 <br />
 
 - Adjusts Information Gain by the uncertainty of the split (Split Info)
@@ -389,7 +477,10 @@ Split Info. = - ∑ (ni/n)log2(ni/n)
 - How should the splitting procedure stop?
 
 ## Stopping Criteria for Tree Induction
-- stop expanding a node when all the instances belong to the same class
+When do we stop growing the tree: 
+- all instances in a node belong to the same class
+  - stop expanding a node when all the instances belong to the same class
+- no attribute left to split on
 - stop expanding a node when all the instances have similar attribute values
 - early termination when number of instances below minimum threshold
 
@@ -405,3 +496,16 @@ Split Info. = - ∑ (ni/n)log2(ni/n)
 - Disadvantages:
   - greedy nature of splitting criterion: attributes that can distinguish between classes together but not individually, may be passed over in favor of other attributes
   - each decision boundary involves only a single attribute
+
+
+# Summary
+| Concept | Meaning | Example | 
+| -- | -- | -- |
+| Classification | Predict discrete labels | Spam vs not Spam |
+| Regression | Predict continuous values | House prices |
+| Entropy | Measures impurity | 0 = pure, 1 = mixed/impure |
+| Information Gain | Drop in entropy after a split | Gain = Parent - Child | 
+| Gain Ratio | Adjusted info gain (avoids overfitting) | Penalizes many small branches |
+| Decision Tree | Splits data based on attribute conditions | "If income > 80K -> Yes" |
+| Hunt's Algorithm | Recursively splits data until pure | Builds the decision tree |
+| Stopping Criteria | When to stop splitting | All same class or no data left |
