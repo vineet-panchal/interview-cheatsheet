@@ -350,7 +350,7 @@ Therefore P(No | X) > P(Yes | X)
 - weights have some values
 - data described by 3 features -> 3 input units
 - 2 classes -> 2 output units
-  - for example, if classes are dog and cat, then output will be [1 0] for dog or [0 1] for cat
+  - for example, if classes are dog and cat, then output will be [1 0] for dog or [0 1] for categorical
 - 1 hidden layer
 
 <br />
@@ -362,3 +362,76 @@ Therefore P(No | X) > P(Yes | X)
 
 <img width="314" height="185" alt="Image" src="https://github.com/user-attachments/assets/fcd975f7-3d50-4d4c-be0c-d0227d1afd84" />
 
+
+### Forward Propagation Examples
+
+- activation g function is the sigmoid function
+- compute the result of forward propagation
+
+#### Example 1
+
+<img width="215" height="170" alt="Image" src="https://github.com/user-attachments/assets/fc1d27f2-b0f9-4706-bc06-72a94ee9a87a" />
+
+<img width="215" height="178" alt="Image" src="https://github.com/user-attachments/assets/d5286594-66c9-4085-b297-e49ee220da93" />
+
+<img width="283" height="198" alt="Image" src="https://github.com/user-attachments/assets/da1586b1-62fe-4930-a370-4cad9b708464" />
+
+#### Example 2
+
+<img width="212" height="170" alt="Image" src="https://github.com/user-attachments/assets/8f8c66ba-c32b-4c12-be32-afdf03460d3f" />
+
+<img width="223" height="186" alt="Image" src="https://github.com/user-attachments/assets/db9e27dc-4d31-40d2-b395-3bfa6d254c8b" />
+
+<img width="285" height="198" alt="Image" src="https://github.com/user-attachments/assets/09ca5eed-3f99-4fe6-9acd-c77df0dea9a9" />
+
+#### Example 3
+
+<img width="367" height="323" alt="Image" src="https://github.com/user-attachments/assets/f54cbb37-6727-4bcd-aca2-55bab074547c" />
+
+<img width="214" height="180" alt="Image" src="https://github.com/user-attachments/assets/5a41be52-c632-4a6b-a3e4-915f2f90cefd" />
+
+<img width="290" height="205" alt="Image" src="https://github.com/user-attachments/assets/a92850b8-26fa-487d-8134-35e111a4a058" />
+
+
+<br />
+
+***Backpropagation***:
+- for training the neural network (-> learning the weights)
+- the goal is to minimize the output error:
+  - compare the desired output and the actual output
+  - compute the contribution of each output connection to the error
+  - compute the contribution of each connection in the lower layer to these errors, and so on until the algorithm reaches the input layer
+  - tweak all the connection weights using Gradient Descent, so that the error is minimized
+
+<br />
+
+***ANN Conclusion***:
+- Number of features -> number of input units
+- Number of classes -> number of output units
+- Number of hidden layers and number of units per layers
+  - usually the more the better but computation becomes expensive
+- the layers close to the input layer are called the lower layers; those close to the output layer are called the upper layers
+
+<br />
+
+***Algorithm***: 
+- randomly initialize all the weights (w0, w1, ... , wk)
+- adjust the weights such that the final output is consistent with class labels y of training examples
+- ***Forward propagation to estimate output ```y``` given input ```X``` and weights ```wi```***
+- ***Backpropagation to find the weights that minimize the output estimation error***
+
+## Classifiers
+- we took a look at the following alternate classification methods:
+  - Support Vector Machines
+  - Naïve Bayes
+  - Nearest Neighbor Classifiers
+  - Artificial Neural Networks
+
+<br />
+
+***Class Imbalance Problem***
+- classification problems where classes are skewed (more of one class than another)
+  - credit card fraud, intrusion detection, defective products in manufacturing assembly line
+- ***Key Challenge***: some evaluation measures (such as accuracy, which is the ratio of correct classification over the total number of records) are not well-suited for imbalanced class
+
+## Classifiers - Evaluation
