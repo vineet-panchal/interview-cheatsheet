@@ -46,9 +46,13 @@ $$
 
 **Answer**:
 
-```
-Weighted Entropy = (6 / 12) * 0.65 + (6 / 12) * 0.92 = 0.785
-```
+- weighted entropy formula:
+
+$$H_{weighted} = \frac{n_1}{n}H_1 + \frac{n_2}{n}H_2$$
+
+- compute (with n1 = n2 = 6, n = 12)
+
+$$H_{weighted} = \frac{6}{12}\cdot 0.65 + \frac{6}{12}\cdot 0.92 = 0.785$$
 
 - Therefore, the weighted entropy after the split is 0.785
 
@@ -61,10 +65,7 @@ Weighted Entropy = (6 / 12) * 0.65 + (6 / 12) * 0.92 = 0.785
 
 **Answer**:
 
-```
-Gain = Entropy(parent) - WeightedEntropy(children)
-Gain = 0.98 - 0.785 = 0.195
-```
+$$Gain = H_{parent} - H_{weighted} = 0.98 - 0.785 = 0.195$$
 
 - Therefore, the information gain is 0.195
 - so this split slightly improves the purity.
@@ -82,19 +83,14 @@ Gain = 0.98 - 0.785 = 0.195
 
 **Answer**:
 
-```
-Gain Ratio = 0.2 / 1.0 = 0.2
-```
+$$GainRatio = \frac{InformationGain}{SplitInfo}$$
+
+$$GainRatio_A=\frac{0.20}{1.0}=0.20,\quad GainRatio_B=\frac{0.15}{0.20}=0.75$$
 
 - Therefore, the gain ratio is 0.2.
 - if another split has:
   - Information Gain = 0.15
   - Split Info = 0.2
-
-```
-Gain Ratio = 0.15 / 0.2 = 0.75
-```
-
 - The second split is better (higher gain ratio).
 
 <br />
