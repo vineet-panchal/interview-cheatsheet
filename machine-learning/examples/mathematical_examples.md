@@ -87,7 +87,9 @@ Gain Ratio = 0.15 / 0.2 = 0.75
 
 - The second split is better (higher gain ratio).
 
-#### Question 5: Entropy of a collection
+<br />
+
+### Question 5: Entropy of a collection
 - given this collection of training examples:
 
 | Instance | a1 | a2 | a3 | Target Class |
@@ -95,7 +97,7 @@ Gain Ratio = 0.15 / 0.2 = 0.75
 | 1 | T | T | 1.0 | + |
 | 2 | T | T | 6.0 | + |
 | 3 | T | F | 5.0 | - |
-| 4 | 5 | T | 4.0 | - |
+| 4 | 5 | T | 4.0 | + |
 | 5 | F | T | 7.0 | - |
 | 6 | F | T | 3.0 | - |
 | 7 | F | F | 8.0 | - |
@@ -106,11 +108,34 @@ Gain Ratio = 0.15 / 0.2 = 0.75
 
 <br />
 
+**Answer**:
+
+- from the table there are 9 instances, counting the target column gives:
+  - `+` (positive) = 4
+  - `-` (negative) = 5
+
+**Step 1: Count class labels**
+- so the class probabilities are:
+  - $p(+) = \frac{4}{9}$
+  - $p(-) = \frac{5}{9}$
+
+**Step 2: Entropy formula**
+- Entropy for a binary target:
+
+$$H = - \sum_c p(c)\log_2 p(c)$$
+
+```
+H = - ∑ p(c)log2(p(c)) = -(p(+)log2(p(+)) + p(-)log2(p(-)))
+     (c)
+```
+
+
 
 <br />
 
 ## Linear Regression and Gradient Descent
 - given data:
+
 | X | Y | 
 | -- | -- |
 | 1 | 2 |
