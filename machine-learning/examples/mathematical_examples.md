@@ -87,6 +87,26 @@ Gain Ratio = 0.15 / 0.2 = 0.75
 
 - The second split is better (higher gain ratio).
 
+#### Question 5: Entropy of a collection
+- given this collection of training examples:
+
+| Instance | a1 | a2 | a3 | Target Class |
+| -- | -- | -- | -- | -- |
+| 1 | T | T | 1.0 | + |
+| 2 | T | T | 6.0 | + |
+| 3 | T | F | 5.0 | - |
+| 4 | 5 | T | 4.0 | - |
+| 5 | F | T | 7.0 | - |
+| 6 | F | T | 3.0 | - |
+| 7 | F | F | 8.0 | - |
+| 8 | T | F | 7.0 | + |
+| 9 | F | T | 5.0 | - |
+
+- What is the entropy of this collection of training examples with respect to the target class? (round to 2 decimal places, e.g., if the result is 1.1111, report 1.11)
+
+<br />
+
+
 <br />
 
 ## Linear Regression and Gradient Descent
