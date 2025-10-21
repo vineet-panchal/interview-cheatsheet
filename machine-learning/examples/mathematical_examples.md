@@ -223,6 +223,9 @@ $$\text{Gain}(a_1) = H_{\text{parent}} - H_{\text{split}} = 0.99 - 0.7627 = 0.23
 
 
 ## Linear Regression and Gradient Descent
+
+### Question 1: Fit Linear Regression model on given data
+
 - given data:
 
 | X | Y | 
@@ -231,4 +234,81 @@ $$\text{Gain}(a_1) = H_{\text{parent}} - H_{\text{split}} = 0.99 - 0.7627 = 0.23
 | 2 | 3 |
 | 3 | 5 |
 
-- Find β1 and β0 
+- Fit simple linear regression by hand
+
+<br />
+
+**Answer**:
+
+- slope formula:
+
+$$\beta_1 = \frac{\sum_i (x_i - \bar{x})(y_i - \bar{y})}{\sum_i (x_i - \bar{x})^2}$$
+
+- intercept formula:
+
+$$\beta_0 = \bar{y} - \beta_1 \bar{x}$$
+
+**Step 1: Compute means**:
+
+$$\bar{x} = \frac{1+2+3}{3}=2,\quad \bar{y}=\frac{2+3+5}{3}=\frac{10}{3}\approx 3.333333$$
+
+**Step 2: Compute numerator and denominator**:
+
+$$\sum (x_i-\bar{x})(y_i-\bar{y}) = 3.0,\quad \sum (x_i-\bar{x})^2 = 2$$
+
+$$\beta_1 = \frac{3}{2} = 1.5,\quad \beta_0 = \bar{y} - \beta_1 \bar{x} = \frac{10}{3} - 1.5\cdot2 = 0.333333$$
+
+- Therefore, the final linear regression model is: 
+
+$$\hat{y} = 0.3333 + 1.5x$$
+
+<br />
+
+### Question 2: One iteration of Gradient Descent
+
+- given: 
+```
+x = [1, 2]
+y = [2, 4]
+β0 = 0
+β = 0
+α = 0.1
+```
+- do one iteration of gradient descent
+
+<br />
+
+**Answer**:
+
+- predictions and errors:
+
+$$\hat{y} = \beta_0 + \beta_1 x = [0,0],\quad \text{errors }(y-\hat{y})=[2,4]$$
+
+- gradients for ```SSE J = ∑ (y - y^)^2```
+
+$$\frac{\partial J}{\partial \beta_0} = -2 \sum (y-\hat{y}) = -12$$
+$$\frac{\partial J}{\partial \beta_1} = -2 \sum x (y-\hat{y}) = -20$$
+
+- update: 
+
+$$\beta_0 := 0 - 0.1(-12) = 1.2$$
+$$\beta_1 := 0 - 0.1(-20) = 2.0$$
+
+- Therefore, the results after one iteration is:
+
+$$\beta_0 = 1.2,\quad \beta_1 = 2.0$$
+
+<br />
+
+### Question 3: Effect of normalization
+
+- given ```x = [1, 2, 3]```
+
+<br />
+
+**Answer**:
+
+- Z-score standardization:
+
+$$\mu = 2,\quad \sigma = \sqrt{\frac{(1-2)^2+(2-2)^2+(3-2)^2}{3}}=\sqrt{\frac{2}{3}}\approx0.8165$$
+$$z = \frac{x-\mu}{\sigma}\approx[-1.2247,\ 0,\ 1.2247]$$
