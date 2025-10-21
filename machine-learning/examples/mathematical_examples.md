@@ -312,3 +312,117 @@ $$\beta_0 = 1.2,\quad \beta_1 = 2.0$$
 
 $$\mu = 2,\quad \sigma = \sqrt{\frac{(1-2)^2+(2-2)^2+(3-2)^2}{3}}=\sqrt{\frac{2}{3}}\approx0.8165$$
 $$z = \frac{x-\mu}{\sigma}\approx[-1.2247,\ 0,\ 1.2247]$$
+
+<br />
+
+## SVM, Naive Bayes, K-NN, and ANN
+
+### Question 1: SVM margin width from w
+
+- given ```w = [2, 2]```
+
+<br />
+
+**Answer**:
+
+- margin width (distance width parallel support hyperplanes) is:
+
+$$margin = \frac{2}{\|w\|}$$
+
+- compute:
+
+$$\|w\|=\sqrt{2^2+2^2}=\sqrt{8}=2\sqrt{2}\approx2.82842712$$
+$$margin=\frac{2}{2.82842712}\approx0.70710678$$
+
+- Therefore, margin = 0.7071
+
+<br />
+
+### Question 2: Naive Bayes posterior
+
+- given
+
+```
+P(Yes) = 0.6, P(No) = 0.4
+P(Sunny | Yes) = 0.5, P(Sunny | No) = 0.1
+P(Hot | Yes) = 0.3, P(Hot | No) = 0.5
+```
+
+<br />
+
+**Answer**:
+
+- compute unnormalized posteriors:
+
+$$P(\text{Yes}\mid Sunny,Hot)\propto 0.5\times0.3\times0.6 = 0.09$$
+
+$$P(\text{No}\mid Sunny,Hot)\propto 0.1\times0.5\times0.4 = 0.02$$
+
+- normalize:
+
+$$Total = 0.09+0.02 = 0.11$$
+$$P(\text{Yes}\mid Sunny,Hot) = \frac{0.09}{0.11}\approx0.8182$$
+$$P(\text{No}\mid Sunny,Hot) = \frac{0.02}{0.11}\approx0.1818$$
+
+- Therefore, Play = Yes (~81.82%)
+
+<br />
+
+### Question 3: K-NN distances (numerical)
+
+- training points:
+```
+A(1, 2) Red
+B(2, 3) Blue
+C(3, 3) Blue
+```
+
+- Test point: T(2, 2)
+
+<br />
+
+**Answer**:
+
+$$d(A,T)=\sqrt{(2-1)^2+(2-2)^2}=1$$
+$$d(B,T)=\sqrt{(2-2)^2+(2-3)^2}=1$$
+$$d(C,T)=\sqrt{(2-3)^2+(2-3)^2}=\sqrt{2}\approx1.4142$$
+
+- Therefore, the distance is 1.4142
+- with k = 2, nearest are A and B (tie)
+- tie-breaking rule needed (e.g., choose smallest average distance class or random)
+
+<br />
+
+### Question 4: ANN weighted sum + sigmoid
+
+- given inputs ```x = [1, 2]```, weights ```w = [0.4, 0.3]```, bias ```b = 0.2```
+
+<br />
+
+**Answer**:
+
+- weighted sum:
+
+$$z = 0.4\cdot 1 + 0.3\cdot 2 + 0.2 = 1.2$$
+
+- sigmoid activation:
+
+$$\sigma(z)=\frac{1}{1+e^{-z}}=\frac{1}{1+e^{-1.2}}\approx0.7685$$
+
+- Therefore, the output is 0.7685
+
+<br />
+
+### Question 5: F1 Score from Precision and Recall
+
+- given Precision ```P = 0.8```, Recall ```R = 0.5```
+
+- formula: 
+
+$$F1 = 2\cdot \frac{P\cdot R}{P+R}$$
+
+- compute:
+
+$$F1 = 2\cdot\frac{0.8\cdot 0.5}{0.8+0.5} = \frac{0.8}{1.3}\approx0.6154$$
+
+- Therefore, the answer is F1 = 0.6154
