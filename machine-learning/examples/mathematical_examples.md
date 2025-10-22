@@ -505,6 +505,10 @@ $$F1 = 2\cdot\frac{0.8\cdot 0.5}{0.8+0.5} = \frac{0.8}{1.3}\approx0.6154$$
 - the table shows the posterior probabilities obtained by applying the models to a dataset.
 - only posterior probabilities for the positive class are shown
 
+| Instance | True Class | ```P(+ | A, ..., Z, M1)``` | ```P(+ | A, ..., Z, M2)``` |
+| -- | -- | -- | -- |
+| 1 | + | 0.73 | 0.61 |
+
 
 | Instance | True Class | ```P(+ | A, ..., Z, M1)``` | ```P(+ | A, ..., Z, M2)``` |
 | -- | -- | -- | -- |
