@@ -368,7 +368,77 @@ $$P(\text{No}\mid Sunny,Hot) = \frac{0.02}{0.11}\approx0.1818$$
 
 <br />
 
-### Question 3: K-NN distances (numerical)
+### Question 3: 1-NN 
+
+- consider the one dimensional data set shown in this table.
+
+| x | 0.5 | 3.0 | 4.5 | 4.6 | 4.9 | 5.2 | 5.3 | 5.5 | 7.0 | 9.5 |
+| -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- |
+| y | - | - | + | + | + | - | - | + | - | - |
+
+- classify the data point ```x = 5.0``` according to its 1-nearest neighbor using majority vote
+
+<br />
+
+**Answer**:
+
+- we need to find the single training point with the smallest distance to 5.0
+
+- distances to nearby points
+  - ```|5.0 - 4.9| = 0.1```
+  - ```[5.0 - 5.2] = 0.2```
+
+- the closest point is ```x = 4.9``` (distance 0.1), whose label is ```0.1```
+
+- Therefore, by 1-NN majority vote (i.e., take the single nearest neighbor's label), the predicted class for ```x = 5.0``` is ```+```
+
+<br />
+
+### Question 4: 3-NN
+
+- consider the same dataset as the previous question
+
+| x | 0.5 | 3.0 | 4.5 | 4.6 | 4.9 | 5.2 | 5.3 | 5.5 | 7.0 | 9.5 |
+| -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- |
+| y | - | - | + | + | + | - | - | + | - | - |
+
+- classify the data point ```x = 5.0``` to its 3-nearest neighbor using majority vote.
+
+<br />
+
+**Answer**:
+
+- Compute distances to each point:
+
+$$
+\begin{aligned}
+|5.0 - 0.5| &= 4.5\\
+|5.0 - 3.0| &= 2.0\\
+|5.0 - 4.5| &= 0.5\\
+|5.0 - 4.6| &= 0.4\\
+|5.0 - 4.9| &= 0.1\\
+|5.0 - 5.2| &= 0.2\\
+|5.0 - 5.3| &= 0.3\\
+|5.0 - 7.0| &= 2.0\\
+|5.0 - 9.5| &= 4.5
+\end{aligned}
+$$
+
+- Sort by distance (smallest first) and take the 3 nearest points:
+
+| x | y | Distance | Rank |
+|:--|:--|:--|:--|
+| 4.9 | + | 0.1 | 1 |
+| 5.2 | − | 0.2 | 2 |
+| 5.3 | - | 0.3 | 3 |
+
+- there are 1 ```+``` classes and 2 ```-``` class
+- Therefore, the majority class is ```-```
+- Therefore, ```x = 5.0``` is classified as ```-```
+
+<br />
+
+### Question 5: K-NN distances (numerical)
 
 - training points:
 ```
@@ -393,7 +463,7 @@ $$d(C,T)=\sqrt{(2-3)^2+(2-3)^2}=\sqrt{2}\approx1.4142$$
 
 <br />
 
-### Question 4: ANN weighted sum + sigmoid
+### Question 6: ANN weighted sum + sigmoid
 
 - given inputs ```x = [1, 2]```, weights ```w = [0.4, 0.3]```, bias ```b = 0.2```
 
@@ -413,7 +483,7 @@ $$\sigma(z)=\frac{1}{1+e^{-z}}=\frac{1}{1+e^{-1.2}}\approx0.7685$$
 
 <br />
 
-### Question 5: F1 Score from Precision and Recall
+### Question 7: F1 Score from Precision and Recall
 
 - given Precision ```P = 0.8```, Recall ```R = 0.5```
 
@@ -426,3 +496,219 @@ $$F1 = 2\cdot \frac{P\cdot R}{P+R}$$
 $$F1 = 2\cdot\frac{0.8\cdot 0.5}{0.8+0.5} = \frac{0.8}{1.3}\approx0.6154$$
 
 - Therefore, the answer is F1 = 0.6154
+
+<br />
+
+### Question 8: Model Evaluation: Comparing classifers
+
+- you are asked to evaluate the performance of two classification models, M1 and M2
+- the table shows the posterior probabilities obtained by applying the models to a dataset.
+- only posterior probabilities for the positive class are shown
+
+| Instance | True Class | ```P(+ | A, ..., Z, M1)``` | ```P(+ | A, ..., Z, M2)``` |
+| -- | -- | -- | -- |
+| 1 | + | 0.73 | 0.61 |
+| 2 | + | 0.69 | 0.03 |
+| 3 | - | 0.44 | 0.68 |
+| 4 | - | 0.55 | 0.31 |
+| 5 | + | 0.67 | 0.45 |
+| 6 | + | 0.47 | 0.09 |
+| 7 | - | 0.08 | 0.38 |
+| 8 | - | 0.15 | 0.05 |
+| 9 | + | 0.45 | 0.01 |
+| 10 | - | 0.35 | 0.04 |
+
+- assume that we are mostly interested in detecting instances from the positive class
+- plot the ROC curve for both M1 and M2
+- Which model do you think is better?
+
+<br />
+
+**Answer**:
+
+**Step 1**: understand the data
+- we have posterior probabilties for the positive class (+) from two models
+- There are 5 positives (instances 1, 2, 5, 6, 9) and 5 negatives (3, 4, 7, 8, 10)
+
+**Step 2**: What ROC curve means
+- each threshold ```t``` between 0 and 1 gives a different True Positive Rate (TPR) and False Positive Rate (FPR)
+- ROC curves plots TPR vs FPR as threshold decreases
+- Larger area = better model (AUC closer to 1)
+
+$$TPR = \frac{TP}{TP+FN}, \quad FPR = \frac{FP}{FP+TN}$$
+
+**Step 3**: Rank by predicted probability
+
+- for M1 (sort descending):
+
+| Rank | Instance | True Class | P(+|M₁) |
+|:--|:--:|:--:|:--:|
+| 1 | 1 | + | 0.73 |
+| 2 | 2 | + | 0.69 |
+| 3 | 5 | + | 0.67 |
+| 4 | 4 | − | 0.55 |
+| 5 | 3 | − | 0.44 |
+| 6 | 6 | + | 0.47 |
+| 7 | 9 | + | 0.45 |
+| 8 | 10 | − | 0.35 |
+| 9 | 8 | − | 0.15 |
+| 10 | 7 | − | 0.08 |
+
+- notice some probabilities slightly out of order (4 > 6 > 9 > 3)
+- Let’s fix that order properly: 1 (0.73), 2 (0.69), 5 (0.67), 4 (0.55), 6 (0.47), 9 (0.45), 3 (0.44), 10 (0.35), 8 (0.15), 7 (0.08).
+
+- for M2 (sort descending):
+
+| Rank | Instance | True Class | P(+|M₂) |
+|:--|:--:|:--:|:--:|
+| 1 | 3 | − | 0.68 |
+| 2 | 1 | + | 0.61 |
+| 3 | 5 | + | 0.45 |
+| 4 | 7 | − | 0.38 |
+| 5 | 4 | − | 0.31 |
+| 6 | 8 | − | 0.05 |
+| 7 | 10 | − | 0.04 |
+| 8 | 6 | + | 0.09 |
+| 9 | 2 | + | 0.03 |
+| 10 | 9 | + | 0.01 |
+
+**Step 4**: Sketch ROC qualitatively
+
+- for M1:
+  - as we lower the threshold, positives tend to appear earlier (top ranks)
+  - High TPR with relatively low FPR
+
+- for M2:
+  - notice instance 3 (negative) has the highest probability (0.68)
+  - that means at the top threshold we already have FP = 1 and TP = 0, so FPR starts high.
+
+- so ROC(M1) lies above ROC(M2)
+
+**Step 5**: Approximate AUC by ranking logic
+- AUC ≈ Probability that a random positive is ranked above a random negative.
+- you can count pairwise comparisons or reason visually.
+- For M1:
+  - Most positives (0.73, 0.69, 0.67, 0.47, 0.45) are higher than negatives (mostly 0.55, 0.44, 0.35, 0.15, 0.08) → AUC ≈ 0.9
+- For M2:
+  - Negative 3 is ranked top; several negatives are above positives → AUC ≈ 0.6
+
+**Step 6**: Conclusion
+
+$$AUC(M_1) > AUC(M_2)$$  
+
+- Therefore, Model M1 is better (it ranks positives higher and has a better ROC curve)
+
+<br />
+
+### Question 9: 
+
+- consider the same table as the previous question:
+
+| Instance | True Class | ```P(+ | A, ..., Z, M1)``` | ```P(+ | A, ..., Z, M2)``` |
+| -- | -- | -- | -- |
+| 1 | + | 0.73 | 0.61 |
+| 2 | + | 0.69 | 0.03 |
+| 3 | - | 0.44 | 0.68 |
+| 4 | - | 0.55 | 0.31 |
+| 5 | + | 0.67 | 0.45 |
+| 6 | + | 0.47 | 0.09 |
+| 7 | - | 0.08 | 0.38 |
+| 8 | - | 0.15 | 0.05 |
+| 9 | + | 0.45 | 0.01 |
+| 10 | - | 0.35 | 0.04 |
+
+- for model M1, suppose you choose the cutoff threshold to be ```t = 0.5```.
+- in other words, any test instances whose posterior probability is greater than ```t``` will be classified as a positive example
+- Compute the precision at this threshold value.
+
+<br />
+
+**Answer**: 
+
+**Step 1**: Apply the threshold ```t = 0.5```
+
+- so predictions:
+
+| Instance | P(+|M1) | Predicted | True |
+|:--|:--:|:--:|:--:|
+| 1 | 0.73 | + | + |
+| 2 | 0.69 | + | + |
+| 3 | 0.44 | – | – |
+| 4 | 0.55 | + | – |
+| 5 | 0.67 | + | + |
+| 6 | 0.47 | – | + |
+| 7 | 0.08 | – | – |
+| 8 | 0.15 | – | – |
+| 9 | 0.45 | – | + |
+| 10 | 0.35 | – | – |
+
+**Step 2**: Count outcomes
+
+- define:
+  - TP (True Positives) = predicted +, actual +
+  - FP (False Postives) = predicted +, actual -
+  - TN (True Negatives) = predicted -, actual -
+  - FN (False Negatives) = predicted -, actual +
+- now count:
+
+| Category | Instances | Count |
+| -- | -- | -- |
+| TP | 1, 2, 5 | 3 |
+| FP | 4 | 1 |
+| TN | 3, 7, 8, 10 | 4 |
+| FN | 6, 9 | 2 |
+
+**Step 3**: Compute Precision
+- precision is the fraction of predicted positives that are correct:
+
+$$\text{Precision} = \frac{TP}{TP + FP}$$
+
+- substitute values:
+
+$$\text{Precision} = \frac{3}{4} = 0.75$$
+
+- Therefore, the Precision at ```t = 0.5 = 0.75```
+
+<br />
+
+- consider the same table as the previous question:
+
+| Instance | True Class | ```P(+ | A, ..., Z, M1)``` | ```P(+ | A, ..., Z, M2)``` |
+| -- | -- | -- | -- |
+| 1 | + | 0.73 | 0.61 |
+| 2 | + | 0.69 | 0.03 |
+| 3 | - | 0.44 | 0.68 |
+| 4 | - | 0.55 | 0.31 |
+| 5 | + | 0.67 | 0.45 |
+| 6 | + | 0.47 | 0.09 |
+| 7 | - | 0.08 | 0.38 |
+| 8 | - | 0.15 | 0.05 |
+| 9 | + | 0.45 | 0.01 |
+| 10 | - | 0.35 | 0.04 |
+
+- for model M1, suppose you choose the cutoff threshold to be ```t = 0.5```
+- in other words, any instances whose posterior probability is greater than t will be classified as a positive example
+- Compute the recall at this threshold value.
+
+<br />
+
+**Answer**:
+
+- what we found:
+
+| Metric | Count | Instances |
+| -- | -- | -- |
+| TP | 3 | 1, 2, 5 |
+| FP | 1 | 4 |
+| TN | 4 | 3, 7, 8, 10 |
+| FN | 2 | 6, 9 |
+
+- recall is the fraction of actual positives that are correctly predicted:
+
+$$\text{Recall} = \frac{TP}{TP + FN}$$
+
+- substitute values:
+
+$$\text{Recall} = \frac{3}{5} = 0.6$$
+
+- Therefore, the Recall at ```t = 0.5``` is 0.6
