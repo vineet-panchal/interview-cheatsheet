@@ -505,11 +505,6 @@ $$F1 = 2\cdot\frac{0.8\cdot 0.5}{0.8+0.5} = \frac{0.8}{1.3}\approx0.6154$$
 - the table shows the posterior probabilities obtained by applying the models to a dataset.
 - only posterior probabilities for the positive class are shown
 
-| Instance | True Class | ```P(+  A, ..., Z, M1)``` | ```P(+ | A, ..., Z, M2)``` |
-| -- | -- | -- | -- |
-| 1 | + | 0.73 | 0.61 |
-
-
 | Instance | True Class | ```P(+ ! A, ..., Z, M1)``` | ```P(+ ! A, ..., Z, M2)``` |
 | -- | -- | -- | -- |
 | 1 | + | 0.73 | 0.61 |
@@ -522,7 +517,6 @@ $$F1 = 2\cdot\frac{0.8\cdot 0.5}{0.8+0.5} = \frac{0.8}{1.3}\approx0.6154$$
 | 8 | - | 0.15 | 0.05 |
 | 9 | + | 0.45 | 0.01 |
 | 10 | - | 0.35 | 0.04 |
-
 
 - assume that we are mostly interested in detecting instances from the positive class
 - plot the ROC curve for both M1 and M2
@@ -547,7 +541,7 @@ $$TPR = \frac{TP}{TP+FN}, \quad FPR = \frac{FP}{FP+TN}$$
 
 - for M1 (sort descending):
 
-| Rank | Instance | True Class | P(+|M₁) |
+| Rank | Instance | True Class | ```P(+ ! M₁)``` |
 |:--|:--:|:--:|:--:|
 | 1 | 1 | + | 0.73 |
 | 2 | 2 | + | 0.69 |
@@ -565,7 +559,7 @@ $$TPR = \frac{TP}{TP+FN}, \quad FPR = \frac{FP}{FP+TN}$$
 
 - for M2 (sort descending):
 
-| Rank | Instance | True Class | P(+|M₂) |
+| Rank | Instance | True Class | ```P(+ ! M₂)``` |
 |:--|:--:|:--:|:--:|
 | 1 | 3 | − | 0.68 |
 | 2 | 1 | + | 0.61 |
@@ -610,7 +604,7 @@ $$AUC(M_1) > AUC(M_2)$$
 
 - consider the same table as the previous question:
 
-| Instance | True Class | ```P(+ | A, ..., Z, M1)``` | ```P(+ | A, ..., Z, M2)``` |
+| Instance | True Class | ```P(+ ! A, ..., Z, M1)``` | ```P(+ ! A, ..., Z, M2)``` |
 | -- | -- | -- | -- |
 | 1 | + | 0.73 | 0.61 |
 | 2 | + | 0.69 | 0.03 |
@@ -635,7 +629,7 @@ $$AUC(M_1) > AUC(M_2)$$
 
 - so predictions:
 
-| Instance | P(+|M1) | Predicted | True |
+| Instance | ```P(+ ! M1)``` | Predicted | True |
 |:--|:--:|:--:|:--:|
 | 1 | 0.73 | + | + |
 | 2 | 0.69 | + | + |
@@ -679,7 +673,7 @@ $$\text{Precision} = \frac{3}{4} = 0.75$$
 
 - consider the same table as the previous question:
 
-| Instance | True Class | ```P(+ | A, ..., Z, M1)``` | ```P(+ | A, ..., Z, M2)``` |
+| Instance | True Class | ```P(+ ! A, ..., Z, M1)``` | ```P(+ ! A, ..., Z, M2)``` |
 | -- | -- | -- | -- |
 | 1 | + | 0.73 | 0.61 |
 | 2 | + | 0.69 | 0.03 |
