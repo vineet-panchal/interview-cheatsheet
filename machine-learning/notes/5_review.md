@@ -210,6 +210,8 @@ $$TPR = \frac{TP}{TP + FN}, \quad FPR = \frac{FP}{FP + TN}$$
 - **Good Model** -> AUC close to 1
 - **Random Model** -> AUC around 0.5
 
+## Summary of Key Formulas
+
 | Concept | Key Formula |
 | -- | -- |
 | Entropy | $$Entropy(S) = -p_+ \log_2(p_+) - p_- \log_2(p_-)$$ |
