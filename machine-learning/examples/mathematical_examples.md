@@ -505,6 +505,7 @@ $$F1 = 2\cdot\frac{0.8\cdot 0.5}{0.8+0.5} = \frac{0.8}{1.3}\approx0.6154$$
 - the table shows the posterior probabilities obtained by applying the models to a dataset.
 - only posterior probabilities for the positive class are shown
 
+
 | Instance | True Class | ```P(+ | A, ..., Z, M1)``` | ```P(+ | A, ..., Z, M2)``` |
 | -- | -- | -- | -- |
 | 1 | + | 0.73 | 0.61 |
@@ -517,6 +518,7 @@ $$F1 = 2\cdot\frac{0.8\cdot 0.5}{0.8+0.5} = \frac{0.8}{1.3}\approx0.6154$$
 | 8 | - | 0.15 | 0.05 |
 | 9 | + | 0.45 | 0.01 |
 | 10 | - | 0.35 | 0.04 |
+
 
 - assume that we are mostly interested in detecting instances from the positive class
 - plot the ROC curve for both M1 and M2
