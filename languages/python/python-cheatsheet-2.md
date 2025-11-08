@@ -240,7 +240,7 @@ print(descending)  # Output: [8, 7, 4, 3, 2, 1]
 
 ### Linked Lists
 ###### - to use linked lists you will have to use classes
-```
+```python
 # Create a Node class to create a node
 class Node:
     def __init__(self, data):
