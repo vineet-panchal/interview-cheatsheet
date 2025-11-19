@@ -88,7 +88,107 @@ def tree_height(node):
 #         return new_root
 
 
-# Sample usage:
+# Additional traversal methods
+def in_order_traversal(node):
+    if node is None:
+        return
+    if node.children:
+        in_order_traversal(node.children[0])  # Assuming binary-like for simplicity
+    print(node.data)
+    for child in node.children[1:]:
+        in_order_traversal(child)
+
+def post_order_traversal(node):
+    if node is None:
+        return
+    for child in node.children:
+        post_order_traversal(child)
+    print(node.data)
+
+def level_order_traversal(root):
+    if root is None:
+        return
+    queue = [root]
+    while queue:
+        node = queue.pop(0)
+        print(node.data, end=" ")
+        queue.extend(node.children)
+    print()
+
+# Additional methods
+def count_nodes(node):
+    if node is None:
+        return 0
+    count = 1
+    for child in node.children:
+        count += count_nodes(child)
+    return count
+
+def find_max(node):
+    if node is None:
+        return None
+    max_val = node.data
+    for child in node.children:
+        child_max = find_max(child)
+        if child_max is not None and child_max > max_val:
+            max_val = child_max
+    return max_val
+
+def find_min(node):
+    if node is None:
+        return None
+    min_val = node.data
+    for child in node.children:
+        child_min = find_min(child)
+        if child_min is not None and child_min < min_val:
+            min_val = child_min
+    return min_val
+
+def is_balanced(node):
+    if node is None:
+        return True
+    heights = [tree_height(child) for child in node.children]
+    if not heights:
+        return True
+    return max(heights) - min(heights) <= 1 and all(is_balanced(child) for child in node.children)
+
+def mirror_tree(node):
+    if node is None:
+        return
+    node.children.reverse()
+    for child in node.children:
+        mirror_tree(child)
+
+def print_tree(node, level=0):
+    if node is not None:
+        print("  " * level + str(node.data))
+        for child in node.children:
+            print_tree(child, level + 1)
+
+# Binary Tree Node for specific examples
+class BinaryTreeNode:
+    def __init__(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
+
+def insert_binary(root, data):
+    if root is None:
+        return BinaryTreeNode(data)
+    if data < root.data:
+        root.left = insert_binary(root.left, data)
+    else:
+        root.right = insert_binary(root.right, data)
+    return root
+
+def in_order_binary(node):
+    if node:
+        in_order_binary(node.left)
+        print(node.data, end=" ")
+        in_order_binary(node.right)
+
+# Sample usage for general tree
+print("=== General Tree Examples ===")
 root = TreeNode("A")
 child1 = TreeNode("B")
 child2 = TreeNode("C")
@@ -98,45 +198,42 @@ root.add_child(child1)
 root.add_child(child2)
 root.add_child(child3)
 
-# Traversal example (pre-order)
-print("Pre-order traversal:")
+child1.add_child(TreeNode("E"))
+child1.add_child(TreeNode("F"))
+child2.add_child(TreeNode("G"))
+
+print("Tree structure:")
+print_tree(root)
+
+print("\nPre-order traversal:")
 pre_order_traversal(root)
 
-# Searching example
-target_value = "D"
-print(f"Is {target_value} present in the tree? {depth_first_search(root, target_value)}")
+print("\nPost-order traversal:")
+post_order_traversal(root)
 
-# Insertion example
-new_node = TreeNode("E")
-insert_node(child1, new_node)
-print("After insertion:")
-pre_order_traversal(root)
+print("\nLevel-order traversal:")
+level_order_traversal(root)
 
-# Deletion example
-delete_node(root, "C")
-print("After deletion:")
-pre_order_traversal(root)
+print(f"\nNumber of nodes: {count_nodes(root)}")
+print(f"Max value: {find_max(root)}")
+print(f"Min value: {find_min(root)}")
+print(f"Is balanced: {is_balanced(root)}")
 
-# Height calculation example
-print("Height of the tree:", tree_height(root))
+print("\nMirroring tree:")
+mirror_tree(root)
+print_tree(root)
 
-# AVL tree example (basic concept)
-# avl_root = AVLTreeNode("M")
-# avl_child1 = AVLTreeNode("L")
-# avl_child2 = AVLTreeNode("R")
+print("\nSearching for 'G':", depth_first_search(root, "G"))
 
-# avl_root.add_child(avl_child1)
-# avl_root.add_child(avl_child2)
+# Binary tree example
+print("\n=== Binary Tree Example ===")
+b_root = None
+for val in [5, 3, 7, 2, 4, 6, 8]:
+    b_root = insert_binary(b_root, val)
 
-# avl_child1.add_child(TreeNode("A"))
-# avl_child1.add_child(TreeNode("B"))
+print("In-order traversal of binary tree:")
+in_order_binary(b_root)
+print()
 
-# avl_child2.add_child(TreeNode("X"))
-
-# avl_root = avl_root.rotate_left()
-# print("After rotation (left):")
-# pre_order_traversal(avl_root)
-
-# avl_root = avl_root.rotate_right()
-# print("After rotation (right):")
-# pre_order_traversal(avl_root)
+# Height and other methods
+print(f"Height of general tree: {tree_height(root)}")

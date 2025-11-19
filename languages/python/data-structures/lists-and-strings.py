@@ -115,8 +115,107 @@ def lists():
 
 def strings():
   print("String Methods")
-  s = "Hello, World"
+  s = "Hello, World"  # initialize the string
+  print("The String: ", s)
+
+  print("At Index 0: ", s[0])  # accessing a character in a string
+
+  s2 = s + "!"  # concatenating strings (like appending)
+  print("Concatenating '!' to the string: ", s2)
+
+  s3 = s[:-1]  # removing last character (like popping)
+  print("Removing last character: ", s3)
+
+  s4 = s[:6] + "Universe" + s[6:]  # inserting into a string
+  print("Inserting 'Universe' into the string: ", s4, "\n")
+
+  print("Initializing Strings With Size")
+  n = 5
+  s5 = " " * n  # initialize string with spaces
+  print("String 5 with initial size as 5 (spaces): ", repr(s5))
+
+  s6 = "a" * n  # initialize string with repeated characters
+  print("String 6 with 'a' repeated 5 times: ", s6, "\n")
+
+  print("Substrings")
+  print("Original String: ", s)
+  print("Substring from index 0 to 5: ", s[0:5])  # substring
+  print("Substring from index 7 to end: ", s[7:])
+  print("Substring with step (every other char): ", s[::2], "\n")
+
+  print("Unpacking")
+  s7 = "abcde"
+  a, b, c, d, e = s7  # unpacking a string
+  print("Original String: ", s7)
+  print("Unpacked Characters: ", a, b, c, d, e, "\n")
+
+  print("Head and Tail")
+  print("Original String: ", s7)
+  print("Getting the Head: ", s7[0])  # head is first character
+  print("Getting the Tail: ", s7[1:])  # tail is index 1 and forward
+  head, *tail = s7
+  print("Another way to get Head: ", head)
+  print("Another way of getting Tail: ", ''.join(tail), "\n")
+
+  print("More String Methods")
   print("String 1: ", s)
+  print("String 2: ", s5)
+  print("String 3: ", s6)
+  print("String 4: ", s7)
+  s8 = "hello world hello"
+  print("String 8: ", s8)
+  s9 = "a,b,c,d,e"
+  print("String 9: ", s9)
+  print("Length of String 1: ", len(s))  # get the length of a string
+  print("String 1 in uppercase: ", s.upper())  # convert to uppercase
+  print("String 1 in lowercase: ", s.lower())  # convert to lowercase
+  print("Count # of 'l's in String 1: ", s.count('l'))  # counting # of occurrences
+  print("Find index of 'o' in String 1: ", s.find('o'))  # finding index
+  print("Replace 'World' with 'Universe' in String 1: ", s.replace('World', 'Universe'))  # replace
+  print("Split String 9 by ',': ", s9.split(','))  # split into list
+  print("Join list back with '-': ", '-'.join(s9.split(',')))  # join
+  s10 = "  hello world  "
+  print("String 10: ", repr(s10))
+  print("Strip String 10: ", repr(s10.strip()))  # strip whitespace
+  print("String 8 starts with 'hello': ", s8.startswith('hello'))  # check start
+  print("String 8 ends with 'world': ", s8.endswith('world'))  # check end
+  print("Is String 6 all lowercase: ", s6.islower())  # check case
+  print("Is String 6 all alphabetic: ", s6.isalpha(), "\n")  # check alphabetic
+
+  print("Looping Through Strings")
+  print("String: ", s)
+  print("Loop using the index: ")
+  for i in range(len(s)):  # loop from 0 to the last character
+    print(s[i])  # use the index to grab the character
+
+  print("Loop using the characters: ")
+  for char in s:  # initialize char as a character in s
+    print(char)  # print the character
+
+  print("Loop through the string using the index and the characters: ")
+  for i, char in enumerate(s):  # use enumerate to assign two variables
+    print(i, char)
+
+  s11 = "abc"
+  s12 = "def"
+  print("String 11: ", s11)
+  print("String 12: ", s12)
+
+  print("Loop through both strings at the same time: ")
+  for c1, c2 in zip(s11, s12):  # use zip to bind the two strings
+    print(c1, c2)  # the strings have to be the same length
+
+  print("\n")
+
+  print("String Formatting")
+  name = "Alice"
+  age = 30
+  formatted = f"Hello, my name is {name} and I am {age} years old."  # f-string
+  print("Formatted String: ", formatted)
+  formatted2 = "Hello, my name is {} and I am {} years old.".format(name, age)  # format method
+  print("Formatted String 2: ", formatted2)
+
+  print("\n")
   
 
 

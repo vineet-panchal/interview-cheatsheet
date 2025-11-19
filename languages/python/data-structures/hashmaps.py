@@ -47,6 +47,16 @@ def hashmaps():
   # /> main.py
   # alice: 90
   # bob: 80
-
+  
+  print("\n")
+  print("Additional Methods for Hashmaps")
+  count = {6: 3, 1: 1, 2: 4, 3: 5}
+  print("Original Hashmap: ", count)
+  sorted_by_values = sorted(count.items(), key=lambda item: item[1])
+  sorted_by_values_dict = dict(sorted_by_values)
+  print("Dictionary sorted by values: ", sorted_by_values_dict)
+  sorted_by_values_reversed = sorted(count.items(), key=lambda item: item[1], reverse=True)
+  sorted_by_values_reversed_dict = dict(sorted_by_values_reversed)
+  print("Dictionary sorted by values in reverse: ", sorted_by_values_reversed_dict)
 if __name__ == "__main__":
   hashmaps()
