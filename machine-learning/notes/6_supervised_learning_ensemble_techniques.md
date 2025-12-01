@@ -67,6 +67,7 @@
 ## Bagging (Boostrap AGGregatING)
 - bootstrap sampling: sampling with replacement
 
+| | | | | | | | | | | | |
 | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- |
 | Original Data | -- | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
 | Bagging (Round 1) | -- | 7 | 8 | 10 | 8 | 2 | 5 | 10 | 10 | 5 | 9 |
